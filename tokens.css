@@ -28,6 +28,11 @@
   --h-surface-light: #f5e2d8;
   --h-surface-dark:  #3d2c21;
 
+  /* Horizontal inset for shared components. A host with its own content
+   * grid overrides this so the nav and footer line up with the page body
+   * instead of missing it by a few pixels. */
+  --h-inset: clamp(1rem, 4vw, 2.25rem);
+
   /* Plate */
   --h-plate-frame:  var(--h-ink);
   --h-plate-cell:   var(--h-page);
