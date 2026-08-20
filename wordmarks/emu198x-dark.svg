@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="330.5" height="87.5"
+     viewBox="0 0 330.5 87.5" role="img" aria-label="Emu198x">
+  <title>Emu198x</title>
+  <g>
+    <clipPath id="r"><rect x="3.4" y="3.4" width="323.7" height="80.6" rx="10.3"/></clipPath>
+    <g clip-path="url(#r)">
+      <rect x="3.4" y="3.4" width="144.0" height="80.6" fill="#0d4a7d"/>
+      <rect x="147.4" y="3.4" width="179.7" height="80.6" fill="#242019"/>
+    </g>
+    <rect x="3.4" y="3.4" width="323.7" height="80.6" rx="10.3"
+          fill="none" stroke="#efe7d6" stroke-width="6.9"/>
+    <line x1="150.9" y1="3.4" x2="150.9" y2="84.1"
+          stroke="#efe7d6" stroke-width="6.9"/>
+    <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="48.0" font-weight="700"
+       letter-spacing="-0.48">
+      <text x="32.2" y="55.3" fill="#faf8f2">EMU</text>
+      <text x="183.1" y="55.3" fill="#efe7d6">198x</text>
+    </g>
+  </g>
+</svg>

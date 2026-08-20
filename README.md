@@ -16,6 +16,8 @@ same job for prose.
 | `components/SiteNav.astro` | Top-level navigation |
 | `components/FamilyStrip.astro` | The footer family strip |
 | `machines.json` | Machine → colour, for all 156 systems |
+| `wordmarks/` | The nine plates as SVG and PNG, light and dark |
+| [`WORDMARK.md`](WORDMARK.md) | Wordmark spec — geometry, colours, and what not to do |
 
 **Components, not layouts.** Shared components survive three sites diverging.
 Shared layouts are how you end up unable to change one site without negotiating

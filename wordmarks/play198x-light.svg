@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="359.3" height="87.5"
+     viewBox="0 0 359.3 87.5" role="img" aria-label="Play198x">
+  <title>Play198x</title>
+  <g>
+    <clipPath id="r"><rect x="3.4" y="3.4" width="352.5" height="80.6" rx="10.3"/></clipPath>
+    <g clip-path="url(#r)">
+      <rect x="3.4" y="3.4" width="172.8" height="80.6" fill="#424e0c"/>
+      <rect x="176.2" y="3.4" width="179.7" height="80.6" fill="#fdfcf7"/>
+    </g>
+    <rect x="3.4" y="3.4" width="352.5" height="80.6" rx="10.3"
+          fill="none" stroke="#3a2c1f" stroke-width="6.9"/>
+    <line x1="179.7" y1="3.4" x2="179.7" y2="84.1"
+          stroke="#3a2c1f" stroke-width="6.9"/>
+    <g font-family="JetBrains Mono, ui-monospace, monospace" font-size="48.0" font-weight="700"
+       letter-spacing="-0.48">
+      <text x="32.2" y="55.3" fill="#faf8f2">PLAY</text>
+      <text x="211.9" y="55.3" fill="#3a2c1f">198x</text>
+    </g>
+  </g>
+</svg>
