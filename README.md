@@ -5,7 +5,9 @@ Emu198x and Code198x.
 
 One canonical copy, consumed by checkout, no registry. Same posture as
 [`house-style`](https://github.com/stevehill1981/house-style), which does the
-same job for prose.
+same job for prose. The two names differ for historical reasons and that is
+deliberate — renaming `house-style` would churn nine pinned configs to fix
+nothing, and the style inside it is called `House198x` either way.
 
 ## What is here
 
