@@ -1,4 +1,4 @@
-# house-ui
+# 198x-ui
 
 Shared design tokens and Astro components for the 198x family sites — Asm198x,
 Emu198x and Code198x.
@@ -30,14 +30,14 @@ checkout, pinned to a tag:
 - name: Check out house-ui
   uses: actions/checkout@v7
   with:
-    repository: stevehill1981/house-ui
+    repository: stevehill1981/198x-ui
     ref: v0.1.0
-    path: _house-ui
+    path: _198x-ui
 ```
 
 ```astro
 ---
-import SiteNav from '../../_house-ui/components/SiteNav.astro';
+import SiteNav from '../../_198x-ui/components/SiteNav.astro';
 ---
 <SiteNav
   prefix="asm"
