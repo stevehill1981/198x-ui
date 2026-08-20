@@ -23,21 +23,28 @@ with two others.
 
 ## Use it in a site
 
-The consuming site checks this repo out during its build and imports from the
-checkout, pinned to a tag:
+The consuming site fetches this repo into a gitignored `_198x-ui/` and imports
+from it. One mechanism for local work and CI alike, so `npm run dev` needs no
+workflow:
 
-```yaml
-- name: Check out house-ui
-  uses: actions/checkout@v7
-  with:
-    repository: stevehill1981/198x-ui
-    ref: v0.1.0
-    path: _198x-ui
+```jsonc
+// package.json
+"scripts": {
+  "ui:fetch": "./scripts/fetch-ui.sh",   // clones or moves _198x-ui to the pinned tag
+  "predev": "npm run ui:fetch",
+  "prebuild": "npm run ui:fetch"
+}
+```
+
+```jsonc
+// tsconfig.json
+"paths": { "@198x-ui/*": ["_198x-ui/*"] }
 ```
 
 ```astro
 ---
-import SiteNav from '../../_198x-ui/components/SiteNav.astro';
+import '@198x-ui/tokens.css';
+import SiteNav from '@198x-ui/components/SiteNav.astro';
 ---
 <SiteNav
   prefix="asm"
@@ -50,6 +57,8 @@ import SiteNav from '../../_198x-ui/components/SiteNav.astro';
   ]}
 />
 ```
+
+`asm198x.github.io` carries a working `scripts/fetch-ui.sh` to copy.
 
 Pin to a tag rather than tracking `main`. Without that, a change here can break
 three sites at once with nothing in between to catch it.
