@@ -19,13 +19,17 @@ interface Props {
   prefix: string;
   project?: 'code' | 'emu' | 'asm' | 'cat' | 'build' | 'debug' | 'isa' | 'forge' | 'play';
   items: NavItem[];
-  /** Rendered with a `v` prefix if the caller has not already added one. */
+  /**
+   * Shown at the end of the nav. A bare version number gains a `v`; anything
+   * else is rendered as given, so a caller can pass a state rather than a
+   * number ("main @ e8e784b") without it becoming "vmain".
+   */
   version?: string;
   homeHref?: string;
 }
 
 const { prefix, project, items, version, homeHref = '/' } = Astro.props;
-const shown = version ? (version.startsWith('v') ? version : `v${version}`) : null;
+const shown = version ? (/^\d/.test(version) ? `v${version}` : version) : null;
 ---
 
 <header class="h-nav">
