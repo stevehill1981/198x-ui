@@ -1,0 +1,79 @@
+---
+/**
+ * The family wordmark: two cells with a full-height rule between them.
+ *
+ * The prefix cell varies and carries the project colour; the `198x` cell never
+ * changes. The frame is constant house brown (paper on dark), never the project
+ * colour — nine fills of differing strength still read as one set because the
+ * edge is shared. See 198x/decisions/family-visual-identity.md §1 and §2.
+ */
+type Project =
+  | 'code' | 'emu' | 'asm' | 'cat' | 'build'
+  | 'debug' | 'isa' | 'forge' | 'play';
+
+interface Props {
+  /** Shown in the left cell. Rendered upper-case. */
+  prefix: string;
+  /** Picks the fill from the token set. Omit for an unfilled plate. */
+  project?: Project;
+  /** Cell type size in px. The plate scales from this. */
+  size?: number;
+  /** Wraps the plate in a link when given. */
+  href?: string;
+  /** Accessible name. Defaults to "<Prefix>198x". */
+  label?: string;
+}
+
+const { prefix, project, size = 14, href, label } = Astro.props;
+const name = label ?? `${prefix.charAt(0).toUpperCase()}${prefix.slice(1).toLowerCase()}198x`;
+const fill = project ? `var(--h-project-${project})` : 'transparent';
+const ink = project ? '#faf8f2' : 'var(--h-ink)';
+const Tag = href ? 'a' : 'span';
+---
+
+<Tag
+  class="h-plate"
+  href={href}
+  aria-label={name}
+  style={`--plate-size:${size}px; --plate-fill:${fill}; --plate-ink:${ink};`}
+>
+  <span class="h-plate-prefix" aria-hidden="true">{prefix.toUpperCase()}</span>
+  <span class="h-plate-suffix" aria-hidden="true">198x</span>
+</Tag>
+
+<style>
+  .h-plate {
+    display: inline-flex;
+    overflow: hidden;
+    border: 2px solid var(--h-plate-frame);
+    border-radius: 3px;
+    box-shadow: var(--h-plate-shadow);
+    font-family: var(--h-font-mono);
+    font-size: var(--plate-size);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    text-decoration: none;
+  }
+
+  .h-plate-prefix,
+  .h-plate-suffix {
+    padding: 0.34em 0.6em;
+  }
+
+  .h-plate-prefix {
+    background: var(--plate-fill);
+    color: var(--plate-ink);
+  }
+
+  .h-plate-suffix {
+    border-left: 2px solid var(--h-plate-frame);
+    background: var(--h-plate-cell);
+    color: var(--h-ink);
+  }
+
+  a.h-plate:focus-visible {
+    outline: 2px solid var(--h-accent);
+    outline-offset: 3px;
+  }
+</style>

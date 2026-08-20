@@ -1,0 +1,60 @@
+---
+/**
+ * The footer family strip.
+ *
+ * Wording and behaviour are fixed by 198x/decisions/sibling-cross-promotion.md:
+ * an always-on, low-key line, with "198x family" linking to the hub and each
+ * name linking to that project's GitHub org. Siblings are presented as peers —
+ * the order here is not a ranking.
+ */
+interface Sibling {
+  name: string;
+  href: string;
+}
+
+interface Props {
+  /** Defaults to the siblings the decision record names. */
+  siblings?: Sibling[];
+  hubHref?: string;
+}
+
+const {
+  siblings = [
+    { name: 'Code198x', href: 'https://github.com/code198x' },
+    { name: 'Emu198x', href: 'https://github.com/emu198x' },
+    { name: 'Asm198x', href: 'https://github.com/asm198x' },
+    { name: 'Cat198x', href: 'https://github.com/cat198x' },
+  ],
+  hubHref = 'https://code198x.com/family',
+} = Astro.props;
+---
+
+<p class="h-family">
+  Part of the <a href={hubHref}>198x family</a>:{' '}
+  {siblings.map((s, i) => (
+    <>
+      {i > 0 && <span aria-hidden="true"> · </span>}
+      <a href={s.href}>{s.name}</a>
+    </>
+  ))}
+</p>
+
+<style>
+  .h-family {
+    margin: 0;
+    padding: 0.9rem clamp(1rem, 4vw, 2.25rem);
+    border-top: 1px solid var(--h-line);
+    font-family: var(--h-font-ui);
+    font-size: 0.78rem;
+    color: var(--h-ink-faint);
+  }
+
+  .h-family a {
+    color: var(--h-accent);
+    text-decoration: none;
+    text-underline-offset: 0.18em;
+  }
+
+  .h-family a:hover { text-decoration: underline; }
+  .h-family a:focus-visible { outline: 2px solid var(--h-accent); outline-offset: 3px; }
+</style>

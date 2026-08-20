@@ -1,0 +1,90 @@
+/* House198x design tokens.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md. Values here are the
+ * decision made concrete; change the record first, then this file.
+ *
+ * Light is the default. Dark applies on [data-theme="dark"] and, for viewers
+ * who have expressed no preference, on prefers-color-scheme: dark.
+ */
+
+:root {
+  /* Ground and ink */
+  --h-page:        #fdfcf7;   /* the lightest surface: page background */
+  --h-ground:      #f4f1e8;   /* panels, cards, sidebars */
+  --h-ink:         #3a2c1f;   /* house brown: headings, plate frame */
+  --h-ink-body:    #3f4652;   /* long-form body text */
+  --h-ink-muted:   #6b7280;
+  --h-ink-faint:   #94a3b8;
+  --h-accent:      #b74d2d;   /* rust */
+  --h-accent-deep: #a8401f;
+  --h-line:        #d6d3ca;
+  --h-line-soft:   #e2ded3;
+  --h-code-bg:     #242019;
+  --h-code-ink:    #efe7d6;
+
+  /* Derivation surface. Every ink is computed against this, never against
+   * --h-page. It is conservative by design: ink that clears AA here clears it
+   * on any lighter ground. See family-visual-identity.md §3a. */
+  --h-surface-light: #f5e2d8;
+  --h-surface-dark:  #3d2c21;
+
+  /* Plate */
+  --h-plate-frame:  var(--h-ink);
+  --h-plate-cell:   var(--h-page);
+  --h-plate-shadow: 0 1px 2px rgba(58, 44, 31, 0.20), 0 3px 8px rgba(58, 44, 31, 0.10);
+
+  /* Project identity. oklch(0.40 <chroma> <hue>) — equal lightness is the
+   * cohering rule; chroma runs to the sRGB gamut edge per hue. These appear in
+   * a plate cell and nowhere else. */
+  --h-project-code:  #792b0b;
+  --h-project-emu:   #0d4a7d;
+  --h-project-asm:   #0f5631;
+  --h-project-cat:   #562a8d;
+  --h-project-build: #60410c;
+  --h-project-debug: #85112d;
+  --h-project-isa:   #0f5158;
+  --h-project-forge: #721a6e;
+  --h-project-play:  #424e0c;
+
+  /* Type. Three faces, three jobs. */
+  --h-font-ui:    Archivo, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --h-font-read:  Literata, Georgia, "Times New Roman", serif;
+  --h-font-mono:  "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --h-page:        #1a1714;
+    --h-ground:      #221d16;
+    --h-ink:         #efe7d6;
+    --h-ink-body:    #b9ad96;
+    --h-ink-muted:   #b9ad96;
+    --h-ink-faint:   #8a7f6a;
+    --h-accent:      #e0744a;
+    --h-accent-deep: #c85122;
+    --h-line:        #3a342a;
+    --h-line-soft:   #4a4234;
+    --h-code-bg:     #100e0c;
+    --h-plate-frame: #efe7d6;
+    --h-plate-cell:  #242019;
+    /* No shadow on a dark ground: it reads as dirt, not lift. */
+    --h-plate-shadow: none;
+  }
+}
+
+:root[data-theme="dark"] {
+  --h-page:        #1a1714;
+  --h-ground:      #221d16;
+  --h-ink:         #efe7d6;
+  --h-ink-body:    #b9ad96;
+  --h-ink-muted:   #b9ad96;
+  --h-ink-faint:   #8a7f6a;
+  --h-accent:      #e0744a;
+  --h-accent-deep: #c85122;
+  --h-line:        #3a342a;
+  --h-line-soft:   #4a4234;
+  --h-code-bg:     #100e0c;
+  --h-plate-frame: #efe7d6;
+  --h-plate-cell:  #242019;
+  --h-plate-shadow: none;
+}

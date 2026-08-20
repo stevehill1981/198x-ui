@@ -1,0 +1,938 @@
+{
+  "3do": {
+    "name": "3DO Interactive Multiplayer",
+    "short": "3DO",
+    "year": "1993",
+    "color": "#ffd700"
+  },
+  "aamber-pegasus": {
+    "name": "Aamber Pegasus",
+    "short": "Pegasus",
+    "year": "1981",
+    "color": "#5d4037"
+  },
+  "acorn-archimedes": {
+    "name": "Acorn Archimedes",
+    "short": "Archimedes",
+    "year": "1987",
+    "color": "#006400"
+  },
+  "acorn-atom": {
+    "name": "Acorn Atom",
+    "short": "Atom",
+    "year": "1980",
+    "color": "#c97b1f"
+  },
+  "acorn-electron": {
+    "name": "Acorn Electron",
+    "short": "Electron",
+    "year": "1983",
+    "color": "#d4a017"
+  },
+  "acorn-system": {
+    "name": "Acorn System",
+    "short": "Acorn System",
+    "year": "1979",
+    "color": "#4a7c2f"
+  },
+  "aim-65": {
+    "name": "Rockwell AIM-65",
+    "short": "AIM-65",
+    "year": "1978",
+    "color": "#3b7d3b"
+  },
+  "aleste-520ex": {
+    "name": "Aleste 520EX",
+    "short": "Aleste",
+    "year": "1993",
+    "color": "#d2691e"
+  },
+  "altair-8800": {
+    "name": "MITS Altair 8800",
+    "short": "Altair 8800",
+    "year": "1975",
+    "color": "#4169e1"
+  },
+  "amstrad-cpc-plus": {
+    "name": "Amstrad CPC Plus",
+    "short": "CPC Plus",
+    "year": "1990",
+    "color": "#e8622c"
+  },
+  "amstrad-cpc": {
+    "name": "Amstrad CPC",
+    "short": "Amstrad CPC",
+    "year": "1984",
+    "color": "#f7941d"
+  },
+  "amstrad-pcw": {
+    "name": "Amstrad PCW",
+    "short": "PCW",
+    "year": "1985",
+    "color": "#3b7a57"
+  },
+  "apogey-bk-01": {
+    "name": "Apogey BK-01",
+    "short": "Apogey",
+    "year": "1988",
+    "color": "#b22222"
+  },
+  "apple-ii": {
+    "name": "Apple II",
+    "short": "Apple II",
+    "year": "1977",
+    "color": "#61BB46"
+  },
+  "apple-iigs": {
+    "name": "Apple IIGS",
+    "short": "IIGS",
+    "year": "1986",
+    "color": "#a3c1ad"
+  },
+  "atari-2600": {
+    "name": "Atari 2600",
+    "short": "Atari 2600",
+    "year": "1977",
+    "color": "#c92127"
+  },
+  "atari-5200": {
+    "name": "Atari 5200",
+    "short": "Atari 5200",
+    "year": "1982",
+    "color": "#a0522d"
+  },
+  "atari-7800": {
+    "name": "Atari 7800",
+    "short": "Atari 7800",
+    "year": "1986",
+    "color": "#cd5c5c"
+  },
+  "atari-800": {
+    "name": "Atari 8-bit",
+    "short": "Atari 800",
+    "year": "1979",
+    "color": "#4a7c59"
+  },
+  "atari-jaguar": {
+    "name": "Atari Jaguar",
+    "short": "Jaguar",
+    "year": "1993",
+    "color": "#dc143c"
+  },
+  "atari-lynx": {
+    "name": "Atari Lynx",
+    "short": "Lynx",
+    "year": "1989",
+    "color": "#ff6347"
+  },
+  "atari-st": {
+    "name": "Atari ST",
+    "short": "Atari ST",
+    "year": "1985",
+    "color": "#1a8f3c"
+  },
+  "atm-turbo": {
+    "name": "ATM Turbo",
+    "short": "ATM Turbo",
+    "year": "1991",
+    "color": "#b22222"
+  },
+  "bally-astrocade": {
+    "name": "Bally Astrocade",
+    "short": "Astrocade",
+    "year": "1978",
+    "color": "#b71c1c"
+  },
+  "bandai-rx-78": {
+    "name": "Bandai RX-78",
+    "short": "RX-78",
+    "year": "1983",
+    "color": "#e65100"
+  },
+  "bandai-wonderswan-color": {
+    "name": "Bandai WonderSwan Color",
+    "short": "WonderSwan Color",
+    "year": "2000",
+    "color": "#4682b4"
+  },
+  "bandai-wonderswan": {
+    "name": "Bandai WonderSwan",
+    "short": "WonderSwan",
+    "year": "1999",
+    "color": "#87ceeb"
+  },
+  "bbc-micro": {
+    "name": "BBC Micro",
+    "short": "BBC Micro",
+    "year": "1981",
+    "color": "#a62226"
+  },
+  "camputers-lynx": {
+    "name": "Camputers Lynx",
+    "short": "Lynx",
+    "year": "1983",
+    "color": "#b5651d"
+  },
+  "casio-pv-2000": {
+    "name": "Casio PV-2000",
+    "short": "PV-2000",
+    "year": "1983",
+    "color": "#00838f"
+  },
+  "coleco-adam": {
+    "name": "Coleco Adam",
+    "short": "Adam",
+    "year": "1983",
+    "color": "#2e8b57"
+  },
+  "colecovision": {
+    "name": "ColecoVision",
+    "short": "ColecoVision",
+    "year": "1982",
+    "color": "#1e3d59"
+  },
+  "colour-genie-eg2000": {
+    "name": "Colour Genie EG2000",
+    "short": "Colour Genie",
+    "year": "1982",
+    "color": "#7d3c98"
+  },
+  "commodore-128": {
+    "name": "Commodore 128",
+    "short": "C128",
+    "year": "1985",
+    "color": "#4a3aff"
+  },
+  "commodore-64": {
+    "name": "Commodore 64",
+    "short": "C64",
+    "year": "1982",
+    "color": "#4a4dff"
+  },
+  "commodore-amiga": {
+    "name": "Commodore Amiga",
+    "short": "Amiga",
+    "year": "1985",
+    "color": "#ff6600"
+  },
+  "commodore-cdtv": {
+    "name": "Commodore CDTV",
+    "short": "CDTV",
+    "year": "1991",
+    "color": "#1b1b3a"
+  },
+  "commodore-pet": {
+    "name": "Commodore PET",
+    "short": "PET",
+    "year": "1977",
+    "color": "#2d5a27"
+  },
+  "commodore-plus4": {
+    "name": "Commodore Plus/4",
+    "short": "Plus/4",
+    "year": "1984",
+    "color": "#666699"
+  },
+  "commodore-vic-20": {
+    "name": "Commodore VIC-20",
+    "short": "VIC-20",
+    "year": "1980",
+    "color": "#8b6914"
+  },
+  "compucolor-ii": {
+    "name": "Compucolor II",
+    "short": "Compucolor II",
+    "year": "1977",
+    "color": "#1e7a4f"
+  },
+  "cosmac-elf": {
+    "name": "COSMAC ELF",
+    "short": "COSMAC ELF",
+    "year": "1976",
+    "color": "#3a7d44"
+  },
+  "daewoo-zemmix": {
+    "name": "Daewoo Zemmix",
+    "short": "Zemmix",
+    "year": "1985",
+    "color": "#2471a3"
+  },
+  "dai": {
+    "name": "DAI Personal Computer",
+    "short": "DAI",
+    "year": "1980",
+    "color": "#b5651d"
+  },
+  "didaktik": {
+    "name": "Didaktik",
+    "short": "Didaktik",
+    "year": "1987",
+    "color": "#1e6b4f"
+  },
+  "dragon-32": {
+    "name": "Dragon 32/64",
+    "short": "Dragon",
+    "year": "1982",
+    "color": "#228b22"
+  },
+  "elwro-800-junior": {
+    "name": "Elwro 800 Junior",
+    "short": "Elwro 800",
+    "year": "1986",
+    "color": "#b03a2e"
+  },
+  "enterprise": {
+    "name": "Enterprise 64/128",
+    "short": "Enterprise",
+    "year": "1985",
+    "color": "#8a4f9e"
+  },
+  "exidy-sorcerer": {
+    "name": "Exidy Sorcerer",
+    "short": "Sorcerer",
+    "year": "1978",
+    "color": "#b5742a"
+  },
+  "fairchild-channel-f": {
+    "name": "Fairchild Channel F",
+    "short": "Channel F",
+    "year": "1976",
+    "color": "#8b4513"
+  },
+  "fm-towns": {
+    "name": "Fujitsu FM Towns",
+    "short": "FM Towns",
+    "year": "1989",
+    "color": "#4682b4"
+  },
+  "fujitsu-fm-7": {
+    "name": "Fujitsu FM-7",
+    "short": "FM-7",
+    "year": "1982",
+    "color": "#2e7d32"
+  },
+  "game-boy-advance": {
+    "name": "Nintendo Game Boy Advance",
+    "short": "GBA",
+    "year": "2001",
+    "color": "#663399"
+  },
+  "game-boy-color": {
+    "name": "Nintendo Game Boy Color",
+    "short": "Game Boy Color",
+    "year": "1998",
+    "color": "#6b5b95"
+  },
+  "game-boy": {
+    "name": "Nintendo Game Boy",
+    "short": "Game Boy",
+    "year": "1989",
+    "color": "#8a9a5b"
+  },
+  "grundy-newbrain": {
+    "name": "Grundy NewBrain",
+    "short": "NewBrain",
+    "year": "1982",
+    "color": "#5b6770"
+  },
+  "gx4000": {
+    "name": "Amstrad GX4000",
+    "short": "GX4000",
+    "year": "1990",
+    "color": "#c1352b"
+  },
+  "heathkit-h8": {
+    "name": "Heathkit H8 / H89",
+    "short": "Heathkit H8",
+    "year": "1977",
+    "color": "#2f6e8f"
+  },
+  "hobbit": {
+    "name": "Hobbit",
+    "short": "Hobbit",
+    "year": "1990",
+    "color": "#8b4513"
+  },
+  "ht-1080z": {
+    "name": "HT-1080Z",
+    "short": "HT-1080Z",
+    "year": "1982",
+    "color": "#c0392b"
+  },
+  "ibm-pc": {
+    "name": "IBM PC",
+    "short": "IBM PC",
+    "year": "1981",
+    "color": "#000080"
+  },
+  "imsai-8080": {
+    "name": "IMSAI 8080",
+    "short": "IMSAI 8080",
+    "year": "1975",
+    "color": "#2f4f4f"
+  },
+  "intellivision": {
+    "name": "Mattel Intellivision",
+    "short": "Intellivision",
+    "year": "1979",
+    "color": "#8b0000"
+  },
+  "interact": {
+    "name": "Interact Home Computer",
+    "short": "Interact",
+    "year": "1978",
+    "color": "#a83b3b"
+  },
+  "iq-151": {
+    "name": "IQ 151",
+    "short": "IQ 151",
+    "year": "1985",
+    "color": "#16734d"
+  },
+  "jupiter-ace": {
+    "name": "Jupiter Ace",
+    "short": "Jupiter Ace",
+    "year": "1982",
+    "color": "#8b0000"
+  },
+  "kim-1": {
+    "name": "MOS KIM-1",
+    "short": "KIM-1",
+    "year": "1976",
+    "color": "#6b4f2a"
+  },
+  "korvet-pk8020": {
+    "name": "Korvet PK8020",
+    "short": "Korvet",
+    "year": "1988",
+    "color": "#800000"
+  },
+  "macintosh": {
+    "name": "Apple Macintosh",
+    "short": "Mac",
+    "year": "1984",
+    "color": "#555555"
+  },
+  "magnavox-odyssey2": {
+    "name": "Magnavox Odyssey²",
+    "short": "Odyssey²",
+    "year": "1978",
+    "color": "#daa520"
+  },
+  "matra-alice": {
+    "name": "Matra Alice",
+    "short": "Alice",
+    "year": "1983",
+    "color": "#d62828"
+  },
+  "mattel-aquarius": {
+    "name": "Mattel Aquarius",
+    "short": "Aquarius",
+    "year": "1983",
+    "color": "#00736b"
+  },
+  "memotech-mtx": {
+    "name": "Memotech MTX",
+    "short": "MTX",
+    "year": "1983",
+    "color": "#2f4f4f"
+  },
+  "meritum": {
+    "name": "Meritum",
+    "short": "Meritum",
+    "year": "1983",
+    "color": "#922b21"
+  },
+  "microbee": {
+    "name": "MicroBee",
+    "short": "MicroBee",
+    "year": "1982",
+    "color": "#f9a825"
+  },
+  "micronique-hector": {
+    "name": "Micronique Hector",
+    "short": "Hector",
+    "year": "1983",
+    "color": "#6a4c93"
+  },
+  "mikrosha": {
+    "name": "Mikrosha",
+    "short": "Mikrosha",
+    "year": "1987",
+    "color": "#8b0000"
+  },
+  "msx-turbo-r": {
+    "name": "MSX turbo R",
+    "short": "turbo R",
+    "year": "1990",
+    "color": "#c8102e"
+  },
+  "msx": {
+    "name": "MSX",
+    "short": "MSX",
+    "year": "1983",
+    "color": "#e60012"
+  },
+  "multitech-mpf-1": {
+    "name": "Multitech MPF-I",
+    "short": "MPF-I",
+    "year": "1981",
+    "color": "#558b2f"
+  },
+  "nabu-pc": {
+    "name": "NABU PC",
+    "short": "NABU",
+    "year": "1982",
+    "color": "#00695c"
+  },
+  "nascom": {
+    "name": "Nascom",
+    "short": "Nascom",
+    "year": "1977",
+    "color": "#7a2e2e"
+  },
+  "ndr-klein-computer": {
+    "name": "NDR-Klein-Computer",
+    "short": "NDR-Klein",
+    "year": "1984",
+    "color": "#455a64"
+  },
+  "nec-pc-6001": {
+    "name": "NEC PC-6001",
+    "short": "PC-6001",
+    "year": "1981",
+    "color": "#1565c0"
+  },
+  "nec-pc-88": {
+    "name": "NEC PC-8801",
+    "short": "PC-88",
+    "year": "1981",
+    "color": "#b0b0b0"
+  },
+  "nec-pc-98": {
+    "name": "NEC PC-9801",
+    "short": "PC-98",
+    "year": "1982",
+    "color": "#1d4e8f"
+  },
+  "nec-pc-fx": {
+    "name": "NEC PC-FX",
+    "short": "PC-FX",
+    "year": "1994",
+    "color": "#708090"
+  },
+  "neo-geo-pocket-color": {
+    "name": "SNK Neo Geo Pocket Color",
+    "short": "NGPC",
+    "year": "1999",
+    "color": "#ff8c00"
+  },
+  "neo-geo-pocket": {
+    "name": "SNK Neo Geo Pocket",
+    "short": "Neo Geo Pocket",
+    "year": "1998",
+    "color": "#ffa500"
+  },
+  "neo-geo": {
+    "name": "SNK Neo Geo",
+    "short": "Neo Geo",
+    "year": "1990",
+    "color": "#d4a012"
+  },
+  "netronics-elf-ii": {
+    "name": "Netronics ELF II",
+    "short": "ELF II",
+    "year": "1977",
+    "color": "#7d3a6a"
+  },
+  "nintendo-64": {
+    "name": "Nintendo 64",
+    "short": "N64",
+    "year": "1996",
+    "color": "#009b3a"
+  },
+  "nintendo-entertainment-system": {
+    "name": "Nintendo Entertainment System",
+    "short": "NES",
+    "year": "1983",
+    "color": "#e30613"
+  },
+  "nintendo-virtual-boy": {
+    "name": "Nintendo Virtual Boy",
+    "short": "Virtual Boy",
+    "year": "1995",
+    "color": "#b22222"
+  },
+  "ohio-scientific": {
+    "name": "Ohio Scientific Superboard",
+    "short": "Ohio Scientific",
+    "year": "1977",
+    "color": "#7a3b8a"
+  },
+  "olivetti-prodest-pc128": {
+    "name": "Olivetti Prodest PC128",
+    "short": "Prodest PC128",
+    "year": "1986",
+    "color": "#4527a0"
+  },
+  "ondra": {
+    "name": "Ondra",
+    "short": "Ondra",
+    "year": "1985",
+    "color": "#3a7d5d"
+  },
+  "oric-atmos": {
+    "name": "Oric Atmos",
+    "short": "Oric",
+    "year": "1984",
+    "color": "#e65c00"
+  },
+  "orion-128": {
+    "name": "Orion-128",
+    "short": "Orion-128",
+    "year": "1990",
+    "color": "#c0392b"
+  },
+  "pc-engine": {
+    "name": "NEC PC Engine",
+    "short": "PC Engine",
+    "year": "1987",
+    "color": "#ff4500"
+  },
+  "pentagon-128": {
+    "name": "Pentagon 128",
+    "short": "Pentagon",
+    "year": "1989",
+    "color": "#b22222"
+  },
+  "philips-cd-i": {
+    "name": "Philips CD-i",
+    "short": "CD-i",
+    "year": "1991",
+    "color": "#006633"
+  },
+  "philips-p2000": {
+    "name": "Philips P2000",
+    "short": "P2000",
+    "year": "1980",
+    "color": "#1d4e89"
+  },
+  "philips-vg-5000": {
+    "name": "Philips VG-5000",
+    "short": "VG-5000",
+    "year": "1984",
+    "color": "#0a7d6b"
+  },
+  "pmd-85": {
+    "name": "PMD 85",
+    "short": "PMD 85",
+    "year": "1985",
+    "color": "#2c7a4b"
+  },
+  "pravetz-8": {
+    "name": "Pravetz 8",
+    "short": "Pravetz 8",
+    "year": "1982",
+    "color": "#117a65"
+  },
+  "pravetz-8d": {
+    "name": "Pravetz 8D",
+    "short": "Pravetz 8D",
+    "year": "1985",
+    "color": "#0e6655"
+  },
+  "primo": {
+    "name": "Primo",
+    "short": "Primo",
+    "year": "1984",
+    "color": "#d35400"
+  },
+  "processor-tech-sol-20": {
+    "name": "Processor Technology Sol-20",
+    "short": "Sol-20",
+    "year": "1976",
+    "color": "#8a6d3b"
+  },
+  "radio-86rk": {
+    "name": "Radio-86RK",
+    "short": "Radio-86RK",
+    "year": "1986",
+    "color": "#a52a2a"
+  },
+  "rca-studio-ii": {
+    "name": "RCA Studio II",
+    "short": "Studio II",
+    "year": "1977",
+    "color": "#696969"
+  },
+  "robotron-kc85": {
+    "name": "Robotron KC85/KC87",
+    "short": "KC85",
+    "year": "1984",
+    "color": "#2e5090"
+  },
+  "sam-coupe": {
+    "name": "SAM Coupé",
+    "short": "SAM Coupé",
+    "year": "1989",
+    "color": "#cc3366"
+  },
+  "samsung-spc": {
+    "name": "Samsung SPC",
+    "short": "SPC",
+    "year": "1982",
+    "color": "#1f618d"
+  },
+  "scorpion-zs256": {
+    "name": "Scorpion ZS-256",
+    "short": "Scorpion",
+    "year": "1991",
+    "color": "#8b4513"
+  },
+  "sega-32x": {
+    "name": "Sega 32X",
+    "short": "32X",
+    "year": "1994",
+    "color": "#ff1493"
+  },
+  "sega-dreamcast": {
+    "name": "Sega Dreamcast",
+    "short": "Dreamcast",
+    "year": "1998",
+    "color": "#ff7f00"
+  },
+  "sega-game-gear": {
+    "name": "Sega Game Gear",
+    "short": "Game Gear",
+    "year": "1990",
+    "color": "#17569b"
+  },
+  "sega-master-system": {
+    "name": "Sega Master System",
+    "short": "Master System",
+    "year": "1985",
+    "color": "#0060a8"
+  },
+  "sega-mega-cd": {
+    "name": "Sega Mega CD",
+    "short": "Mega CD",
+    "year": "1991",
+    "color": "#1e90ff"
+  },
+  "sega-mega-drive": {
+    "name": "Sega Mega Drive",
+    "short": "Mega Drive",
+    "year": "1988",
+    "color": "#0057a0"
+  },
+  "sega-saturn": {
+    "name": "Sega Saturn",
+    "short": "Saturn",
+    "year": "1994",
+    "color": "#4169e1"
+  },
+  "sega-sc-3000": {
+    "name": "Sega SC-3000",
+    "short": "SC-3000",
+    "year": "1983",
+    "color": "#283593"
+  },
+  "sega-sg-1000": {
+    "name": "Sega SG-1000",
+    "short": "SG-1000",
+    "year": "1983",
+    "color": "#cc0000"
+  },
+  "sharp-mz": {
+    "name": "Sharp MZ",
+    "short": "MZ",
+    "year": "1978",
+    "color": "#c01f3a"
+  },
+  "sharp-x1": {
+    "name": "Sharp X1",
+    "short": "X1",
+    "year": "1982",
+    "color": "#d81b60"
+  },
+  "sharp-x68000": {
+    "name": "Sharp X68000",
+    "short": "X68000",
+    "year": "1987",
+    "color": "#333333"
+  },
+  "sinclair-ql": {
+    "name": "Sinclair QL",
+    "short": "QL",
+    "year": "1984",
+    "color": "#1a3a6b"
+  },
+  "sinclair-zx-spectrum": {
+    "name": "Sinclair ZX Spectrum",
+    "short": "Spectrum",
+    "year": "1982",
+    "color": "#cc0000"
+  },
+  "sinclair-zx80": {
+    "name": "Sinclair ZX80",
+    "short": "ZX80",
+    "year": "1980",
+    "color": "#404040"
+  },
+  "sony-playstation-2": {
+    "name": "Sony PlayStation 2",
+    "short": "PS2",
+    "year": "2000",
+    "color": "#00439c"
+  },
+  "sony-playstation": {
+    "name": "Sony PlayStation",
+    "short": "PlayStation",
+    "year": "1994",
+    "color": "#003087"
+  },
+  "sord-m5": {
+    "name": "Sord M5",
+    "short": "M5",
+    "year": "1982",
+    "color": "#e07b00"
+  },
+  "specialist": {
+    "name": "Specialist",
+    "short": "Specialist",
+    "year": "1987",
+    "color": "#a0522d"
+  },
+  "spectravideo-svi-328": {
+    "name": "Spectravideo SVI-328",
+    "short": "SVI-328",
+    "year": "1983",
+    "color": "#1e6fb8"
+  },
+  "squale": {
+    "name": "Squale",
+    "short": "Squale",
+    "year": "1984",
+    "color": "#2a6f97"
+  },
+  "super-nintendo": {
+    "name": "Nintendo Super Nintendo",
+    "short": "SNES",
+    "year": "1990",
+    "color": "#4b0082"
+  },
+  "sym-1": {
+    "name": "Synertek SYM-1",
+    "short": "SYM-1",
+    "year": "1978",
+    "color": "#4a4a8a"
+  },
+  "tandy-1000": {
+    "name": "Tandy 1000",
+    "short": "Tandy 1000",
+    "year": "1984",
+    "color": "#8b4513"
+  },
+  "tandy-coco": {
+    "name": "Tandy Color Computer",
+    "short": "CoCo",
+    "year": "1980",
+    "color": "#cc6600"
+  },
+  "tangerine-microtan-65": {
+    "name": "Tangerine Microtan 65",
+    "short": "Microtan 65",
+    "year": "1979",
+    "color": "#e67e22"
+  },
+  "tatung-einstein": {
+    "name": "Tatung Einstein",
+    "short": "Einstein",
+    "year": "1984",
+    "color": "#5b3a8c"
+  },
+  "thomson-mo5": {
+    "name": "Thomson MO5",
+    "short": "Thomson MO5",
+    "year": "1984",
+    "color": "#0066cc"
+  },
+  "ti-99-4a": {
+    "name": "Texas Instruments TI-99/4A",
+    "short": "TI-99/4A",
+    "year": "1981",
+    "color": "#b8860b"
+  },
+  "timex-tc2048": {
+    "name": "Timex Computer 2048",
+    "short": "TC2048",
+    "year": "1984",
+    "color": "#1b8a5a"
+  },
+  "timex-ts2068": {
+    "name": "Timex Sinclair 2068",
+    "short": "TS2068",
+    "year": "1983",
+    "color": "#2a9d8f"
+  },
+  "tomy-tutor": {
+    "name": "Tomy Tutor",
+    "short": "Tutor",
+    "year": "1982",
+    "color": "#6a1b9a"
+  },
+  "trs-80-mc-10": {
+    "name": "TRS-80 MC-10",
+    "short": "MC-10",
+    "year": "1983",
+    "color": "#37474f"
+  },
+  "trs-80-model-100": {
+    "name": "TRS-80 Model 100",
+    "short": "Model 100",
+    "year": "1983",
+    "color": "#546e7a"
+  },
+  "trs-80": {
+    "name": "Tandy TRS-80",
+    "short": "TRS-80",
+    "year": "1977",
+    "color": "#4d4d4d"
+  },
+  "vector-06c": {
+    "name": "Vector-06C",
+    "short": "Vector-06C",
+    "year": "1987",
+    "color": "#cd5c5c"
+  },
+  "vectrex": {
+    "name": "GCE Vectrex",
+    "short": "Vectrex",
+    "year": "1982",
+    "color": "#8a2be2"
+  },
+  "videoton-tvc": {
+    "name": "Videoton TVC",
+    "short": "TVC",
+    "year": "1986",
+    "color": "#e67e22"
+  },
+  "vtech-laser": {
+    "name": "VTech Laser",
+    "short": "Laser",
+    "year": "1983",
+    "color": "#6c3483"
+  },
+  "z1013": {
+    "name": "Robotron Z1013",
+    "short": "Z1013",
+    "year": "1985",
+    "color": "#34495e"
+  },
+  "zx81": {
+    "name": "Sinclair ZX81",
+    "short": "ZX81",
+    "year": "1981",
+    "color": "#1a1a1a"
+  }
+}
