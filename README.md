@@ -83,6 +83,10 @@ repo.** In particular:
   2.27:1 on `--h-ground`, and darkening it far enough to carry copy turns it
   into `--h-ink-muted` — the tone that already does that job. The two cannot
   both be text colours.
+- **Set text in `--h-accent-ink`, never `--h-accent`.** The plain accent is the
+  fill: as small text it measures 4.07:1 on `--h-surface-light` and 4.52:1 on
+  `--h-ground`. `--h-accent-ink` is whichever of the pair is readable on the
+  current theme's ground, and it is the only one to put words in.
 - **Three faces, three jobs.** Archivo for interface, Literata for reading and
   editorial display and all captions, JetBrains Mono for anything the machine
   said. A fourth face is a drift trigger, not a decision.

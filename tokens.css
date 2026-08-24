@@ -25,6 +25,12 @@
   --h-ink-faint:   #94a3b8;
   --h-accent:      #b74d2d;   /* rust */
   --h-accent-deep: #a8401f;
+  /* The accent at ink strength — the one to set *text* in. --h-accent is the
+   * fill: it measures 4.07:1 on --h-surface-light and 4.52:1 on --h-ground, so
+   * it is not safe as small text on the family's own grounds. This role swaps
+   * per theme, because each of the pair is the readable one on exactly one
+   * ground. Every consuming site had grown its own copy of this swap. */
+  --h-accent-ink:  var(--h-accent-deep);
   --h-line:        #d6d3ca;
   --h-line-soft:   #e2ded3;
   --h-code-bg:     #242019;
@@ -75,6 +81,7 @@
     --h-ink-faint:   #8a7f6a;
     --h-accent:      #e0744a;
     --h-accent-deep: #c85122;
+    --h-accent-ink:  var(--h-accent);
     --h-line:        #3a342a;
     --h-line-soft:   #4a4234;
     --h-code-bg:     #100e0c;
@@ -94,6 +101,7 @@
   --h-ink-faint:   #8a7f6a;
   --h-accent:      #e0744a;
   --h-accent-deep: #c85122;
+  --h-accent-ink:  var(--h-accent);
   --h-line:        #3a342a;
   --h-line-soft:   #4a4234;
   --h-code-bg:     #100e0c;
