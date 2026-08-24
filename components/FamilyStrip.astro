@@ -46,7 +46,9 @@ const {
     border-top: 1px solid var(--h-line);
     font-family: var(--h-font-ui);
     font-size: 0.78rem;
-    color: var(--h-ink-faint);
+    /* Not --h-ink-faint: this is small informational text, and that token is
+       decorative-only. See tokens.css. */
+    color: var(--h-ink-muted);
   }
 
   .h-family a {

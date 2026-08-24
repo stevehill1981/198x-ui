@@ -13,7 +13,15 @@
   --h-ground:      #f4f1e8;   /* panels, cards, sidebars */
   --h-ink:         #3a2c1f;   /* house brown: headings, plate frame */
   --h-ink-body:    #3f4652;   /* long-form body text */
-  --h-ink-muted:   #6b7280;
+  /* Cleared 4.5:1 against all three light grounds, --h-surface-light included,
+   * so text set in it holds on the darkest ground the family uses. It was
+   * #6b7280, which measured 3.86:1 there and 4.28:1 on --h-ground. */
+  --h-ink-muted:   #606773;
+  /* DECORATIVE / LARGE ONLY — never small informational text. At 2.27:1 on
+   * --h-ground it cannot carry copy, and darkening it far enough to try makes
+   * it --h-ink-muted, which is the tone that already does that job. Use it for
+   * rules, separators and ornament. Rule from Code198x's
+   * visual-direction-synthesis.md, which names this exact value. */
   --h-ink-faint:   #94a3b8;
   --h-accent:      #b74d2d;   /* rust */
   --h-accent-deep: #a8401f;

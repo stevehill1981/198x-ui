@@ -79,6 +79,10 @@ repo.** In particular:
   prevent, and a reader cannot tell two colours apart by looking.
 - **The plate frame is constant**, never the project colour. It is what makes
   nine fills of differing strength read as one set.
+- **`--h-ink-faint` is decorative, never small informational text.** It measures
+  2.27:1 on `--h-ground`, and darkening it far enough to carry copy turns it
+  into `--h-ink-muted` — the tone that already does that job. The two cannot
+  both be text colours.
 - **Three faces, three jobs.** Archivo for interface, Literata for reading and
   editorial display and all captions, JetBrains Mono for anything the machine
   said. A fourth face is a drift trigger, not a decision.
