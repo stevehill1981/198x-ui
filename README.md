@@ -67,6 +67,26 @@ import SiteNav from '@198x-ui/components/SiteNav.astro';
 Pin to a tag rather than tracking `main`. Without that, a change here can break
 three sites at once with nothing in between to catch it.
 
+## Ground tint
+
+A site can carry its project colour as an ambient ground tint. Opt in from the
+HTML, with the same project name the plate takes:
+
+```astro
+<html lang="en" data-tint="build">
+```
+
+That is the whole interface. The colour and both ceilings — 5% in light, 20% in
+dark — resolve inside `tokens.css`, because a host that could set the strength
+could exceed it, and the light ceiling is what keeps every derived ink valid on
+the tinted ground. See `198x/decisions/family-visual-identity.md` §3b.
+
+Two things it is not. It is not a licence for project colour anywhere else:
+the tint works *because* it is ambient, and anything attached to an object — a
+border, heading, link, rule or card accent — stays forbidden. And a fixed brand
+colour is not covered by the ceiling, which protects derived ink only; check any
+such colour on the tinted ground directly. That is how `--h-accent` was caught.
+
 ## Governance
 
 Everything here is the concrete form of
