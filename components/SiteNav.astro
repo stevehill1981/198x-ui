@@ -11,8 +11,20 @@ import Plate from './Plate.astro';
 interface NavItem {
   label: string;
   href: string;
-  /** Marks the section the current page belongs to. */
-  current?: boolean;
+  /**
+   * Marks this entry as where the reader is.
+   *
+   * `true` (or `'page'`) means this entry IS the page being shown, and emits
+   * `aria-current="page"`. `'section'` means the page sits inside this
+   * entry's branch without being it, and emits `aria-current="true"` — the
+   * value ARIA defines for "the current item in a set" when it is not the
+   * page itself.
+   *
+   * The distinction is not cosmetic. Emitting `page` for an ancestor tells a
+   * screen-reader user that a link to somewhere else is the document they are
+   * on, which is worse than marking nothing at all.
+   */
+  current?: boolean | 'page' | 'section';
 }
 
 interface Props {
@@ -29,6 +41,14 @@ interface Props {
 }
 
 const { prefix, project, items, version, homeHref = '/' } = Astro.props;
+
+/**
+ * `true` keeps meaning `page`, so every existing caller is unaffected.
+ */
+function ariaCurrent(current: NavItem['current']) {
+  if (current === 'section') return 'true';
+  return current ? 'page' : undefined;
+}
 const shown = version ? (/^\d/.test(version) ? `v${version}` : version) : null;
 ---
 
@@ -37,8 +57,12 @@ const shown = version ? (/^\d/.test(version) ? `v${version}` : version) : null;
 
   <nav class="h-nav-items" aria-label="Primary">
     {items.map((item) => (
-      <a href={item.href} class:list={['h-nav-link', { current: item.current }]}
-         aria-current={item.current ? 'page' : undefined}>{item.label}</a>
+      <a href={item.href}
+         class:list={['h-nav-link', {
+           current: item.current === true || item.current === 'page',
+           section: item.current === 'section',
+         }]}
+         aria-current={ariaCurrent(item.current)}>{item.label}</a>
     ))}
     {shown && <span class="h-nav-version">{shown}</span>}
   </nav>
@@ -72,6 +96,10 @@ const shown = version ? (/^\d/.test(version) ? `v${version}` : version) : null;
 
   .h-nav-link:hover { color: var(--h-accent-ink); text-decoration: underline; }
   .h-nav-link.current { color: var(--h-ink); font-weight: 600; }
+  /* A section is where you are heading, not where you are: the same ink, no
+     added weight. Weight is reserved for the page itself so the two states
+     stay tellable apart without relying on colour. */
+  .h-nav-link.section { color: var(--h-ink); }
   .h-nav-link:focus-visible { outline: 2px solid var(--h-accent); outline-offset: 3px; }
 
   .h-nav-version {
