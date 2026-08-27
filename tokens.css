@@ -61,18 +61,21 @@
   --h-plate-cell:   var(--h-page);
   --h-plate-shadow: 0 1px 2px rgba(58, 44, 31, 0.20), 0 3px 8px rgba(58, 44, 31, 0.10);
 
-  /* Project identity. oklch(0.40 <chroma> <hue>) — equal lightness is the
+  /* Project identity. oklch(0.50 <chroma> <hue>) — equal lightness is the
    * cohering rule; chroma runs to the sRGB gamut edge per hue. These appear in
-   * a plate cell and nowhere else. */
-  --h-project-code:  #792b0b;
-  --h-project-emu:   #0d4a7d;
-  --h-project-asm:   #0f5631;
-  --h-project-cat:   #562a8d;
-  --h-project-build: #60410c;
-  --h-project-debug: #85112d;
-  --h-project-isa:   #0f5158;
-  --h-project-forge: #721a6e;
-  --h-project-play:  #424e0c;
+   * a plate cell and nowhere else, which is what separates them from machine
+   * colour — not their lightness. White cell ink measures 5.3–6.6:1 on them.
+   * 0.50 is the ceiling: from 0.55 to 0.70 neither paper nor brown ink clears
+   * 4.5:1 on the worst of the nine. */
+  --h-project-code:  #a93800;
+  --h-project-emu:   #0066af;
+  --h-project-asm:   #007742;
+  --h-project-cat:   #8000e0;
+  --h-project-build: #865900;
+  --h-project-debug: #b9003c;
+  --h-project-isa:   #00717b;
+  --h-project-forge: #a4009e;
+  --h-project-play:  #5b6c00;
 
   /* Type. Three faces, three jobs. All three cover Latin, Greek and Cyrillic,
    * so a heading naming a Soviet or Bulgarian machine sets in the house face
