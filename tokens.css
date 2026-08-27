@@ -86,6 +86,8 @@
   --h-project-isa:   #00717b;
   --h-project-forge: #a4009e;
   --h-project-play:  #5b6c00;
+  --h-project-format: #007465;
+  --h-project-studio: #482aff;
 
   /* Type. Three faces, three jobs. All three cover Latin, Greek and Cyrillic,
    * so a heading naming a Soviet or Bulgarian machine sets in the house face
@@ -210,6 +212,8 @@
 :root[data-tint="isa"]   { --h-tint: var(--h-project-isa); }
 :root[data-tint="forge"] { --h-tint: var(--h-project-forge); }
 :root[data-tint="play"]  { --h-tint: var(--h-project-play); }
+:root[data-tint="format"] { --h-tint: var(--h-project-format); }
+:root[data-tint="studio"] { --h-tint: var(--h-project-studio); }
 
 /* One rule, both themes: --h-tint-strength and the bases each resolve to
  * whatever the active theme block set them to. */
