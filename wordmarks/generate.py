@@ -31,9 +31,10 @@ import json
 import pathlib
 
 PROJECTS = {
-    "code": "#792b0b", "emu": "#0d4a7d", "asm": "#0f5631",
-    "cat": "#562a8d", "build": "#60410c", "debug": "#85112d",
-    "isa": "#0f5158", "forge": "#721a6e", "play": "#424e0c",
+    "code": "#a93800", "emu": "#0066af", "asm": "#007742",
+    "cat": "#8000e0", "build": "#865900", "debug": "#b9003c",
+    "isa": "#00717b", "forge": "#a4009e", "play": "#5b6c00",
+    "format": "#007465", "studio": "#482aff",
 }
 
 _DATA = json.loads((pathlib.Path(__file__).parent / "glyphs.json").read_text())
