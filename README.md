@@ -20,6 +20,7 @@ nothing, and the style inside it is called `House198x` either way.
 | `machines.json` | Machine → colour, for all 156 systems |
 | `wordmarks/` | The nine plates as SVG and PNG, light and dark |
 | `wordmarks/glyphs.json` | JetBrains Mono outlines, shared by `Plate.astro` and the generator |
+| `fonts.css`, `fonts/` | The three house faces, self-hosted and range-split |
 | [`WORDMARK.md`](WORDMARK.md) | Wordmark spec — geometry, colours, and what not to do |
 
 **Components, not layouts.** Shared components survive three sites diverging.
