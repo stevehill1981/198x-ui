@@ -21,6 +21,12 @@ than stylistic: it puts every cell on the same rhythm, so a three-character
 prefix and a five-character one differ in width without looking inconsistent.
 A proportional face makes nine plates look like nine unrelated marks.
 
+Load-bearing in a literal sense too: the plate geometry is computed from the
+face's 600-unit advance, and the divider is placed at a fixed offset. That is
+why the ready-made assets carry the type as **outlines rather than live text** —
+a substituted mono has a different advance, and the divider does not move to
+meet it.
+
 **The frame is constant.** House brown `#3a2c1f` on light, paper `#efe7d6` on
 dark — never the project colour. It is what makes nine fills of differing
 strength read as one set, and it does more work than the fill does.
@@ -66,9 +72,14 @@ wordmarks/asm198x-light.svg   wordmarks/asm198x-light.png
 wordmarks/asm198x-dark.svg    wordmarks/asm198x-dark.png
 ```
 
-**Prefer the PNG where you do not control the fonts.** The SVG sets its type in
-JetBrains Mono; a viewer without it gets a fallback mono and the geometry no
-longer matches. GitHub READMEs are the common case.
+**Use the SVG anywhere.** It carries its own outlines, so it needs no font
+installed and renders identically everywhere — GitHub READMEs included, which
+used to be the case that forced the PNG. The PNG remains for the places that
+cannot take an SVG at all: some mail clients, some social-card scrapers.
+
+The type is not selectable in the SVG, which for a wordmark is the intent
+rather than a cost — `ASM198x` should not land in someone's copy of the page.
+`role="img"` and the `<title>` carry the name to a screen reader either way.
 
 Regenerate with `python3 wordmarks/generate.py`. The geometry there mirrors
 `Plate.astro` — change both together or the assets drift from what the sites
