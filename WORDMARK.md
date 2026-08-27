@@ -43,6 +43,17 @@ literal values.
 | Frame and divider | `2px` at `F = 14`, i.e. `F / 7` |
 | Corner radius | `3px` at `F = 14` |
 | Letter-spacing | `-0.01em` |
+| Vertical alignment | cap-height band centred in the cell |
+
+**The type is centred on cap height, not sat on a text baseline.** The names are
+uppercase and the suffix is digits, so nothing descends. A text baseline leaves
+`0.34em` above the caps and `0.59em` below them — the type rides high by
+`0.125em`, which is 6px on a 48px plate. Centring the cap band puts `0.475em`
+on both sides.
+
+Centred on cap height rather than on each name's own ink, so all nine sit on one
+baseline: `Q`'s tail or a round glyph's overshoot must not shift a plate relative
+to its siblings.
 
 ## Colours
 

@@ -43,8 +43,8 @@ const fill = project ? `var(--h-project-${project})` : 'transparent';
 const ink = project ? '#faf8f2' : 'var(--h-ink)';
 const Tag = href ? 'a' : 'span';
 
-const { upem, advance, glyphs } = glyphData as {
-  upem: number; advance: number; glyphs: Record<string, string>;
+const { upem, advance, capHeight, glyphs } = glyphData as {
+  upem: number; advance: number; capHeight: number; glyphs: Record<string, string>;
 };
 
 const left = prefix.toUpperCase();
@@ -75,7 +75,13 @@ const w = wLeft + wRight + STROKE;      // one shared divider line
 const ow = w + STROKE;                  // room for the outer stroke
 const oh = h + STROKE;
 const o = STROKE / 2;
-const baseline = o + PAD_Y + F * 0.74;  // cap height sits ~0.74em below the top
+/* Centre the cap-height band in the cell rather than sitting the type on a text
+   baseline. The names are uppercase with no descenders, so a text baseline
+   leaves 0.34em above the caps and 0.59em below — a 0.125em list that reads as
+   the type riding high. Centring on cap height rather than each string's ink
+   keeps every plate on one baseline. */
+const CAP = capHeight / upem;
+const baseline = o + (h + CAP * F) / 2;
 
 const n = (v: number) => Number(v.toFixed(2));
 const scale = F / upem;

@@ -1,6 +1,7 @@
 {
- "_": "JetBrains Mono Bold glyph outlines in font units. Shared by wordmarks/generate.py and components/Plate.astro so the two cannot drift. Regenerate per the docstring in generate.py.",
+ "_": "JetBrains Mono Bold glyph outlines in font units. Shared by wordmarks/generate.py and components/Plate.astro so the two cannot drift. Regenerate per the docstring in generate.py. capHeight is what the plate centres on: the names are uppercase, so centring the em box or sitting on a text baseline leaves them riding high.",
  "advance": 600,
+ "capHeight": 730,
  "glyphs": {
   "0": "M300 -10Q229 -10 177 17Q125 44 96 93Q68 142 68 208V522Q68 588 96 637Q125 686 177 713Q229 740 300 740Q371 740 423 713Q475 686 504 637Q532 588 532 522V208Q532 142 504 93Q475 44 423 17Q371 -10 300 -10ZM300 98Q352 98 383 128Q414 158 414 208V522Q414 572 384 602Q353 632 300 632Q247 632 216 602Q186 572 186 522V208Q186 158 217 128Q248 98 300 98ZM300 305Q270 305 252 322Q234 338 234 368Q234 398 252 414Q270 429 300 429Q330 429 348 414Q366 398 366 368Q366 338 348 322Q330 305 300 305Z",
   "1": "M84 0V113H274V609L83 469V609L251 730H399V113H552V0Z",
