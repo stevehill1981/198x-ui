@@ -83,7 +83,8 @@ rather than a cost — `ASM198x` should not land in someone's copy of the page.
 
 Regenerate with `python3 wordmarks/generate.py`. The geometry there mirrors
 `Plate.astro` — change both together or the assets drift from what the sites
-render.
+render. Both read their outlines from `wordmarks/glyphs.json`, so the glyphs
+themselves cannot drift; it is the geometry constants that need keeping in step.
 
 ## Four renderings
 
