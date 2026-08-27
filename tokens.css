@@ -5,7 +5,17 @@
  *
  * Light is the default. Dark applies on [data-theme="dark"] and, for viewers
  * who have expressed no preference, on prefers-color-scheme: dark.
+ *
+ * Those three states are declared once, below, via color-scheme. Every colour
+ * token then carries both values in a single light-dark() declaration instead
+ * of being restated in a second and third block. Setting color-scheme also
+ * hands form controls and scrollbars the right theme, which restating tokens
+ * never did.
  */
+
+:root { color-scheme: light dark; }
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"]  { color-scheme: dark; }
 
 :root {
   /* Ground and ink.
@@ -14,35 +24,35 @@
    * resolving from them. Custom properties resolve at use time, so a theme
    * block moves only the base and the tint below keeps working — nothing has
    * to restate the mix per theme. */
-  --h-page-base:   #fdfcf7;   /* the lightest surface: page background */
-  --h-ground-base: #f4f1e8;   /* panels, cards, sidebars */
+  --h-page-base:   light-dark(#fdfcf7, #1a1714);   /* the lightest surface: page background */
+  --h-ground-base: light-dark(#f4f1e8, #221d16);   /* panels, cards, sidebars */
   --h-page:        var(--h-page-base);
   --h-ground:      var(--h-ground-base);
   /* Ambient ground tint ceiling — see the block at the end of this file. */
   --h-tint-strength: 5%;
-  --h-ink:         #3a2c1f;   /* house brown: headings, plate frame */
-  --h-ink-body:    #3f4652;   /* long-form body text */
+  --h-ink:         light-dark(#3a2c1f, #efe7d6);   /* house brown: headings, plate frame */
+  --h-ink-body:    light-dark(#3f4652, #b9ad96);   /* long-form body text */
   /* Cleared 4.5:1 against all three light grounds, --h-surface-light included,
    * so text set in it holds on the darkest ground the family uses. It was
    * #6b7280, which measured 3.86:1 there and 4.28:1 on --h-ground. */
-  --h-ink-muted:   #606773;
+  --h-ink-muted:   light-dark(#606773, #b9ad96);
   /* DECORATIVE / LARGE ONLY — never small informational text. At 2.27:1 on
    * --h-ground it cannot carry copy, and darkening it far enough to try makes
    * it --h-ink-muted, which is the tone that already does that job. Use it for
    * rules, separators and ornament. Rule from Code198x's
    * visual-direction-synthesis.md, which names this exact value. */
-  --h-ink-faint:   #94a3b8;
-  --h-accent:      #b74d2d;   /* rust */
-  --h-accent-deep: #a8401f;
+  --h-ink-faint:   light-dark(#94a3b8, #8a7f6a);
+  --h-accent:      light-dark(#b74d2d, #e0744a);   /* rust */
+  --h-accent-deep: light-dark(#a8401f, #c85122);
   /* The accent at ink strength — the one to set *text* in. --h-accent is the
    * fill: it measures 4.07:1 on --h-surface-light and 4.52:1 on --h-ground, so
    * it is not safe as small text on the family's own grounds. This role swaps
    * per theme, because each of the pair is the readable one on exactly one
    * ground. Every consuming site had grown its own copy of this swap. */
   --h-accent-ink:  var(--h-accent-deep);
-  --h-line:        #d6d3ca;
-  --h-line-soft:   #e2ded3;
-  --h-code-bg:     #242019;
+  --h-line:        light-dark(#d6d3ca, #3a342a);
+  --h-line-soft:   light-dark(#e2ded3, #4a4234);
+  --h-code-bg:     light-dark(#242019, #100e0c);
   --h-code-ink:    #efe7d6;
 
   /* Derivation surface. Every ink is computed against this, never against
@@ -57,8 +67,8 @@
   --h-inset: clamp(1rem, 4vw, 2.25rem);
 
   /* Plate */
-  --h-plate-frame:  var(--h-ink);
-  --h-plate-cell:   var(--h-page);
+  --h-plate-frame:  light-dark(var(--h-ink), #efe7d6);
+  --h-plate-cell:   light-dark(var(--h-page), #242019);
   --h-plate-shadow: 0 1px 2px rgba(58, 44, 31, 0.20), 0 3px 8px rgba(58, 44, 31, 0.10);
 
   /* Project identity. oklch(0.50 <chroma> <hue>) — equal lightness is the
@@ -85,45 +95,25 @@
   --h-font-mono:  "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
 }
 
+/* What light-dark() cannot carry.
+ *
+ * It takes colours only, so these three still need a block per state: a
+ * percentage, a shadow list, and a token that points at a *different* token
+ * per theme rather than at a different value. Three restated instead of
+ * sixteen. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --h-page-base:   #1a1714;
-    --h-ground-base: #221d16;
     --h-tint-strength: 20%;
-    --h-ink:         #efe7d6;
-    --h-ink-body:    #b9ad96;
-    --h-ink-muted:   #b9ad96;
-    --h-ink-faint:   #8a7f6a;
-    --h-accent:      #e0744a;
-    --h-accent-deep: #c85122;
-    --h-accent-ink:  var(--h-accent);
-    --h-line:        #3a342a;
-    --h-line-soft:   #4a4234;
-    --h-code-bg:     #100e0c;
-    --h-plate-frame: #efe7d6;
-    --h-plate-cell:  #242019;
+    --h-accent-ink:    var(--h-accent);
     /* No shadow on a dark ground: it reads as dirt, not lift. */
-    --h-plate-shadow: none;
+    --h-plate-shadow:  none;
   }
 }
 
 :root[data-theme="dark"] {
-  --h-page-base:   #1a1714;
-  --h-ground-base: #221d16;
   --h-tint-strength: 20%;
-  --h-ink:         #efe7d6;
-  --h-ink-body:    #b9ad96;
-  --h-ink-muted:   #b9ad96;
-  --h-ink-faint:   #8a7f6a;
-  --h-accent:      #e0744a;
-  --h-accent-deep: #c85122;
-  --h-accent-ink:  var(--h-accent);
-  --h-line:        #3a342a;
-  --h-line-soft:   #4a4234;
-  --h-code-bg:     #100e0c;
-  --h-plate-frame: #efe7d6;
-  --h-plate-cell:  #242019;
-  --h-plate-shadow: none;
+  --h-accent-ink:    var(--h-accent);
+  --h-plate-shadow:  none;
 }
 
 /* Ambient ground tint — 198x/decisions/family-visual-identity.md §3b.
