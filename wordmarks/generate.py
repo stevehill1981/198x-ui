@@ -40,6 +40,7 @@ _DATA = json.loads((pathlib.Path(__file__).parent / "glyphs.json").read_text())
 UPEM = _DATA["upem"]          # JetBrains Mono units per em
 ADV_UNITS = _DATA["advance"]  # its advance, the 0.6em the geometry above assumes
 GLYPHS = _DATA["glyphs"]
+CAP = _DATA["capHeight"] / UPEM   # 0.73 em — what the type is centred on
 
 F = 48.0            # cell type size
 ADV = 0.6 * F       # JetBrains Mono advance width
@@ -80,7 +81,12 @@ def plate(prefix: str, fill: str, theme: dict) -> str:
     w = w_l + w_r + STROKE          # one shared divider line
     ow, oh = w + STROKE, h + STROKE  # room for the outer stroke
     o = STROKE / 2
-    baseline = o + PAD_Y + F * 0.74  # cap height sits ~0.74em below the top
+    # Centre the cap-height band in the cell, rather than sitting the type on a
+    # text baseline. The names are uppercase with no descenders, so a text
+    # baseline leaves 0.34em above the caps and 0.59em below them -- a 0.125em
+    # list that reads as the type riding high. Centring on cap height rather
+    # than on each string's ink keeps all nine plates on one baseline.
+    baseline = o + (h + CAP * F) / 2
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{ow:.1f}" height="{oh:.1f}"
      viewBox="0 0 {ow:.1f} {oh:.1f}" role="img" aria-label="{prefix.capitalize()}198x">
   <title>{prefix.capitalize()}198x</title>
