@@ -74,8 +74,10 @@
   --h-project-forge: #721a6e;
   --h-project-play:  #424e0c;
 
-  /* Type. Three faces, three jobs. */
-  --h-font-ui:    Archivo, ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Type. Three faces, three jobs. All three cover Latin, Greek and Cyrillic,
+   * so a heading naming a Soviet or Bulgarian machine sets in the house face
+   * rather than the viewer's. None covers CJK. */
+  --h-font-ui:    "Nebula Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --h-font-read:  Literata, Georgia, "Times New Roman", serif;
   --h-font-mono:  "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
 }

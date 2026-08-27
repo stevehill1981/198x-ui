@@ -107,7 +107,7 @@ repo.** In particular:
   fill: as small text it measures 4.07:1 on `--h-surface-light` and 4.52:1 on
   `--h-ground`. `--h-accent-ink` is whichever of the pair is readable on the
   current theme's ground, and it is the only one to put words in.
-- **Three faces, three jobs.** Archivo for interface, Literata for reading and
+- **Three faces, three jobs.** Nebula Sans for interface, Literata for reading and
   editorial display and all captions, JetBrains Mono for anything the machine
   said. A fourth face is a drift trigger, not a decision.
 
