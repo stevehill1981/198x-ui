@@ -69,7 +69,7 @@
   /* Plate */
   --h-plate-frame:  light-dark(var(--h-ink), #efe7d6);
   --h-plate-cell:   light-dark(var(--h-page), #242019);
-  --h-plate-shadow: 0 1px 2px rgba(58, 44, 31, 0.20), 0 3px 8px rgba(58, 44, 31, 0.10);
+  --h-plate-shadow: var(--h-lift-1);   /* a rung of the ladder, not a constant */
 
   /* Project identity. oklch(0.50 <chroma> <hue>) — equal lightness is the
    * cohering rule; chroma runs to the sRGB gamut edge per hue. These appear in
@@ -93,27 +93,84 @@
   --h-font-ui:    "Nebula Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --h-font-read:  Literata, Georgia, "Times New Roman", serif;
   --h-font-mono:  "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+
+  /* ---- Type scale — family-visual-identity.md §6 -------------------------
+   * Nine steps on a 20px body, roughly a 1.25 ratio. The root size is
+   * deliberately NOT overridden, so a reader who has raised their browser font
+   * size takes the whole system with them.
+   *
+   * Line-heights are written as the pixel pair they resolve to. The rounded
+   * decimal misses the 4px grid — 1.1667 lands on 56.0016px at 48px — and
+   * calc(56 / 48) does not, while staying unitless so it still scales. */
+  --h-text-display: 4rem;      --h-lh-display: calc(68 / 64);  --h-tr-display: -0.025em;
+  --h-text-h1:      3rem;      --h-lh-h1:      calc(56 / 48);  --h-tr-h1:      -0.02em;
+  --h-text-h2:      2.5rem;    --h-lh-h2:      calc(48 / 40);  --h-tr-h2:      -0.02em;
+  --h-text-h3:      2rem;      --h-lh-h3:      calc(40 / 32);  --h-tr-h3:      -0.015em;
+  --h-text-h4:      1.5rem;    --h-lh-h4:      calc(32 / 24);  --h-tr-h4:      -0.01em;
+  --h-text-lead:    1.5rem;    --h-lh-lead:    calc(36 / 24);
+  --h-text-body:    1.25rem;   --h-lh-body:    calc(32 / 20);
+  --h-text-small:   1rem;      --h-lh-small:   calc(24 / 16);
+  --h-text-micro:   0.875rem;  --h-lh-micro:   calc(20 / 14);  --h-tr-micro:   0.01em;
+
+  /* Weights. Nebula Sans ships six; the ladder uses two, so hierarchy comes
+   * from weight and size rather than size alone. */
+  --h-weight-major: 700;   /* display, h1, h2 */
+  --h-weight-minor: 600;   /* h3, h4 */
+
+  /* ---- Space — one 4px unit, the grid the line-heights land on ----------- */
+  --h-space-1:  0.25rem;   --h-space-2:  0.5rem;   --h-space-3:  0.75rem;
+  --h-space-4:  1rem;      --h-space-6:  1.5rem;   --h-space-8:  2rem;
+  --h-space-12: 3rem;      --h-space-16: 4rem;     --h-space-24: 6rem;
+
+  --h-measure: 65ch;   /* ~600px of Literata at 20px */
+
+  /* ---- Lift — §6. One ladder, rendered in two media ----------------------
+   * Shadow models ink falling on paper, and a dark ground is not paper: the
+   * plate's dark shadow was already `none` rather than softened. The dark
+   * counterpart is a glow — the thing does not cast, it emits.
+   *
+   * Both geometries are always declared; light-dark() makes the wrong one
+   * transparent. That keeps lift in a single declaration, since light-dark()
+   * carries colours but cannot switch a shadow's geometry.
+   *
+   * The glow alpha ceiling is 0.15, derived: --h-ink-muted has to survive
+   * sitting in the brightened ground. At 0.30 it measures 3.33:1 and fails;
+   * at 0.15, 5.41:1. The glow is paper, never a project colour — see §3c and
+   * the one exception it allows. */
+  --h-lift-1:
+    0 1px 2px  light-dark(rgba(58, 44, 31, 0.20), transparent),
+    0 3px 8px  light-dark(rgba(58, 44, 31, 0.10), transparent),
+    0 0 20px -6px light-dark(transparent, rgba(239, 231, 214, 0.15));
+  --h-lift-2:
+    0 2px 4px  light-dark(rgba(58, 44, 31, 0.22), transparent),
+    0 8px 24px light-dark(rgba(58, 44, 31, 0.14), transparent),
+    0 0 32px -8px light-dark(transparent, rgba(239, 231, 214, 0.15));
+
+  /* ---- Motion — §6. One rule ---------------------------------------------
+   * Reading is the job; animation is mostly a tax on it. The exception is the
+   * lift transition, because phosphor rises fast and decays slowly and that is
+   * worth quoting. Zeroed under prefers-reduced-motion, below. */
+  --h-rise:  120ms;
+  --h-decay: 420ms;
+  --h-ease:  cubic-bezier(0.2, 0, 0.1, 1);
 }
 
 /* What light-dark() cannot carry.
  *
- * It takes colours only, so these three still need a block per state: a
- * percentage, a shadow list, and a token that points at a *different* token
- * per theme rather than at a different value. Three restated instead of
- * sixteen. */
+ * It takes colours only, so these two still need a block per state: a
+ * percentage, and a token that points at a *different* token per theme rather
+ * than at a different value. Two restated instead of sixteen — the plate's
+ * shadow left this block when it became a rung of the lift ladder. */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --h-tint-strength: 20%;
     --h-accent-ink:    var(--h-accent);
-    /* No shadow on a dark ground: it reads as dirt, not lift. */
-    --h-plate-shadow:  none;
   }
 }
 
 :root[data-theme="dark"] {
   --h-tint-strength: 20%;
   --h-accent-ink:    var(--h-accent);
-  --h-plate-shadow:  none;
 }
 
 /* Ambient ground tint — 198x/decisions/family-visual-identity.md §3b.
@@ -159,4 +216,12 @@
 :root[data-tint] {
   --h-page:   color-mix(in oklab, var(--h-tint) var(--h-tint-strength), var(--h-page-base));
   --h-ground: color-mix(in oklab, var(--h-tint) var(--h-tint-strength), var(--h-ground-base));
+}
+
+/* Motion off where it is not wanted — §6. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --h-rise:  0ms;
+    --h-decay: 0ms;
+  }
 }
