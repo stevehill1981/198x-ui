@@ -6,13 +6,25 @@
  * changes. The frame is constant house brown (paper on dark), never the project
  * colour — nine fills of differing strength still read as one set because the
  * edge is shared. See 198x/decisions/family-visual-identity.md §1 and §2.
+ *
+ * The type is drawn as outlines from `wordmarks/glyphs.json`, not set as text.
+ * The geometry is computed from JetBrains Mono's 600-unit advance and the
+ * divider sits at a fixed offset, so a host that has not loaded the face would
+ * otherwise get a fallback mono whose advance does not match. Outlines make the
+ * plate render identically on every site regardless of what fonts loaded.
+ *
+ * `wordmarks/generate.py` reads the same glyph file and mirrors the geometry
+ * below. Change one and change the other, or the assets drift from what the
+ * sites render.
  */
+import glyphData from '../wordmarks/glyphs.json';
+
 type Project =
   | 'code' | 'emu' | 'asm' | 'cat' | 'build'
   | 'debug' | 'isa' | 'forge' | 'play';
 
 interface Props {
-  /** Shown in the left cell. Rendered upper-case. */
+  /** Shown in the left cell. Rendered upper-case. A–Z and 0–9. */
   prefix: string;
   /** Picks the fill from the token set. Omit for an unfilled plate. */
   project?: Project;
@@ -25,51 +37,123 @@ interface Props {
 }
 
 const { prefix, project, size = 14, href, label } = Astro.props;
+
 const name = label ?? `${prefix.charAt(0).toUpperCase()}${prefix.slice(1).toLowerCase()}198x`;
 const fill = project ? `var(--h-project-${project})` : 'transparent';
 const ink = project ? '#faf8f2' : 'var(--h-ink)';
 const Tag = href ? 'a' : 'span';
+
+const { upem, advance, glyphs } = glyphData as {
+  upem: number; advance: number; glyphs: Record<string, string>;
+};
+
+const left = prefix.toUpperCase();
+const right = '198x';
+
+const unknown = [...left].filter((c) => !(c in glyphs));
+if (unknown.length) {
+  console.warn(
+    `[198x-ui] Plate: no outline for ${unknown.map((c) => `"${c}"`).join(', ')} ` +
+    `in prefix "${prefix}". Covered: A–Z and 0–9. The cell keeps its width and ` +
+    `the glyph is omitted. Add it to wordmarks/glyphs.json to fix.`,
+  );
+}
+
+/* Geometry — mirrors wordmarks/generate.py. */
+const F = size;
+const ADV = 0.6 * F;               // JetBrains Mono advance width
+const PAD_X = 0.6 * F;
+const PAD_Y = 0.34 * F;
+const STROKE = (2 / 14) * F;       // 2px border at the default size of 14
+const RADIUS = (3 / 14) * F;
+const LETTER_SPACING_UNITS = -10;  // -0.01em, in font units
+
+const wLeft = left.length * ADV + 2 * PAD_X;
+const wRight = right.length * ADV + 2 * PAD_X;
+const h = F + 2 * PAD_Y;
+const w = wLeft + wRight + STROKE;      // one shared divider line
+const ow = w + STROKE;                  // room for the outer stroke
+const oh = h + STROKE;
+const o = STROKE / 2;
+const baseline = o + PAD_Y + F * 0.74;  // cap height sits ~0.74em below the top
+
+const n = (v: number) => Number(v.toFixed(2));
+const scale = F / upem;
+const step = advance + LETTER_SPACING_UNITS;
+
+/** One text run as outlines: a scaled group, one path per glyph. */
+const run = (text: string, x: number) =>
+  [...text]
+    .map((ch, i) =>
+      ch in glyphs
+        ? `<path d="${glyphs[ch]}"${i ? ` transform="translate(${i * step} 0)"` : ''}/>`
+        : '',
+    )
+    .join('');
+
+// Deterministic: identical plates share a clip path, which is harmless —
+// the rect is identical. Random ids would churn the build output.
+const clipId = `h-plate-${left.toLowerCase()}-${n(ow)}`.replace(/\./g, '-');
 ---
 
 <Tag
   class="h-plate"
   href={href}
   aria-label={name}
-  style={`--plate-size:${size}px; --plate-fill:${fill}; --plate-ink:${ink};`}
+  style={`--plate-radius:${n(RADIUS)}px;`}
 >
-  <span class="h-plate-prefix" aria-hidden="true">{prefix.toUpperCase()}</span>
-  <span class="h-plate-suffix" aria-hidden="true">198x</span>
+  <svg
+    width={n(ow)}
+    height={n(oh)}
+    viewBox={`0 0 ${n(ow)} ${n(oh)}`}
+    role="img"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <clipPath id={clipId}>
+      <rect x={n(o)} y={n(o)} width={n(w)} height={n(h)} rx={n(RADIUS)} />
+    </clipPath>
+    <g clip-path={`url(#${clipId})`}>
+      <rect x={n(o)} y={n(o)} width={n(wLeft)} height={n(h)} fill={fill} />
+      <rect
+        x={n(o + wLeft)} y={n(o)}
+        width={n(wRight + STROKE)} height={n(h)}
+        fill="var(--h-plate-cell)"
+      />
+    </g>
+    <rect
+      x={n(o)} y={n(o)} width={n(w)} height={n(h)} rx={n(RADIUS)}
+      fill="none" stroke="var(--h-plate-frame)" stroke-width={n(STROKE)}
+    />
+    <line
+      x1={n(o + wLeft + STROKE / 2)} y1={n(o)}
+      x2={n(o + wLeft + STROKE / 2)} y2={n(o + h)}
+      stroke="var(--h-plate-frame)" stroke-width={n(STROKE)}
+    />
+    <g
+      fill={ink}
+      transform={`translate(${n(o + PAD_X)} ${n(baseline)}) scale(${scale.toFixed(4)} -${scale.toFixed(4)})`}
+      set:html={run(left, 0)}
+    />
+    <g
+      fill="var(--h-ink)"
+      transform={`translate(${n(o + wLeft + STROKE + PAD_X)} ${n(baseline)}) scale(${scale.toFixed(4)} -${scale.toFixed(4)})`}
+      set:html={run(right, 0)}
+    />
+  </svg>
 </Tag>
 
 <style>
   .h-plate {
     display: inline-flex;
-    overflow: hidden;
-    border: 2px solid var(--h-plate-frame);
-    border-radius: 3px;
+    border-radius: var(--plate-radius);
     box-shadow: var(--h-plate-shadow);
-    font-family: var(--h-font-mono);
-    font-size: var(--plate-size);
-    font-weight: 700;
-    letter-spacing: -0.01em;
-    line-height: 1;
+    line-height: 0;
     text-decoration: none;
   }
 
-  .h-plate-prefix,
-  .h-plate-suffix {
-    padding: 0.34em 0.6em;
-  }
-
-  .h-plate-prefix {
-    background: var(--plate-fill);
-    color: var(--plate-ink);
-  }
-
-  .h-plate-suffix {
-    border-left: 2px solid var(--h-plate-frame);
-    background: var(--h-plate-cell);
-    color: var(--h-ink);
+  .h-plate svg {
+    display: block;
   }
 
   a.h-plate:focus-visible {

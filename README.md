@@ -19,6 +19,7 @@ nothing, and the style inside it is called `House198x` either way.
 | `components/FamilyStrip.astro` | The footer family strip |
 | `machines.json` | Machine → colour, for all 156 systems |
 | `wordmarks/` | The nine plates as SVG and PNG, light and dark |
+| `wordmarks/glyphs.json` | JetBrains Mono outlines, shared by `Plate.astro` and the generator |
 | [`WORDMARK.md`](WORDMARK.md) | Wordmark spec — geometry, colours, and what not to do |
 
 **Components, not layouts.** Shared components survive three sites diverging.
