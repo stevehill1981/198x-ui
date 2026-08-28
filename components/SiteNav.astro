@@ -17,7 +17,11 @@ interface NavItem {
 
 interface Props {
   prefix: string;
-  project?: 'code' | 'emu' | 'asm' | 'cat' | 'build' | 'debug' | 'isa' | 'forge' | 'play';
+  /* Kept in step with Plate.astro's Project union and the --h-project-*
+     tokens. A name missing here is a nav a sibling cannot colour. */
+  project?:
+    | 'code' | 'emu' | 'asm' | 'cat' | 'build' | 'debug'
+    | 'isa' | 'forge' | 'play' | 'format' | 'studio';
   items: NavItem[];
   /**
    * Shown at the end of the nav. A bare version number gains a `v`; anything
