@@ -76,7 +76,7 @@
    * a plate cell and nowhere else, which is what separates them from machine
    * colour — not their lightness. White cell ink measures 5.3–6.6:1 on them.
    * 0.50 is the ceiling: from 0.55 to 0.70 neither paper nor brown ink clears
-   * 4.5:1 on the worst of the nine. */
+   * 4.5:1 on the worst of the eleven. */
   --h-project-code:  #a93800;
   --h-project-emu:   #0066af;
   --h-project-asm:   #007742;
@@ -186,13 +186,13 @@
  * the single fact that keeps every derived ink valid on the tinted ground.
  * §3a's guarantee is that ink computed against --h-surface-light clears AA on
  * any lighter ground, and 5% is the point at which the tinted --h-ground stops
- * being lighter than that surface. Measured across all nine project colours,
- * the tightest (Forge) reaches it at 5.8%.
+ * being lighter than that surface. Measured across the project colours, the
+ * tightest (Forge) reaches it at 5.8%.
  *
  * Dark is bounded differently — by --h-ink-muted holding 4.5:1 on the tinted
- * ground — and has more room, because the project colours sit at L 0.40, well
- * below the light inks that have to survive on them. It is 20%, where the nine
- * measure 6.82-7.13:1.
+ * ground — and has more room, because even a brightened project colour stays
+ * well below the light inks that have to survive on them. It is 20%, where the
+ * set measures 6.34-7.06:1 and the page ink 11.41-12.71:1.
  *
  * --h-surface-light is deliberately NOT tinted. It is the reference every ink
  * is derived against, not a ground anything is painted on; moving it would

@@ -19,7 +19,7 @@ does.
 Set in **JetBrains Mono, weight 700**. The monospace is load-bearing rather
 than stylistic: it puts every cell on the same rhythm, so a three-character
 prefix and a five-character one differ in width without looking inconsistent.
-A proportional face makes nine plates look like nine unrelated marks.
+A proportional face makes eleven plates look like eleven unrelated marks.
 
 Load-bearing in a literal sense too: the plate geometry is computed from the
 face's 600-unit advance, and the divider is placed at a fixed offset. That is
@@ -28,7 +28,7 @@ a substituted mono has a different advance, and the divider does not move to
 meet it.
 
 **The frame is constant.** House brown `#3a2c1f` on light, paper `#efe7d6` on
-dark — never the project colour. It is what makes nine fills of differing
+dark — never the project colour. It is what makes eleven fills of differing
 strength read as one set, and it does more work than the fill does.
 
 ## Geometry
@@ -51,32 +51,34 @@ uppercase and the suffix is digits, so nothing descends. A text baseline leaves
 `0.125em`, which is 6px on a 48px plate. Centring the cap band puts `0.475em`
 on both sides.
 
-Centred on cap height rather than on each name's own ink, so all nine sit on one
-baseline: `Q`'s tail or a round glyph's overshoot must not shift a plate relative
-to its siblings.
+Centred on cap height rather than on each name's own ink, so all eleven sit on
+one baseline: `Q`'s tail or a round glyph's overshoot must not shift a plate
+relative to its siblings.
 
 ## Colours
 
-The fill is the project's, at `oklch(0.40 <chroma> <hue>)` — equal lightness is
+The fill is the project's, at `oklch(0.50 <chroma> <hue>)` — equal lightness is
 the cohering rule, chroma runs to the sRGB gamut edge per hue.
 
 | Project | Fill | Project | Fill |
 |---|---|---|---|
-| Code198x | `#792b0b` | Debug198x | `#85112d` |
-| Emu198x | `#0d4a7d` | Isa198x | `#0f5158` |
-| Asm198x | `#0f5631` | Forge198x | `#721a6e` |
-| Cat198x | `#562a8d` | Play198x | `#424e0c` |
-| Build198x | `#60410c` | | |
+| Code198x | `#a93800` | Debug198x | `#b9003c` |
+| Emu198x | `#0066af` | Isa198x | `#00717b` |
+| Asm198x | `#007742` | Forge198x | `#a4009e` |
+| Cat198x | `#8000e0` | Play198x | `#5b6c00` |
+| Build198x | `#865900` | Format198x | `#007465` |
+| | | Studio198x | `#482aff` |
 
-Prefix text is `#faf8f2` on the fill. The `198x` cell is `#fdfcf7` with
-`#3a2c1f` text on light, `#242019` with `#efe7d6` on dark.
+Prefix text is `#faf8f2` on the fill, where it measures 5.3–6.6:1. The `198x`
+cell is `#fdfcf7` with `#3a2c1f` text on light, `#242019` with `#efe7d6` on
+dark.
 
 **Shadow on light grounds only**: `0 1px 2px rgba(58,44,31,0.20), 0 3px 8px
 rgba(58,44,31,0.10)`. On a dark ground a drop shadow reads as dirt, not lift.
 
 ## Ready-made assets
 
-`wordmarks/` carries all nine, light and dark, as SVG and PNG:
+`wordmarks/` carries all eleven, light and dark, as SVG and PNG:
 
 ```
 wordmarks/asm198x-light.svg   wordmarks/asm198x-light.png
@@ -118,6 +120,8 @@ to the wildcard `x` alone at 16px.
 - **Colour the frame.** It is constant by design.
 - **Colour the `198x` cell**, or let it vary between siblings in any way.
 - **Set it in a proportional face** because it looks tidier.
-- **Give a new sibling a colour outside `oklch(0.40 … …)`** because the set
-  needs something brighter. Add a hue; keep the lightness.
+- **Give a new sibling a colour outside `oklch(0.50 … …)`** because the set
+  needs something brighter. Add a hue; keep the lightness. `0.50` is a ceiling,
+  not a preference — above it the cell's paper ink stops clearing 4.5:1 on the
+  worst hue of the set.
 - **Link a site to itself** in the family strip. It takes its list as a prop.

@@ -1,7 +1,7 @@
 # 198x-ui
 
 Shared design tokens and Astro components for the 198x family sites — Asm198x,
-Emu198x and Code198x.
+Build198x, Cat198x, Debug198x, Emu198x, Format198x, Play198x and Code198x.
 
 One canonical copy, consumed by checkout, no registry. Same posture as
 [`house-style`](https://github.com/stevehill1981/house-style), which does the
@@ -13,19 +13,19 @@ nothing, and the style inside it is called `House198x` either way.
 
 | | |
 |---|---|
-| `tokens.css` | Palette, dark tokens, the type roster, the nine project colours |
+| `tokens.css` | Palette, dark tokens, the type roster, the eleven project colours |
 | `components/Plate.astro` | The family wordmark — `[ ASM \| 198x ]` |
 | `components/SiteNav.astro` | Top-level navigation |
 | `components/FamilyStrip.astro` | The footer family strip |
 | `machines.json` | Machine → colour, for all 156 systems |
-| `wordmarks/` | The nine plates as SVG and PNG, light and dark |
+| `wordmarks/` | The eleven plates as SVG and PNG, light and dark |
 | `wordmarks/glyphs.json` | JetBrains Mono outlines, shared by `Plate.astro` and the generator |
 | `fonts.css`, `fonts/` | The three house faces, self-hosted and range-split |
 | [`WORDMARK.md`](WORDMARK.md) | Wordmark spec — geometry, colours, and what not to do |
 
-**Components, not layouts.** Shared components survive three sites diverging.
-Shared layouts are how you end up unable to change one site without negotiating
-with two others.
+**Components, not layouts.** Shared components survive sites diverging. Shared
+layouts are how you end up unable to change one site without negotiating with
+every other.
 
 ## Use it in a site
 
@@ -67,7 +67,7 @@ import SiteNav from '@198x-ui/components/SiteNav.astro';
 `asm198x.github.io` carries a working `scripts/fetch-ui.sh` to copy.
 
 Pin to a tag rather than tracking `main`. Without that, a change here can break
-three sites at once with nothing in between to catch it.
+every site at once with nothing in between to catch it.
 
 ## Ground tint
 
@@ -100,7 +100,7 @@ repo.** In particular:
   *machine*; a second meaning for the same signal is what the rule exists to
   prevent, and a reader cannot tell two colours apart by looking.
 - **The plate frame is constant**, never the project colour. It is what makes
-  nine fills of differing strength read as one set.
+  eleven fills of differing strength read as one set.
 - **`--h-ink-faint` is decorative, never small informational text.** It measures
   2.27:1 on `--h-ground`, and darkening it far enough to carry copy turns it
   into `--h-ink-muted` — the tone that already does that job. The two cannot
