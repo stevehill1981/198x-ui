@@ -22,6 +22,7 @@ nothing, and the style inside it is called `House198x` either way.
 | `wordmarks/glyphs.json` | JetBrains Mono outlines, shared by `Plate.astro` and the generator |
 | `fonts.css`, `fonts/` | The three house faces, self-hosted and range-split |
 | [`WORDMARK.md`](WORDMARK.md) | Wordmark spec — geometry, colours, and what not to do |
+| [`AGENTS.md`](AGENTS.md) | How to work on the kit — verification, governance, release |
 
 **Components, not layouts.** Shared components survive sites diverging. Shared
 layouts are how you end up unable to change one site without negotiating with
@@ -131,3 +132,16 @@ The colours here are the **declared** brand values. They are rarely what
 renders: text and fills are derived from them against a contrast floor, and a
 machine colour that fails AA is darkened until it passes. Never treat a value
 here as the colour a reader will see, and never write a derived value down.
+
+## Licence
+
+MIT — see [`LICENSE`](LICENSE). That is the content side of
+`198x/decisions/how-198x-licenses-its-own-work.md`: this is a presentation kit
+for the family's own sites, not a shipped tool, and nothing in it derives from a
+GPL source.
+
+Two carve-outs, both in `LICENSE`. **`fonts/` is not ours** — Nebula Sans,
+Literata and JetBrains Mono are redistributed under the SIL OFL 1.1, and the
+licence has to travel with them if you redistribute them further. And MIT grants
+copyright, not trade marks: use the plate to say *this is a 198x site*, not to
+badge something unaffiliated.
