@@ -41,7 +41,15 @@ const { prefix, project, size = 14, href, label } = Astro.props;
 const name = label ?? `${prefix.charAt(0).toUpperCase()}${prefix.slice(1).toLowerCase()}198x`;
 const fill = project ? `var(--h-project-${project})` : 'transparent';
 const ink = project ? '#faf8f2' : 'var(--h-ink)';
+/* A bare <span> has no role, and aria-label only names elements whose role
+   supports naming — so the unlinked plate was not mislabelled, it was absent
+   from the accessibility tree entirely. Both inner runs are aria-hidden, so
+   there was no fallback text either. role="img" is the conventional treatment
+   for a wordmark: it takes the name and keeps the letterforms from being read
+   out one character at a time. The linked case needs none of this — <a> already
+   supports naming, and giving it role="img" would cost it the link role. */
 const Tag = href ? 'a' : 'span';
+const role = href ? undefined : 'img';
 
 const { upem, advance, capHeight, glyphs } = glyphData as {
   upem: number; advance: number; capHeight: number; glyphs: Record<string, string>;
@@ -105,6 +113,7 @@ const clipId = `h-plate-${left.toLowerCase()}-${n(ow)}`.replace(/\./g, '-');
 <Tag
   class="h-plate"
   href={href}
+  role={role}
   aria-label={name}
   style={`--plate-radius:${n(RADIUS)}px;`}
 >
