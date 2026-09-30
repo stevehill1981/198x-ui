@@ -17,6 +17,8 @@ nothing, and the style inside it is called `House198x` either way.
 | `components/Plate.astro` | The family wordmark — `[ ASM \| 198x ]` |
 | `components/SiteNav.astro` | Top-level navigation |
 | `components/FamilyStrip.astro` | The footer family strip |
+| `components/Screen.astro` | One capture, at a whole multiple of its true grid |
+| `catalogue/` | Every component in its variants, for a site to mount in development |
 | `machines.json` | Machine → colour, for all 156 systems |
 | `wordmarks/` | The eleven plates as SVG and PNG, light and dark |
 | `wordmarks/glyphs.json` | JetBrains Mono outlines, shared by `Plate.astro` and the generator |
@@ -69,6 +71,74 @@ import SiteNav from '@198x-ui/components/SiteNav.astro';
 
 Pin to a tag rather than tracking `main`. Without that, a change here can break
 every site at once with nothing in between to catch it.
+
+## Screen
+
+A capture, shown as the machine showed it (`family-visual-identity.md` §7):
+
+```astro
+---
+import Screen from '@198x-ui/components/Screen.astro';
+---
+<Screen src="/images/…/step-02.png" alt="The Spectrum after RUN: Hello, then 0 OK." width={352} height={296} />
+<Screen src="/images/…/signal.png" alt="Signal on an Amiga 500." width={640} height={512} grid={{ w: 320, h: 256 }} />
+<Screen src="/images/…/dash.png" alt="Dash on an NTSC NES." width={256} height={240} maxScale={2} />
+```
+
+It renders at a whole multiple of the true grid, never a fraction, and only a
+cell narrower than the grid at 1x (a phone) scales it down. A capture stored
+with every column or row doubled is detected and halved. The Amiga cannot be
+detected, because its pixels do not always pair up, so it declares its grid.
+With `crt` on (the default) there is one scanline per source line in whole
+pixels, a gentle falloff and a faint bloom. The bloom is a separate blurred copy
+of the capture, so the capture itself is never filtered or tinted. `crt={false}`
+leaves the capture in its bezel and nothing else.
+
+`alt` is required. An empty one throws unless you also pass `decorative`,
+because a capture is evidence and usually needs describing. The component file
+header documents every prop.
+
+The fitting runs in the browser, once per page however many screens it holds.
+Detection reads the pixels, so a capture has to be same-origin. A site that adds
+screens after load calls `window.fitScreens()`.
+
+## The catalogue
+
+`catalogue/Catalogue.astro` shows every component in its variants, each with
+the call that produces it and the rule it embodies. It has a Light/Dark switch
+and width presets of 390, 768, 1280 and full. Each entry sits in a resizable
+frame, which is an `<iframe>` so that a 390-pixel frame really is a 390-pixel
+viewport and the components' media queries fire.
+
+The kit cannot run it, so a site mounts it on a route that exists only in
+development:
+
+```astro
+---
+// src/pages/catalogue/[...slug].astro
+import '@198x-ui/tokens.css';
+import '@198x-ui/fonts.css';
+import Catalogue from '@198x-ui/catalogue/Catalogue.astro';
+import { catalogueEntries } from '@198x-ui/catalogue/entries';
+
+export function getStaticPaths() {
+  if (import.meta.env.PROD) return [];   // nothing reaches dist/
+  return [{ params: { slug: undefined } },
+          ...catalogueEntries.map((e) => ({ params: { slug: e.slug } }))];
+}
+const { slug } = Astro.params;
+---
+<html lang="en-GB">
+  <head><meta charset="UTF-8" /><meta name="robots" content="noindex" /><title>198x-ui catalogue</title></head>
+  <body><Catalogue base="/catalogue" entry={slug} /></body>
+</html>
+```
+
+The kit ships no images. The Screen entry shows captures by URL, and the
+defaults in `catalogue/samples.ts` are files `code198x.com` serves: a Spectrum
+screen, the column-doubled BBC Micro poster, an Amiga screen stored at 640x512
+and an NES screen. Any other site passes its own set as `samples`, with the same
+shapes, because each one is there to prove one of Screen's rules.
 
 ## Ground tint
 
