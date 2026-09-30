@@ -1,0 +1,95 @@
+---
+import Screen from '../../components/Screen.astro';
+import Specimen from '../Specimen.astro';
+import type { CatalogueSamples } from '../samples';
+
+interface Props {
+  samples: CatalogueSamples;
+}
+
+const { samples } = Astro.props;
+const { spectrum, doubled, amiga, nes } = samples;
+---
+
+<p class="h-screen-readout-intro">
+  Under each screen: the true grid, the scale k, and the rendered size. A whole
+  k is the rule; a fraction appears only when the frame is narrower than the
+  grid at 1x.
+</p>
+
+<Specimen
+  title="Spectrum, at its true grid"
+  code={`<Screen src="…" alt="…" width={352} height={296} />`}
+  note="Rendered at a whole multiple of the true grid, never a fraction; maxScale defaults to 1, so this stays at 352x296 on a wide screen. One scanline per source line, in whole pixels (§7)."
+  block
+>
+  <Screen {...spectrum} loading="eager" />
+</Specimen>
+
+<Specimen
+  title="Stored with every column doubled"
+  code={`<Screen src="…" alt="…" width={640} height={256} />`}
+  note="Wider than 1.8:1 and every pixel pair identical, so the columns are halved: this BBC Micro capture shows at 320x256, which loses nothing (§7)."
+  block
+>
+  <Screen {...doubled} loading="eager" />
+</Specimen>
+
+<Specimen
+  title="Amiga, with its grid declared"
+  code={`<Screen src="…" alt="…" width={640} height={512} grid={{ w: 320, h: 256 }} />`}
+  note="The emulator stores the Amiga at twice its 320x256, and its pixels do not always pair up, so the grid is declared. Shown at 320x256 so machines read at comparable sizes (§7)."
+  block
+>
+  <Screen {...amiga} grid={{ w: 320, h: 256 }} loading="eager" />
+</Specimen>
+
+<Specimen
+  title="NES, allowed to reach 2x"
+  code={`<Screen src="…" alt="…" width={256} height={240} maxScale={2} />`}
+  note="maxScale lets a small screen take a larger whole multiple where the cell has room: 2x on a desktop, 1x in a tablet column, fitted on a phone."
+  block
+>
+  <Screen {...nes} maxScale={2} loading="eager" />
+</Specimen>
+
+<Specimen
+  title="CRT off"
+  code={`<Screen src="…" alt="…" width={352} height={296} crt={false} />`}
+  note="No scanlines, falloff or bloom: the capture in its bezel, exactly as captured. The capture is never tinted or filtered in either mode; the CRT look only ever sits around it (§7)."
+  block
+>
+  <Screen {...spectrum} crt={false} loading="eager" />
+</Specimen>
+
+<script>
+  /* A readout under each screen, so the rule can be checked by eye. */
+  const read = () =>
+    document.querySelectorAll<HTMLElement>('[data-h-screen]').forEach((el) => {
+      let out = el.nextElementSibling as HTMLElement | null;
+      if (!out || !out.classList.contains('h-screen-readout')) {
+        out = document.createElement('p');
+        out.className = 'h-screen-readout';
+        el.after(out);
+      }
+      const r = el.getBoundingClientRect();
+      const k = Number(el.dataset.scale);
+      out.textContent = el.dataset.scale
+        ? `grid ${el.dataset.gw}x${el.dataset.gh} · k ${Number.isInteger(k) ? k : k.toFixed(3) + ' (fitted)'} · ${Math.round(r.width * 100) / 100}x${Math.round(r.height * 100) / 100}`
+        : 'not fitted yet';
+    });
+  addEventListener('load', read);
+  addEventListener('resize', () => setTimeout(read, 150));
+</script>
+
+<style is:global>
+  .h-screen-readout,
+  .h-screen-readout-intro {
+    font-family: var(--h-font-mono);
+    font-size: var(--h-text-micro);
+    line-height: var(--h-lh-micro);
+    color: var(--h-ink-muted);
+  }
+  .h-screen-readout { margin: var(--h-space-3) 0 0; }
+  .h-screen-readout-intro { margin: 0 0 var(--h-space-4); max-width: var(--h-measure); }
+</style>

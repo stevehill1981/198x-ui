@@ -1,0 +1,37 @@
+---
+import SiteNav from '../../components/SiteNav.astro';
+import Specimen from '../Specimen.astro';
+
+const items = [
+  { label: 'Why', href: '#' },
+  { label: 'Install', href: '#' },
+  { label: 'Reference', href: '#', current: true },
+];
+---
+
+<Specimen
+  title="With a version number"
+  code={`<SiteNav prefix="asm" project="asm" version="0.0.15" items={[…, { label: 'Reference', href: '/reference', current: true }]} />`}
+  note="Items arrive as props: the nav knows no site's routes. A bare version gains a v (§5). The current section is marked with aria-current, not a project colour (§3). Below 40rem it stacks."
+  block
+>
+  <SiteNav prefix="asm" project="asm" version="0.0.15" items={items} homeHref="#" />
+</Specimen>
+
+<Specimen
+  title="With a state instead of a version"
+  code={`<SiteNav prefix="emu" project="emu" version="main @ e8e784b" items={…} />`}
+  note="Anything that does not start with a digit is shown as given, so a state never becomes “vmain”."
+  block
+>
+  <SiteNav prefix="emu" project="emu" version="main @ e8e784b" items={items} homeHref="#" />
+</Specimen>
+
+<Specimen
+  title="Unfilled"
+  code={`<SiteNav prefix="forge" items={…} />`}
+  note="Without a project the plate is outlined."
+  block
+>
+  <SiteNav prefix="forge" items={items} homeHref="#" />
+</Specimen>
