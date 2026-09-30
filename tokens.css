@@ -71,6 +71,14 @@
   --h-plate-cell:   light-dark(var(--h-page), #242019);
   --h-plate-shadow: var(--h-lift-1);   /* a rung of the ladder, not a constant */
 
+  /* Screen hardware — components/Screen.astro. A bezel is an object, not page
+   * furniture, so it stays dark in both themes (§7: objects are round and
+   * physical). These are single values on purpose, not light-dark() pairs. */
+  --h-screen-glass: #0b0a09;                   /* behind the capture, before it loads */
+  --h-screen-bezel: #151311;
+  --h-screen-rim:   rgb(239 231 214 / 0.14);   /* the bezel's outer edge */
+  --h-screen-glow:  rgb(205 205 205 / 0.08);   /* light thrown onto the frame */
+
   /* Project identity. oklch(0.50 <chroma> <hue>) — equal lightness is the
    * cohering rule; chroma runs to the sRGB gamut edge per hue. These appear in
    * a plate cell and nowhere else, which is what separates them from machine
