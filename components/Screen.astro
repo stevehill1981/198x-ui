@@ -1,0 +1,283 @@
+---
+/**
+ * One capture, shown as the machine showed it.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md §7 ("Captures are shown
+ * as the machine showed them", "A machine may light itself") and the drift
+ * triggers under it. The rules this component holds so a site does not have to:
+ *
+ * - **Whole multiples of the true grid, never a fraction.** The capture renders
+ *   at k × its true pixel grid, where k is a whole number from 1 to `maxScale`.
+ *   Only a cell narrower than the grid at 1x (a phone) may scale it down, and
+ *   then it fits the cell exactly.
+ * - **Doubled storage is halved.** A capture stored with every column doubled
+ *   (wider than 1.8:1, as an Acorn or Amstrad screen is) or every row doubled
+ *   (taller than 1.2:1) is detected by comparing pixel pairs and halved on that
+ *   axis, which loses nothing. A grid the pixels cannot reveal is declared:
+ *   the Amiga stores 320x256 at 640x512, so it passes `grid={{ w: 320, h: 256 }}`.
+ * - **One scanline per source line, in whole pixels** when k is whole.
+ * - **The capture itself is never tinted, recoloured, overlaid or filtered.**
+ *   The CRT look is drawn *around* the pixels: the scanlines and falloff sit on
+ *   pseudo-elements, and the bloom is a separate, blurred copy of the capture at
+ *   low opacity — the machine lighting itself, which §7 allows. `crt={false}`
+ *   removes all three and leaves the capture in its bezel.
+ *
+ * The bezel is hardware, so it stays dark in both themes. Its colours are the
+ * `--h-screen-*` tokens in tokens.css.
+ *
+ * Nothing here moves, so there is nothing for prefers-reduced-motion to stop.
+ * A site that animates a screen's reveal (§6 allows it) owns that transition
+ * and must switch it off under reduced motion itself.
+ *
+ * Fitting is done by the script below, which runs once per page however many
+ * screens it holds (Astro bundles and deduplicates a component's script). Until
+ * it runs, or without JavaScript, the screen sits at its stored size capped to
+ * its cell. After a site inserts screens itself, call `window.fitScreens()`.
+ *
+ * Props:
+ *   src        Capture URL. Detection reads its pixels, so it must be same-origin
+ *              (or CORS-enabled); otherwise the stored size is used as the grid.
+ *   alt        Required. What the screen shows. An empty string is allowed only
+ *              together with `decorative`, and throws otherwise.
+ *   decorative Marks the capture as ornament, permitting `alt=""`.
+ *   width      Stored file width in px. Reserves space before the image loads.
+ *   height     Stored file height in px.
+ *   grid       The true grid, `{ w, h }`, when the pixels cannot show it.
+ *   maxScale   Largest whole multiple to reach for. Default 1.
+ *   crt        Scanlines, falloff and bloom. Default true.
+ *   loading    'lazy' (default) or 'eager'. Use eager above the fold.
+ *   class      Extra classes for the outer element, for a host's own layout.
+ */
+
+interface Props {
+  src: string;
+  alt: string;
+  decorative?: boolean;
+  width: number;
+  height: number;
+  grid?: { w: number; h: number };
+  maxScale?: number;
+  crt?: boolean;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const {
+  src,
+  alt,
+  decorative = false,
+  width,
+  height,
+  grid,
+  maxScale = 1,
+  crt = true,
+  loading = 'lazy',
+  class: className,
+} = Astro.props;
+
+if (alt === '' && !decorative) {
+  throw new Error(
+    `[198x-ui] Screen: alt="" on ${src}. A capture is evidence and needs a ` +
+    `description; pass \`decorative\` if this one really is ornament.`,
+  );
+}
+
+const scale = Math.max(1, Math.floor(maxScale));
+/* Before the script runs: the declared grid if there is one, otherwise the
+   stored size. A doubled capture briefly shows wide; that is the no-JS view. */
+const preW = grid?.w ?? width;
+const preH = grid?.h ?? height;
+---
+
+<div
+  class:list={['h-screen', { 'h-screen--crt': crt }, className]}
+  data-h-screen
+  data-max-scale={scale}
+  data-gw={grid?.w}
+  data-gh={grid?.h}
+  style={`--h-screen-pre-w:${preW}px;aspect-ratio:${preW} / ${preH};--lines:${preH};`}
+>
+  <img
+    class="h-screen-img"
+    src={src}
+    alt={alt}
+    width={width}
+    height={height}
+    loading={loading}
+    decoding="async"
+  />
+  {crt && (
+    <img
+      class="h-screen-bloom"
+      src={src}
+      alt=""
+      aria-hidden="true"
+      loading={loading}
+      decoding="async"
+    />
+  )}
+</div>
+
+<style>
+  .h-screen {
+    position: relative;
+    --h-screen-margin: 0.6rem;
+    width: min(var(--h-screen-pre-w), 100% - 2 * var(--h-screen-margin));
+    margin: var(--h-screen-margin);
+    border-radius: 0.3rem;
+    overflow: hidden;
+    isolation: isolate;
+    background: var(--h-screen-glass);
+    box-shadow:
+      0 0 0 0.6rem var(--h-screen-bezel),
+      0 0 0 calc(0.6rem + 1px) var(--h-screen-rim);
+  }
+
+  .h-screen--crt {
+    /* Curved corners that clip only border pixels, and a glow onto the frame. */
+    border-radius: 1.4rem / 1.6rem;
+    box-shadow:
+      0 0 0 0.6rem var(--h-screen-bezel),
+      0 0 0 calc(0.6rem + 1px) var(--h-screen-rim),
+      0 0 60px 0 var(--h-screen-glow);
+  }
+
+  /* On a phone, a thin margin lets a 352-pixel screen still show at 1x. */
+  @media (max-width: 420px) {
+    .h-screen { --h-screen-margin: 3px; }
+  }
+
+  .h-screen img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+  }
+
+  /* The machine lighting itself: a blurred copy of its own pixels, never a
+     filter on the capture. */
+  .h-screen-bloom {
+    filter: blur(4px);
+    mix-blend-mode: screen;
+    z-index: 1;
+    opacity: 0.18;
+    pointer-events: none;
+  }
+
+  /* One scanline per source line. --line-px is k px when the scale is whole. */
+  .h-screen--crt::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(rgb(0 0 0 / 0.12) 50%, transparent 50%);
+    background-size: 100% var(--line-px, calc(100% / var(--lines, 296)));
+  }
+
+  /* A little tube falloff. */
+  .h-screen--crt::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    border-radius: inherit;
+    background: radial-gradient(ellipse at center, transparent 65%, rgb(0 0 0 / 0.28) 100%);
+  }
+</style>
+
+<script>
+  /* Fit every screen on the page to a whole multiple of its true grid. */
+  type Grid = [number, number];
+
+  const repeated = (d: Uint8ClampedArray, w: number, h: number, axis: 'x' | 'y') => {
+    for (let y = 0; y < h; y += 2) {
+      if (axis === 'y' && y + 1 >= h) continue;
+      for (let x = 0; x < w - 1; x += 2) {
+        const i = (y * w + x) * 4;
+        const j = axis === 'x' ? i + 4 : ((y + 1) * w + x) * 4;
+        if (d[i] !== d[j] || d[i + 1] !== d[j + 1] || d[i + 2] !== d[j + 2]) return false;
+      }
+    }
+    return true;
+  };
+
+  const trueGrid = (el: HTMLElement, img: HTMLImageElement): Grid => {
+    if (el.dataset.gw && el.dataset.gh) return [+el.dataset.gw, +el.dataset.gh];
+    const W = img.naturalWidth;
+    const H = img.naturalHeight;
+    let dx = 1;
+    let dy = 1;
+    /* The aspect guards keep an ordinary capture from being tested at all:
+       only a shape no real screen has is checked for doubled pixels. */
+    const wide = W / H > 1.8;
+    const tall = H / W > 1.2;
+    if (wide || tall) {
+      try {
+        const c = document.createElement('canvas');
+        c.width = W;
+        c.height = H;
+        const g = c.getContext('2d', { willReadFrequently: true })!;
+        g.drawImage(img, 0, 0);
+        const d = g.getImageData(0, 0, W, H).data;
+        if (wide && repeated(d, W, H, 'x')) dx = 2;
+        if (tall && repeated(d, W, H, 'y')) dy = 2;
+      } catch {
+        /* Cross-origin or unreadable: the stored size is the grid. */
+      }
+    }
+    const w = W / dx;
+    const h = H / dy;
+    el.dataset.gw = String(w);
+    el.dataset.gh = String(h);
+    return [w, h];
+  };
+
+  const fit = (el: HTMLElement) => {
+    const img = el.querySelector<HTMLImageElement>('img.h-screen-img');
+    if (!img || !img.naturalWidth || !el.parentElement) return;
+    const [w, h] = trueGrid(el, img);
+    /* Measure the space this screen's own cell gives it, not its parent's. */
+    el.style.width = 'auto';
+    el.style.justifySelf = 'stretch';
+    el.style.alignSelf = 'start';
+    let avail = el.getBoundingClientRect().width;
+    /* A flex row gives an auto-width box no size of its own; fall back to the
+       parent's content box, less this screen's margins. */
+    if (!avail) {
+      const cs = getComputedStyle(el);
+      const pcs = getComputedStyle(el.parentElement);
+      avail = el.parentElement.clientWidth
+        - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight)
+        - parseFloat(cs.marginLeft) - parseFloat(cs.marginRight);
+    }
+    el.style.justifySelf = '';
+    el.style.alignSelf = '';
+    const max = Math.max(1, Math.floor(Number(el.dataset.maxScale) || 1));
+    const k = avail >= w ? Math.min(max, Math.floor(avail / w)) : avail / w;
+    el.style.width = `${w * k}px`;
+    el.style.aspectRatio = `${w} / ${h}`;
+    el.style.setProperty('--lines', String(h));
+    if (Number.isInteger(k)) el.style.setProperty('--line-px', `${k}px`);
+    else el.style.removeProperty('--line-px');
+    el.dataset.scale = String(k);
+  };
+
+  const fitScreens = () =>
+    document.querySelectorAll<HTMLElement>('[data-h-screen]').forEach((el) => {
+      const img = el.querySelector<HTMLImageElement>('img.h-screen-img');
+      if (!img) return;
+      if (img.complete) fit(el);
+      else img.addEventListener('load', () => fit(el), { once: true });
+    });
+
+  fitScreens();
+  let t: ReturnType<typeof setTimeout>;
+  addEventListener('resize', () => {
+    clearTimeout(t);
+    t = setTimeout(fitScreens, 100);
+  });
+  (window as unknown as { fitScreens: () => void }).fitScreens = fitScreens;
+</script>
