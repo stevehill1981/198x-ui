@@ -1,0 +1,47 @@
+---
+/**
+ * Plate in every rendering the kit draws, for every project in the union.
+ * Stacked and typed renderings (record §1) are not components: the first is a
+ * generated asset in wordmarks/, the second is plain text.
+ */
+import Plate from '../../components/Plate.astro';
+import Specimen from '../Specimen.astro';
+
+const projects = [
+  'code', 'emu', 'asm', 'cat', 'build', 'debug',
+  'isa', 'forge', 'play', 'format', 'studio',
+] as const;
+---
+
+<Specimen
+  title="Filled, one per project"
+  code={`<Plate prefix="asm" project="asm" />`}
+  note="The prefix cell carries the project colour and the 198x cell never varies. The frame is house brown in light and paper in dark for all eleven, which is what makes fills of different strength read as one set (§1, §2). Unlinked plates take role=img so the name reaches the accessibility tree."
+>
+  {projects.map((p) => <Plate prefix={p} project={p} />)}
+</Specimen>
+
+<Specimen
+  title="Outlined, one per project"
+  code={`<Plate prefix="asm" />`}
+  note="The default over an unknown background (§1). Without a project there is no fill, so no project colour appears at all."
+>
+  {projects.map((p) => <Plate prefix={p} />)}
+</Specimen>
+
+<Specimen
+  title="Linked"
+  code={`<Plate prefix="code" project="code" href="/" label="Code Like It's 198x" />`}
+  note="A link keeps its link role and takes the accessible name. The flagship's name is the plate's label, never text beside it (§1a)."
+>
+  <Plate prefix="code" project="code" href="#" label="Code Like It's 198x" />
+  <Plate prefix="emu" project="emu" href="#" />
+</Specimen>
+
+<Specimen
+  title="Sizes"
+  code={`<Plate prefix="play" project="play" size={24} />`}
+  note="The whole plate scales from the cell type size; the geometry is the same at every size."
+>
+  {[11, 14, 18, 24, 32].map((size) => <Plate prefix="play" project="play" size={size} />)}
+</Specimen>

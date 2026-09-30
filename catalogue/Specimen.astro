@@ -1,0 +1,74 @@
+---
+/**
+ * One variant in a catalogue entry: what it is, the props that produce it,
+ * the rule it embodies, and the component itself.
+ */
+interface Props {
+  title: string;
+  /** The call, as a site would write it. */
+  code: string;
+  /** The rule this variant shows, citing the record section. */
+  note?: string;
+  /** Lay the stage out as a block rather than a wrapping row. */
+  block?: boolean;
+}
+
+const { title, code, note, block = false } = Astro.props;
+---
+
+<section class="h-specimen">
+  <h2 class="h-specimen-title">{title}</h2>
+  {note && <p class="h-specimen-note">{note}</p>}
+  <pre class="h-specimen-code"><code>{code}</code></pre>
+  <div class:list={['h-specimen-stage', { block }]}>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .h-specimen {
+    padding: var(--h-space-6) 0;
+    border-top: 1px solid var(--h-line);
+  }
+
+  .h-specimen-title {
+    margin: 0 0 var(--h-space-2);
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-small);
+    line-height: var(--h-lh-small);
+    font-weight: var(--h-weight-minor);
+    color: var(--h-ink);
+  }
+
+  .h-specimen-note {
+    margin: 0 0 var(--h-space-3);
+    max-width: var(--h-measure);
+    font-family: var(--h-font-read);
+    font-size: var(--h-text-small);
+    line-height: var(--h-lh-small);
+    color: var(--h-ink-body);
+  }
+
+  .h-specimen-code {
+    margin: 0 0 var(--h-space-4);
+    padding: var(--h-space-2) var(--h-space-3);
+    /* Wrapped, not scrolled: a scrolling block needs keyboard focus to be
+       reachable, and a phone-width frame would otherwise make every call one. */
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    background: var(--h-code-bg);
+    color: var(--h-code-ink);
+    font-family: var(--h-font-mono);
+    font-size: var(--h-text-micro);
+    line-height: var(--h-lh-micro);
+  }
+
+  .h-specimen-stage {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: var(--h-space-4);
+  }
+
+  .h-specimen-stage.block { display: block; }
+</style>

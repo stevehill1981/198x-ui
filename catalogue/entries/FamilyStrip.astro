@@ -1,0 +1,27 @@
+---
+import FamilyStrip from '../../components/FamilyStrip.astro';
+import Specimen from '../Specimen.astro';
+---
+
+<Specimen
+  title="Default"
+  code={`<FamilyStrip />`}
+  note="An always-on, low-key line; siblings are peers and the order is not a ranking (sibling-cross-promotion.md). Links are set in the accent ink, never the fill, and carry no project colour (§3)."
+  block
+>
+  <FamilyStrip />
+</Specimen>
+
+<Specimen
+  title="Custom siblings"
+  code={`<FamilyStrip siblings={[{ name: 'Play198x', href: '…' }, { name: 'Build198x', href: '…' }]} />`}
+  note="A site may name its own set of siblings."
+  block
+>
+  <FamilyStrip
+    siblings={[
+      { name: 'Play198x', href: 'https://github.com/play198x' },
+      { name: 'Build198x', href: 'https://github.com/build198x' },
+    ]}
+  />
+</Specimen>

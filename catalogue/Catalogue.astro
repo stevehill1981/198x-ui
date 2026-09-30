@@ -1,0 +1,261 @@
+---
+/**
+ * The component catalogue: every kit component in its variants, in both themes,
+ * at phone, tablet and desktop widths.
+ *
+ * The kit cannot run itself, so the catalogue is mounted by a consuming site on
+ * a development-only route. It renders body content, never <html>: the site
+ * owns the document and imports tokens.css and fonts.css, exactly as its real
+ * pages do, so what the catalogue shows is what that site would render.
+ *
+ * It renders in two modes from one route:
+ *
+ * - **Index** (no `entry`): the shell. A theme switch, width presets, and one
+ *   resizable frame per entry. Each frame is an <iframe> of the entry's own
+ *   page, because a container narrower than the window does not trigger the
+ *   components' media queries; a frame 390 pixels wide is a 390-pixel viewport.
+ * - **Entry** (`entry` set): one entry's specimens alone, which is what each
+ *   frame loads.
+ *
+ * Props:
+ *   base     The URL the site mounts the catalogue at, e.g. "/catalogue".
+ *            Entry pages live at `${base}/${slug}/`.
+ *   entry    A slug from entries.ts, to render that entry alone.
+ *   samples  Captures for the Screen entry. Defaults to paths Code198x serves;
+ *            see samples.ts.
+ *
+ * See README.md, "The catalogue", for mounting it.
+ */
+import { catalogueEntries } from './entries';
+import { code198xSamples, type CatalogueSamples } from './samples';
+import PlateEntry from './entries/Plate.astro';
+import SiteNavEntry from './entries/SiteNav.astro';
+import FamilyStripEntry from './entries/FamilyStrip.astro';
+import ScreenEntry from './entries/Screen.astro';
+
+interface Props {
+  base: string;
+  entry?: string;
+  samples?: CatalogueSamples;
+}
+
+const { base, entry, samples = code198xSamples } = Astro.props;
+const root = base.replace(/\/$/, '');
+
+const components: Record<string, any> = {
+  plate: PlateEntry,
+  'site-nav': SiteNavEntry,
+  'family-strip': FamilyStripEntry,
+  screen: ScreenEntry,
+};
+
+const current = entry ? catalogueEntries.find((e) => e.slug === entry) : undefined;
+if (entry && !current) {
+  throw new Error(`[198x-ui] Catalogue: no entry "${entry}". Known: ${catalogueEntries.map((e) => e.slug).join(', ')}.`);
+}
+const Entry = current ? components[current.slug] : null;
+
+const widths = [
+  { label: '390', value: '390px' },
+  { label: '768', value: '768px' },
+  { label: '1280', value: '1280px' },
+  { label: 'Full', value: '100%' },
+];
+---
+
+{Entry ? (
+  <main class="h-cat-entry">
+    <h1 class="h-cat-entry-title">{current!.title}</h1>
+    <Entry samples={samples} />
+  </main>
+) : (
+  <div class="h-cat">
+    <header class="h-cat-bar">
+      <h1 class="h-cat-title">198x-ui catalogue</h1>
+      <div class="h-cat-controls">
+        <div class="h-cat-group" role="group" aria-label="Theme">
+          <button type="button" class="h-cat-btn" data-theme-set="light" aria-pressed="false">Light</button>
+          <button type="button" class="h-cat-btn" data-theme-set="dark" aria-pressed="false">Dark</button>
+        </div>
+        <div class="h-cat-group" role="group" aria-label="Frame width">
+          {widths.map((w) => (
+            <button
+              type="button"
+              class="h-cat-btn"
+              data-width={w.value}
+              aria-pressed={w.value === '100%' ? 'true' : 'false'}
+            >{w.label}</button>
+          ))}
+        </div>
+      </div>
+      <nav class="h-cat-toc" aria-label="Entries">
+        {catalogueEntries.map((e) => <a href={`#${e.slug}`}>{e.title}</a>)}
+      </nav>
+    </header>
+
+    {catalogueEntries.map((e) => (
+      <section class="h-cat-section" id={e.slug} aria-labelledby={`${e.slug}-h`}>
+        <h2 class="h-cat-section-title" id={`${e.slug}-h`}>
+          {e.title} <a class="h-cat-open" href={`${root}/${e.slug}/`}>open alone</a>
+        </h2>
+        <div class="h-cat-frame">
+          <iframe
+            class="h-cat-iframe"
+            src={`${root}/${e.slug}/`}
+            title={`${e.title}, catalogue entry`}
+          ></iframe>
+        </div>
+      </section>
+    ))}
+  </div>
+)}
+
+<style>
+  /* The catalogue is interface, not object: square, on the 8px cell, flat, and
+     inverse video marks what is current (§7). */
+  :global(body) {
+    margin: 0;
+    background: var(--h-page);
+    color: var(--h-ink);
+  }
+
+  .h-cat,
+  .h-cat-entry {
+    padding: var(--h-space-4) var(--h-inset) var(--h-space-12);
+    font-family: var(--h-font-ui);
+  }
+
+  .h-cat-bar {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--h-space-2) var(--h-space-6);
+    margin: calc(-1 * var(--h-space-4)) calc(-1 * var(--h-inset)) 0;
+    padding: var(--h-space-2) var(--h-inset);
+    background: var(--h-page);
+    border-bottom: 1px solid var(--h-line);
+  }
+
+  .h-cat-title,
+  .h-cat-entry-title {
+    margin: 0;
+    font-size: var(--h-text-small);
+    line-height: var(--h-lh-small);
+    font-weight: var(--h-weight-minor);
+  }
+
+  .h-cat-entry-title {
+    margin-bottom: var(--h-space-2);
+    font-size: var(--h-text-h4);
+    line-height: var(--h-lh-h4);
+  }
+
+  .h-cat-controls { display: flex; flex-wrap: wrap; gap: var(--h-space-4); }
+  .h-cat-group { display: flex; }
+
+  .h-cat-btn {
+    min-height: 32px;
+    padding: 0 var(--h-space-3);
+    border: 1px solid var(--h-line);
+    border-radius: 0;
+    background: var(--h-page);
+    color: var(--h-ink);
+    font: inherit;
+    font-size: var(--h-text-micro);
+    cursor: pointer;
+  }
+
+  .h-cat-btn + .h-cat-btn { border-left: 0; }
+  .h-cat-btn[aria-pressed="true"] { background: var(--h-ink); color: var(--h-page); border-color: var(--h-ink); }
+  .h-cat-btn:focus-visible,
+  .h-cat-toc a:focus-visible,
+  .h-cat-open:focus-visible { outline: 2px solid var(--h-accent); outline-offset: 2px; }
+
+  .h-cat-toc { display: flex; flex-wrap: wrap; gap: var(--h-space-4); font-size: var(--h-text-micro); }
+  .h-cat-toc a,
+  .h-cat-open { color: var(--h-accent-ink); text-underline-offset: 0.18em; }
+
+  .h-cat-section { padding-top: var(--h-space-8); scroll-margin-top: var(--h-space-16); }
+
+  .h-cat-section-title {
+    display: flex;
+    align-items: baseline;
+    gap: var(--h-space-3);
+    margin: 0 0 var(--h-space-3);
+    font-size: var(--h-text-h4);
+    line-height: var(--h-lh-h4);
+    font-weight: var(--h-weight-minor);
+  }
+
+  .h-cat-open { font-size: var(--h-text-micro); font-weight: 400; }
+
+  /* Drag the corner to try any width; the presets set it outright. */
+  .h-cat-frame {
+    width: var(--h-cat-width, 100%);
+    max-width: 100%;
+    min-width: 240px;
+    overflow: hidden;
+    resize: horizontal;
+    border: 1px dashed var(--h-line);
+  }
+
+  .h-cat-iframe {
+    display: block;
+    width: 100%;
+    min-height: 200px;
+    border: 0;
+  }
+</style>
+
+<script>
+    const html = document.documentElement;
+    const frames = [...document.querySelectorAll<HTMLIFrameElement>('.h-cat-iframe')];
+
+    /* Theme: set data-theme here and inside every frame, as the sites do. */
+    const themeButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-theme-set]')];
+    const applyTheme = (theme: string) => {
+      html.dataset.theme = theme;
+      themeButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeSet === theme)));
+      frames.forEach((f) => {
+        const root = f.contentDocument?.documentElement;
+        if (root) root.dataset.theme = theme;
+      });
+    };
+    const initial = html.dataset.theme
+      ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    themeButtons.forEach((b) => b.addEventListener('click', () => applyTheme(b.dataset.themeSet!)));
+
+    /* Width presets. */
+    const widthButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-width]')];
+    const applyWidth = (value: string) => {
+      document.querySelectorAll<HTMLElement>('.h-cat-frame').forEach((el) => {
+        el.style.width = '';
+        el.style.setProperty('--h-cat-width', value);
+      });
+      widthButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.width === value)));
+    };
+    widthButtons.forEach((b) => b.addEventListener('click', () => applyWidth(b.dataset.width!)));
+
+    /* Each frame grows to its content, so the page scrolls rather than the frame. */
+    frames.forEach((f) => {
+      const size = () => {
+        const doc = f.contentDocument;
+        if (doc?.body) f.style.height = `${Math.ceil(doc.body.getBoundingClientRect().height)}px`;
+      };
+      const attach = () => {
+        const doc = f.contentDocument;
+        if (!doc?.body) return;
+        if (html.dataset.theme) doc.documentElement.dataset.theme = html.dataset.theme;
+        new ResizeObserver(size).observe(doc.body);
+        size();
+      };
+      f.addEventListener('load', attach);
+      if (f.contentDocument?.readyState === 'complete') attach();
+    });
+
+    /* Entry pages carry no controls; only the index has anything to wire. */
+    if (themeButtons.length) applyTheme(initial);
+  </script>
