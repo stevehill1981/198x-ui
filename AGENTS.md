@@ -50,6 +50,24 @@ exist in only one theme, which is why it sweeps both. It needs Chromium:
 component, confirm the sweep fails, then swap in the fix and confirm it passes.
 A gate that was never seen red has measured nothing.
 
+### The catalogue is the other half of the recipe
+
+The sweep proves a change breaks nothing; it does not show you the change.
+`catalogue/` does. Mount it in a site worktree (see README, "The catalogue";
+Code198x/website carries the route at `src/pages/catalogue/[...slug].astro`),
+point that site's `_198x-ui` at your working copy with a symlink, and run
+`npx astro dev`, not `npm run dev`: `predev` runs `ui:fetch`, which replaces a
+symlink with a fresh clone at the pinned tag. Copy `fonts/` into the site's
+`public/fonts` yourself, since `ui:fetch` is what normally does it.
+
+A new component gets an entry in the same change: a file in
+`catalogue/entries/`, a line in `catalogue/entries.ts` and one in the map in
+`Catalogue.astro`. Show every variant the props allow, and say in each note
+which section of the record it embodies.
+
+The route is development-only, so check it stays that way: `astro build` should
+leave no `catalogue/` in `dist/`.
+
 ## Governance — the record comes first
 
 Everything here is the concrete form of
@@ -110,6 +128,27 @@ Digested from the record and `README.md`; the record is the authority.
 - **Tint ceilings are derived, not chosen** — 5% light, 20% dark. They are
   resolved inside `tokens.css` so a host cannot exceed them. Re-derive both if
   the palette lightness moves again.
+
+## Screen measures itself
+
+`components/Screen.astro` is the one component with a script, because the true
+grid and the space a screen has are only known in the browser. The rules it
+holds (§7) are easy to break by accident while tidying its CSS:
+
+- **Width comes from the script, never from the stylesheet.** Anything that
+  sizes `.h-screen` to its container (`width: 100%`, `flex: 1`, a grid track that
+  stretches it) makes the scale fractional. Resize the box around it, not the
+  screen.
+- **Nothing goes on the capture.** Scanlines and falloff are pseudo-elements and
+  the bloom is a second `<img>` with `alt=""` and `aria-hidden`. A `filter`, blend
+  mode or opacity on `.h-screen-img` is a breach of §7, whatever it looks like.
+- **The bezel is dark in both themes.** It is hardware; its colours are the
+  `--h-screen-*` tokens, single values rather than `light-dark()` pairs.
+
+Verify a Screen change by measuring, not looking: in the catalogue each screen's
+rendered size must be the grid times a whole k, and its `::before`
+`background-size` must be `100% kpx`. The Screen entry prints the grid, k and
+rendered size under each screen; read the scanline size from devtools.
 
 ## Plate geometry is mirrored, not shared
 
