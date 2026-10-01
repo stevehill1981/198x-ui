@@ -12,6 +12,11 @@ class FontsTest(unittest.TestCase):
         r = self.run_check()
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
 
+    def test_known_gap_is_named_not_hidden(self):
+        r = self.run_check()
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("KNOWN GAP nebula-sans-400-italic-greek.woff2", r.stdout)
+
     def test_magazine_face_declared(self):
         css = (ROOT / "fonts.css").read_text()
         self.assertIn("font-family: 'Fira Sans Condensed'", css)

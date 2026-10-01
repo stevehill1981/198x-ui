@@ -41,7 +41,7 @@ that mounts it elsewhere should override the `src` URLs rather than edit
 
 | Family | Latin | Latin Ext | Greek | Cyrillic | CJK |
 |---|---|---|---|---|---|
-| Nebula Sans | full | full | 88/144 | 156/256 | — |
+| Nebula Sans | full | full | 88/144 (the italic lacks Δ, U+0394) | 156/256 | — |
 | Fira Sans Condensed (Heavy Italic) | full | full | 121/144 | 100/256 | — |
 | JetBrains Mono | full | full | 79/144 | 122/256 | — |
 
@@ -50,6 +50,11 @@ heading naming a Soviet or Bulgarian machine sets in the house face rather than
 the viewer's. **None covers CJK.** If the curriculum reaches the Japanese MSX
 scene or Sharp's machines, that is a further decision and a much larger
 download.
+
+Fira counts are glyphs in the kit's subsets inside U+0370-03FF and U+0400-04FF:
+`python3 -c "from fontTools.ttLib import TTFont; c=TTFont('fonts/fira-sans-condensed-900-italic-greek.woff2').getBestCmap(); print(sum(0x370<=x<=0x3ff for x in c))"`
+(Cyrillic file, `0x400<=x<=0x4ff`). The Nebula italic Δ gap is recorded in
+`KNOWN_GAPS` in `scripts/check_fonts.py`.
 
 Split by `unicode-range`, so a Latin page fetches only the Latin cuts and other
 scripts arrive only when a page uses them.
