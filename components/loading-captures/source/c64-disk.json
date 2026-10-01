@@ -1,0 +1,10 @@
+[
+  {"action": "wait_for_boot", "max_frames": 600},
+  {"action": "load_media", "slot": "drive-8", "kind": "disk", "path": "c64-game.d64"},
+  {"action": "type_string", "text": "LOAD \"GAME\",8\n", "settle_frames": 0},
+  {"action": "run_frames", "frames": 40},
+  {"action": "save_screenshot", "path": "../c64-disk-searching.png"},
+  {"action": "run_frames", "frames": 44},
+  {"action": "query", "path": "screen.text.lines"},
+  {"action": "save_screenshot", "path": "../c64-disk-loading.png"}
+]
