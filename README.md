@@ -13,7 +13,7 @@ nothing, and the style inside it is called `House198x` either way.
 
 | | |
 |---|---|
-| `tokens.css` | Palette, dark tokens, the type roster, the eleven project colours |
+| `tokens.css` | Palette (dark leads, light follows), the type roster, the eleven project colours |
 | `components/Plate.astro` | The family wordmark — `[ ASM \| 198x ]` |
 | `components/SiteNav.astro` | Top-level navigation |
 | `components/FamilyStrip.astro` | The footer family strip |
@@ -173,13 +173,16 @@ repo.** In particular:
 - **The plate frame is constant**, never the project colour. It is what makes
   eleven fills of differing strength read as one set.
 - **`--h-ink-faint` is decorative, never small informational text.** It measures
-  2.27:1 on `--h-ground`, and darkening it far enough to carry copy turns it
+  2.31:1 on the light page, and darkening it far enough to carry copy turns it
   into `--h-ink-muted` — the tone that already does that job. The two cannot
   both be text colours.
 - **Set text in `--h-accent-ink`, never `--h-accent`.** The plain accent is the
-  fill: as small text it measures 4.07:1 on `--h-surface-light` and 4.52:1 on
-  `--h-ground`. `--h-accent-ink` is whichever of the pair is readable on the
-  current theme's ground, and it is the only one to put words in.
+  fill: as small text it measures 4.30:1 on the light page. `--h-accent-ink` is
+  the accent at ink strength in each theme, and it is the only one to put words
+  in. Text *on* the fill is `--h-ink-on-accent`.
+- **Dark leads.** Dark is the default; light follows `prefers-color-scheme` or
+  an explicit `data-theme="light"`, and `data-theme="dark"` forces dark (§7).
+  The Auto/Light/Dark toggle is the site's: it sets or clears `data-theme`.
 - **Three faces, three jobs.** Nebula Sans for interface, Literata for reading and
   editorial display and all captions, JetBrains Mono for anything the machine
   said. A fourth face is a drift trigger, not a decision.

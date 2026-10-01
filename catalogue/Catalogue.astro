@@ -225,7 +225,7 @@ const widths = [
       });
     };
     const initial = html.dataset.theme
-      ?? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      ?? (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');   // dark leads, §7
     themeButtons.forEach((b) => b.addEventListener('click', () => applyTheme(b.dataset.themeSet!)));
 
     /* Width presets. */

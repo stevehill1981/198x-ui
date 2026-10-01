@@ -40,7 +40,7 @@ const { prefix, project, size = 14, href, label } = Astro.props;
 
 const name = label ?? `${prefix.charAt(0).toUpperCase()}${prefix.slice(1).toLowerCase()}198x`;
 const fill = project ? `var(--h-project-${project})` : 'transparent';
-const ink = project ? '#faf8f2' : 'var(--h-ink)';
+const ink = project ? '#faf8f2' : 'var(--h-plate-ink)';
 /* A bare <span> has no role, and aria-label only names elements whose role
    supports naming — so the unlinked plate was not mislabelled, it was absent
    from the accessibility tree entirely. Both inner runs are aria-hidden, so
@@ -151,7 +151,7 @@ const clipId = `h-plate-${left.toLowerCase()}-${n(ow)}`.replace(/\./g, '-');
       set:html={run(left, 0)}
     />
     <g
-      fill="var(--h-ink)"
+      fill="var(--h-plate-ink)"
       transform={`translate(${n(o + wLeft + STROKE + PAD_X)} ${n(baseline)}) scale(${scale.toFixed(4)} -${scale.toFixed(4)})`}
       set:html={run(right, 0)}
     />
