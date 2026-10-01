@@ -53,9 +53,10 @@
   --h-code-bg: #242019;
   --h-code-ink: #efe7d6;
 
-  /* Derivation surface (§3a): every derived ink is computed against this, never
-   * the page. Conservative: an ink that clears 4.5:1 here clears it on paper. */
-  --h-surface-light: #f5e2d8;
+  /* Derivation surface (§3a): every ink is derived against paper. Paper is the
+   * darkest light surface text meets (the panel is lighter), so an ink that
+   * clears 4.5:1 on paper clears it on every light surface in the kit. */
+  --h-surface-light: var(--h-page);
 
   /* Horizontal inset for shared components. A host with its own content
    * grid overrides this so the nav and footer line up with the page body
