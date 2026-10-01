@@ -1,0 +1,8 @@
+[
+  {"action": "load_media", "slot": "tape-1", "kind": "tape", "path": "zx-game.tap"},
+  {"action": "autoload_tape", "slot": "tape-1", "max_boot_frames": 600},
+  {"action": "run_frames", "frames": 278},
+  {"action": "save_screenshot", "path": "../zx-header.png"},
+  {"action": "run_frames", "frames": 52},
+  {"action": "save_screenshot", "path": "../zx-header-wait.png"}
+]
