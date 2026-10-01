@@ -200,7 +200,10 @@ const preH = grid?.h ?? height;
 </style>
 
 <script>
-  /* Fit every screen on the page to a whole multiple of its true grid. */
+  /* Fit every screen on the page to a whole multiple of its true grid. The
+     rule itself is in screen-fit.ts, shared with Loading. */
+  import { fitToGrid, refitOnChange } from './screen-fit';
+
   type Grid = [number, number];
 
   const repeated = (d: Uint8ClampedArray, w: number, h: number, axis: 'x' | 'y') => {
@@ -250,40 +253,7 @@ const preH = grid?.h ?? height;
     const img = el.querySelector<HTMLImageElement>('img.h-screen-img');
     if (!img || !img.naturalWidth || !el.parentElement) return;
     const [w, h] = trueGrid(el, img);
-    /* Measure the space this screen's own cell gives it, not its parent's. */
-    el.style.width = 'auto';
-    el.style.justifySelf = 'stretch';
-    el.style.alignSelf = 'start';
-    let avail = el.getBoundingClientRect().width;
-    /* A flex row gives an auto-width box no size of its own; fall back to the
-       parent's content box, less this screen's margins. */
-    if (!avail) {
-      const cs = getComputedStyle(el);
-      const pcs = getComputedStyle(el.parentElement);
-      avail = el.parentElement.clientWidth
-        - parseFloat(pcs.paddingLeft) - parseFloat(pcs.paddingRight)
-        - parseFloat(cs.marginLeft) - parseFloat(cs.marginRight);
-    }
-    el.style.justifySelf = '';
-    el.style.alignSelf = '';
-    const max = Math.max(1, Math.floor(Number(el.dataset.maxScale) || 1));
-    const k = avail >= w ? Math.min(max, Math.floor(avail / w)) : avail / w;
-    el.style.width = `${w * k}px`;
-    el.style.aspectRatio = `${w} / ${h}`;
-    el.style.setProperty('--lines', String(h));
-    // Scanlines in device pixels: a source line covers k * dpr of them.
-    const dpr = window.devicePixelRatio || 1;
-    const linePx = k * dpr;
-    if (Number.isInteger(k) && linePx >= 2) {
-      el.style.setProperty('--line-px', `${k}px`);
-      el.style.setProperty('--scan-dark', `${Math.max(1, Math.floor(linePx / 2)) / dpr}px`);
-      el.dataset.scan = 'on';
-    } else {
-      el.style.removeProperty('--line-px');
-      el.style.removeProperty('--scan-dark');
-      el.dataset.scan = 'off';
-    }
-    el.dataset.scale = String(k);
+    fitToGrid(el, w, h);
   };
 
   const fitScreens = () =>
@@ -295,17 +265,6 @@ const preH = grid?.h ?? height;
     });
 
   fitScreens();
-  let t: ReturnType<typeof setTimeout>;
-  addEventListener('resize', () => {
-    clearTimeout(t);
-    t = setTimeout(fitScreens, 100);
-  });
-  // Page zoom and moving between displays change devicePixelRatio, and with it
-  // how many device pixels a source line covers.
-  const watchDpr = () => {
-    const mq = matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
-    mq.addEventListener('change', () => { fitScreens(); watchDpr(); }, { once: true });
-  };
-  watchDpr();
+  refitOnChange(fitScreens);
   (window as unknown as { fitScreens: () => void }).fitScreens = fitScreens;
 </script>
