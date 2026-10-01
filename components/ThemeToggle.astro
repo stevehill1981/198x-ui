@@ -1,0 +1,186 @@
+---
+/**
+ * The visible Auto / Light / Dark choice.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7 "Dark leads": dark is the default expression, light follows
+ *   prefers-color-scheme, "with a visible Auto, Light and Dark toggle".
+ * - §7: interface, so square cells on the 8px grid. The chosen option is in
+ *   inverse video, because it is the *current* theme, which is what inverse
+ *   means and all it means.
+ *
+ * What it does: Light and Dark set `data-theme` on <html>; Auto removes it, so
+ * tokens.css falls back to prefers-color-scheme. The choice is kept in
+ * localStorage (Auto removes the key), inside try/catch, because storage can
+ * be absent or throw (a private window, blocked site data).
+ *
+ * Why three radios rather than the concept's cycling icon button. The concept
+ * cycled Auto → Light → Dark on one button whose icon showed the state. That
+ * hides two of the three choices, makes the reader press up to twice to reach
+ * one, and its icons came from an icon font the kit does not take. Three
+ * labelled options are the "visible Auto, Light and Dark" §7 asks for, and as
+ * native radio inputs in a fieldset they bring their semantics and keyboard
+ * model with them: one Tab stop, arrows to move, the group and its legend
+ * announced, checked state reported. Nothing is re-implemented in script.
+ *
+ * Without JavaScript nothing could act on a choice, so the control stays
+ * `hidden` and the page follows the reader's system, which is Auto. The script
+ * reveals it.
+ *
+ * The state lives on <html>, not in the control: every toggle on the page
+ * watches `data-theme` and shows what it finds, so two toggles never disagree
+ * and a host that sets the attribute some other way is reflected.
+ *
+ * To avoid a flash of the wrong theme before this script runs, put ThemeBoot
+ * in the document <head> with the same `storageKey`.
+ *
+ * Props:
+ *   label       The group's name. Default 'Theme'.
+ *   showLabel   Show the name beside the options. Default false: it is still
+ *               the group's accessible name, for screen readers.
+ *   storageKey  The localStorage key. Default 'theme'.
+ *   class       Extra classes for a host's own layout.
+ */
+interface Props {
+  label?: string;
+  showLabel?: boolean;
+  storageKey?: string;
+  class?: string;
+}
+
+const { label = 'Theme', showLabel = false, storageKey = 'theme', class: className } = Astro.props;
+const options = [
+  { value: 'auto', text: 'Auto' },
+  { value: 'light', text: 'Light' },
+  { value: 'dark', text: 'Dark' },
+];
+// Radios group by name, so each toggle needs its own.
+const name = `h-theme-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<fieldset class:list={['h-theme', className]} data-h-theme data-storage-key={storageKey} hidden>
+  <legend class:list={['h-theme-legend', { 'h-theme-sr': !showLabel }]}>{label}</legend>
+  <div class="h-theme-options">
+    {options.map((o) => (
+      <label class="h-theme-option">
+        <input type="radio" name={name} value={o.value} checked={o.value === 'auto'} />
+        <span>{o.text}</span>
+      </label>
+    ))}
+  </div>
+</fieldset>
+
+<style>
+  .h-theme {
+    display: inline-flex;
+    align-items: center;
+    gap: calc(var(--h-cell) * 1.5);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-micro);
+    line-height: 1;
+  }
+  .h-theme[hidden] { display: none; }
+
+  .h-theme-legend {
+    float: left;
+    padding: 0;
+    color: var(--h-ink-body);
+    font-weight: var(--h-weight-minor);
+  }
+
+  .h-theme-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .h-theme-options { display: flex; }
+
+  .h-theme-option { position: relative; display: flex; }
+
+  /* The input stays in the accessibility tree and takes focus; the span is
+     what is seen. */
+  .h-theme-option input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .h-theme-option span {
+    box-sizing: border-box;
+    display: grid;
+    place-items: center;
+    min-height: calc(var(--h-cell) * 5);
+    padding: 0 calc(var(--h-cell) * 2);
+    border: 1px solid var(--h-line);
+    background: var(--h-shell);
+    color: var(--h-ink-body);
+    font-weight: var(--h-weight-minor);
+  }
+  .h-theme-option + .h-theme-option span { border-left: 0; }
+
+  .h-theme-option:hover span { background: var(--h-wash); color: var(--h-ink); }
+
+  /* Current: inverse video, switched instantly. */
+  .h-theme-option input:checked + span {
+    background: var(--h-ink);
+    border-color: var(--h-ink);
+    color: var(--h-ground);
+  }
+
+  .h-theme-option input:focus-visible + span {
+    outline: 2px solid var(--h-accent);
+    outline-offset: 2px;
+    position: relative;
+    z-index: 1;
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const groups = [...document.querySelectorAll<HTMLFieldSetElement>('[data-h-theme]')];
+
+  const current = () => {
+    const t = root.dataset.theme;
+    return t === 'light' || t === 'dark' ? t : 'auto';
+  };
+
+  const show = () => {
+    const mode = current();
+    groups.forEach((g) =>
+      g.querySelectorAll<HTMLInputElement>('input').forEach((i) => { i.checked = i.value === mode; }));
+  };
+
+  const apply = (mode: string, key: string) => {
+    if (mode === 'auto') delete root.dataset.theme;
+    else root.dataset.theme = mode;
+    try {
+      if (mode === 'auto') localStorage.removeItem(key);
+      else localStorage.setItem(key, mode);
+    } catch { /* no storage: the choice lasts for this page */ }
+  };
+
+  groups.forEach((g) => {
+    const key = g.dataset.storageKey || 'theme';
+    // ThemeBoot normally did this already; this covers a page without it.
+    try {
+      const saved = localStorage.getItem(key);
+      if (saved === 'light' || saved === 'dark') root.dataset.theme = saved;
+    } catch { /* fall through to whatever <html> says */ }
+    g.addEventListener('change', (e) => apply((e.target as HTMLInputElement).value, key));
+    g.hidden = false;
+  });
+
+  show();
+  new MutationObserver(show).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+</script>

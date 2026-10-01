@@ -1,0 +1,28 @@
+---
+/**
+ * Applies a saved theme before the page paints. Put it in <head>, before any
+ * stylesheet that depends on `data-theme`, on every page that has a
+ * ThemeToggle, with the same `storageKey`.
+ *
+ * ThemeToggle applies the saved choice too, but its script runs after the page
+ * has painted, so without this a reader who chose Light on a dark-leading site
+ * sees a dark flash on every load. It is inline because it has to run before
+ * anything else, and it does one thing: read the key, set the attribute if the
+ * value is one it knows. Storage that throws leaves the page on Auto.
+ *
+ * Props:
+ *   storageKey  The localStorage key. Default 'theme'.
+ */
+interface Props {
+  storageKey?: string;
+}
+
+const { storageKey = 'theme' } = Astro.props;
+---
+
+<script is:inline define:vars={{ key: storageKey }}>
+  try {
+    const t = localStorage.getItem(key);
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch {}
+</script>
