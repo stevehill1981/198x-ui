@@ -6,7 +6,7 @@ rather than a CDN.
 | Family | Role | Licence |
 |---|---|---|
 | Nebula Sans | interface, headings, the slogan | SIL OFL 1.1 |
-| Literata | long-form reading, editorial display, captions | SIL OFL 1.1 |
+| Fira Sans Condensed (Heavy Italic, 900) | the magazine voice: masthead, pull quote, stat box, teaser | SIL OFL 1.1 |
 | JetBrains Mono | code, data, plates | SIL OFL 1.1 |
 
 All three permit redistribution, so these files are committed. The OFL asks only
@@ -42,7 +42,7 @@ that mounts it elsewhere should override the `src` URLs rather than edit
 | Family | Latin | Latin Ext | Greek | Cyrillic | CJK |
 |---|---|---|---|---|---|
 | Nebula Sans | full | full | 88/144 | 156/256 | — |
-| Literata | full | full | 87/144 | 118/256 | — |
+| Fira Sans Condensed (Heavy Italic) | full | full | 121/144 | 100/256 | — |
 | JetBrains Mono | full | full | 79/144 | 122/256 | — |
 
 All three cover the scripts the family's scope needs, which is the point: a
@@ -59,7 +59,7 @@ scripts arrive only when a page uses them.
 Subsets of upstream releases, taken from the designers' own repositories:
 
 - Nebula Sans — <https://www.nebulasans.com> (1.010)
-- Literata — <https://github.com/googlefonts/literata>
+- Fira Sans Condensed Heavy Italic — <https://github.com/bBoxType/FiraSans> (release 4.3, pinned at commit `f54eeb3124c63fe9b5bcd36d09d1cd46788cd15e`; `Fira_Sans_4_3/Fonts/Fira_Sans_TTF_4301/Condensed/Italic/FiraSansCondensed-HeavyItalic.ttf`, licence `OFL.txt` at the same commit). The font declares usWeightClass 900; `fonts.css` declares weight 900 italic. Subset with `python3 scripts/subset_font.py SRC fira-sans-condensed 900 italic`; `python3 scripts/check_fonts.py` verifies every face
 - JetBrains Mono — <https://github.com/JetBrains/JetBrainsMono> (2.304)
 
 Subsetting for web use is permitted under the OFL and does not trigger the

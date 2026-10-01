@@ -238,7 +238,7 @@ repo.** In particular:
   prediction panel, pull quote, stat box, teaser. Never body text, never below
   20px. `--h-mag-yellow` is a fill only; on paper it is 1.36:1.
 - **Three faces, three jobs.** Nebula Sans for reading and interface, Fira Sans
-  Extra Condensed for the magazine voice, JetBrains Mono for anything the
+  Condensed for the magazine voice, JetBrains Mono for anything the
   machine said. A fourth face is a drift trigger, not a decision.
 - **Every text pair is measured.** `contrast-pairs.json` lists them and
   `node scripts/check-contrast.mjs` fails on any pair under its minimum.
@@ -270,7 +270,7 @@ for the family's own sites, not a shipped tool, and nothing in it derives from a
 GPL source.
 
 Two carve-outs, both in `LICENSE`. **`fonts/` is not ours** — Nebula Sans,
-Literata and JetBrains Mono are redistributed under the SIL OFL 1.1, and the
+Fira Sans Condensed and JetBrains Mono are redistributed under the SIL OFL 1.1, and the
 licence has to travel with them if you redistribute them further. And MIT grants
 copyright, not trade marks: use the plate to say *this is a 198x site*, not to
 badge something unaffiliated.

@@ -98,7 +98,7 @@
   /* Type. Three faces, three jobs; all cover Latin, Greek and Cyrillic. */
   --h-font-ui:   "Nebula Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --h-font-read: var(--h-font-ui);   /* reading is Nebula Sans now; the name stays for v0 components */
-  --h-font-mag:  "Fira Sans Extra Condensed", "Nebula Sans", sans-serif;
+  --h-font-mag:  "Fira Sans Condensed", "Nebula Sans", sans-serif;
   --h-font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
 
   /* ---- Type scale — family-visual-identity.md §6 -------------------------
