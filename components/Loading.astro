@@ -45,9 +45,12 @@
  *
  * Accessibility: the root is role="status" and its text, "Loading…" and the
  * machine, is what assistive technology gets. The picture is aria-hidden, and
- * its text (the machine's messages) is part of the picture, not content: the
- * C64's light blue on blue is what the machine showed and is not a reading
- * surface. `showLabel` puts the status text under the screen for sighted
+ * its text (the machine's messages) is part of the picture, not content. The
+ * C64's light blue on blue measures 2.22:1, and it is what the machine showed:
+ * text that is part of a picture is outside WCAG 1.4.3, and recolouring it
+ * would be borrowing a look the machine never had. So the messages are drawn
+ * as generated content inside the aria-hidden picture, never as page text,
+ * and the status text carries the meaning at full contrast. `showLabel` puts the status text under the screen for sighted
  * readers too.
  *
  * Size: the screen is drawn on the machine's own grid (Spectrum 352x296, C64
@@ -176,7 +179,7 @@ if (look.kind === 'look') {
             )}
             {f.paper && (
               <div class="h-load-paper" style={`background:${f.paper}`}>
-                {f.lines.map((l) => <div class="h-load-line">{l}</div>)}
+                {f.lines.map((l) => <div class="h-load-line" data-text={l}></div>)}
               </div>
             )}
           </div>
@@ -273,6 +276,10 @@ if (look.kind === 'look') {
     white-space: pre;
   }
   .h-load-line { height: calc(var(--h-load-px) * var(--h-load-cell)); }
+  /* The machine's messages are drawn, not set: generated content, so they are
+     part of the picture, as pixels in a capture are, and are not selected,
+     copied or read. See the header on why they are not held to 4.5:1. */
+  .h-load-line::before { content: attr(data-text); }
 
   /* A drive light: an object, so round; on the bezel below the screen. */
   .h-load-led {
