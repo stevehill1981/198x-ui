@@ -64,6 +64,33 @@
    * *text* in. --h-accent is the fill and is not safe as small text on the
    * family's own grounds. */
   --h-accent-ink:  light-dark(#a53a0f, #e4784e);
+  /* The fill under the pointer or focus: a primary button's hover (§4 "accent
+   * fill"; the concept's --accent-hover). --h-ink-on-accent stays the text on
+   * it, 5.77:1 light and 7.09:1 dark. */
+  --h-accent-hover: light-dark(#ad4519, #e8835c);
+
+  /* Washes: ink laid thinly over whatever ground is there, so they work on a
+   * tinted ground without restating it. --h-shell is the double bezel's tray;
+   * --h-wash is a hover; --h-wash-2 a resting cell (a button's arrow cell, a
+   * segment). Every text token clears 4.5:1 on each, see the PR measurements.
+   * --h-highlight is the lit top edge of a device core, never under text. */
+  --h-shell:     light-dark(rgb(28 25 22 / 0.035), rgb(239 231 214 / 0.035));
+  --h-wash:      light-dark(rgb(28 25 22 / 0.05),  rgb(239 231 214 / 0.06));
+  --h-wash-2:    light-dark(rgb(28 25 22 / 0.08),  rgb(239 231 214 / 0.09));
+  --h-highlight: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.07));
+  /* A marked line in a Listing: the accent ink at 12%. The concept used 16%,
+   * which leaves the dark muted ink at 4.51:1 on a 20%-tinted ground; at 12%
+   * the tightest text on it is 4.60:1 (light, accent ink, Forge tint). */
+  --h-mark: color-mix(in srgb, var(--h-accent-ink) 12%, transparent);
+
+  /* Syntax, for Listing. Strings a cool cyan, numbers and addresses a warm
+   * yellow, from the concept (brand.css "COLOUR"). Keywords take
+   * --h-accent-ink and comments --h-ink-muted, so no third hue is needed.
+   * These are text tokens: each clears 4.5:1 on the ground, the page, the
+   * shell, the highlighted-line wash and both tinted at the §3b ceilings. */
+  --h-syn-str:   light-dark(#006962, #86d4c8);
+  --h-syn-num:   light-dark(#7a5700, #e2c572);
+
   --h-line:        light-dark(#d6d3ca, #3a342a);
   --h-line-soft:   light-dark(#e2ded3, #4a4234);
   --h-code-bg:     light-dark(#242019, #100e0c);
@@ -148,6 +175,11 @@
   --h-space-1:  0.25rem;   --h-space-2:  0.5rem;   --h-space-3:  0.75rem;
   --h-space-4:  1rem;      --h-space-6:  1.5rem;   --h-space-8:  2rem;
   --h-space-12: 3rem;      --h-space-16: 4rem;     --h-space-24: 6rem;
+
+  /* The interface cell — §7: interface is square, on an 8px cell. Set in rem
+   * so a reader who raises their font size takes the controls with them, as
+   * they take the type scale. 8px at the default size. */
+  --h-cell: 0.5rem;
 
   --h-measure: 65ch;   /* ~600px of Literata at 20px */
 
