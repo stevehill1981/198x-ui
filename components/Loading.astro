@@ -1,0 +1,324 @@
+---
+/**
+ * A loading state: what this machine showed while it was busy loading.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: "A loading state shows what that machine showed while it was busy,
+ *   quoted from a source, never borrowed from another machine." Each machine's
+ *   look is data in loading-looks.ts, every value cited beside it. A machine
+ *   with no entry fails the build with a clear error; there is no default
+ *   look to fall back on, because any default would be another machine's.
+ * - §7: a screen is an object, so the look sits in Screen's bezel: rounded,
+ *   dark in both themes, the `--h-screen-*` tokens. It is not a capture, so
+ *   there are no scanlines or bloom; the machine's colours are drawn as flat
+ *   fields, and the frame's glow is the machine lighting itself.
+ * - §6: the machine's own loading display while something loads is on the
+ *   allowed list of motion. Under prefers-reduced-motion: reduce nothing moves
+ *   or changes: the look shows its busy state as one still frame.
+ *
+ * What each machine shows (sources in loading-looks.ts):
+ *
+ * - **ZX Spectrum** (tape): the border stripes red and cyan for the pilot,
+ *   about 9.7 lines a band, then blue and yellow for the data, 3.8 lines for a
+ *   0 bit and 7.6 for a 1; the paper untouched but for "Program: NAME". The
+ *   stripes rise, but slower than the machine's 114 lines a second, which
+ *   would flash every point of the border about twelve times a second (WCAG
+ *   2.3.1). Band heights, colours, order and direction are the machine's.
+ * - **Commodore 64** (`media="tape"`, the default): LOAD, PRESS PLAY ON TAPE,
+ *   then the whole screen blanked to light blue, FOUND NAME, and blanked again
+ *   while it loads. It holds the blanked field. No stripes: those were
+ *   commercial turbo loaders, not the KERNAL's.
+ * - **Commodore 64** (`media="disk"`, a 1541): SEARCHING FOR NAME, LOADING, on
+ *   the normal blue screen, with the drive's red light lit.
+ * - **Amiga 500** (Kickstart 1.3): the whole screen dark grey, light grey,
+ *   then white, with the drive light lit. The white is the insert-disk
+ *   screen's ground; Commodore's hand-and-disk picture is not reproduced.
+ * - **NES, Master System** (cartridge): the program is in the machine already,
+ *   so there is no loading state and Loading renders nothing. Show the content
+ *   at once. A site can ask first with `loadingLook(machine).kind === 'none'`
+ *   from loading-looks.ts.
+ *
+ * A sequence plays once, from when the element is first rendered, and holds
+ * its last state, the one the machine spent its busy time in; only stripes
+ * keep moving, because they did. Remove the component when loading ends.
+ *
+ * Accessibility: the root is role="status" and its text, "Loading…" and the
+ * machine, is what assistive technology gets. The picture is aria-hidden, and
+ * its text (the machine's messages) is part of the picture, not content: the
+ * C64's light blue on blue is what the machine showed and is not a reading
+ * surface. `showLabel` puts the status text under the screen for sighted
+ * readers too.
+ *
+ * Size: the screen is drawn on the machine's own grid (Spectrum 352x296, C64
+ * 416x312, Amiga 320x256, as Emu198x captures them) at a whole multiple up to
+ * `maxScale`, like Screen; only a cell narrower than the grid scales it down.
+ * Everything inside, stripes included, is sized in source lines, so it stays
+ * in proportion at any scale.
+ *
+ * Props:
+ *   machine    The machine's id, as in machines.json: 'sinclair-zx-spectrum',
+ *              'commodore-64', 'commodore-amiga', 'nintendo-entertainment-system'.
+ *              Required.
+ *   media      For a machine with more than one loader: the C64's 'tape'
+ *              (default) or 'disk'.
+ *   name       The program's name, shown in the machine's messages and, on the
+ *              Spectrum, encoded in the data stripes. Default 'GAME'. Longer
+ *              than the machine's loader took (10 on the Spectrum, 16 on the
+ *              C64) throws.
+ *   label      The status text before the machine's name. Default 'Loading…'.
+ *   showLabel  Show the status text under the screen. Default false.
+ *   maxScale   Largest whole multiple of the grid. Default 1.
+ *   class      Extra classes for the root.
+ */
+import { loadingLook, spectrumDataBands, type Stripes } from './loading-looks';
+
+interface Props {
+  machine: string;
+  media?: string;
+  name?: string;
+  label?: string;
+  showLabel?: boolean;
+  maxScale?: number;
+  class?: string;
+}
+
+const {
+  machine,
+  media,
+  name = 'GAME',
+  label = 'Loading…',
+  showLabel = false,
+  maxScale = 1,
+  class: className,
+} = Astro.props;
+
+if (!machine) throw new Error('[198x-ui] Loading: machine is required.');
+const look = loadingLook(machine, media);
+
+let render: null | {
+  frames: { style: string; last: boolean; stripes?: { css: string; period: number; seconds: number }; paper?: string; lines: string[] }[];
+} = null;
+let status = '';
+let rootStyle = '';
+let led: { colour: string; from: number } | undefined;
+
+if (look.kind === 'look') {
+  const shown = look.upper ? name.toUpperCase() : name;
+  if (look.maxName && [...shown].length > look.maxName) {
+    throw new Error(
+      `[198x-ui] Loading: "${name}" is ${[...shown].length} characters; the ${look.title} loader took ${look.maxName}.`,
+    );
+  }
+
+  /* One repeating gradient per pattern, its stops in source lines. A tile
+     repeated hundreds of times is what Safari stops painting part-way down a
+     tall layer; a single repeating gradient is not. */
+  const gradient = (s: Stripes) => {
+    let at = 0;
+    const stops = s.bands.map((h, i) => {
+      const c = s.colours[i % 2];
+      const from = at;
+      at += h;
+      return `${c} calc(var(--h-load-px) * ${from.toFixed(2)}) calc(var(--h-load-px) * ${at.toFixed(2)})`;
+    });
+    return { css: `repeating-linear-gradient(to bottom, ${stops.join(', ')})`, period: Math.round(at * 100) / 100 };
+  };
+  const patterns: Record<string, Stripes | undefined> = {
+    pilot: look.stripes?.pilot,
+    data: look.stripes?.data === 'from-name' ? spectrumDataBands(shown) : undefined,
+  };
+
+  const drift = look.drift ?? 0;
+  render = {
+    frames: look.frames.map((f, i) => {
+      const next = look.frames[i + 1];
+      const last = !next;
+      const style = [`--h-load-at:${f.at}s`, next ? `--h-load-until:${next.at}s` : '', 'fill' in f.border ? `background:${f.border.fill}` : '']
+        .filter(Boolean)
+        .join(';');
+      let stripes;
+      if ('stripes' in f.border) {
+        const p = patterns[f.border.stripes];
+        if (!p) throw new Error(`[198x-ui] Loading: ${look.title} has no "${f.border.stripes}" stripes in loading-looks.ts.`);
+        const g = gradient(p);
+        stripes = { ...g, seconds: drift > 0 ? Math.round((g.period / drift) * 1000) / 1000 : 0 };
+      }
+      return { style, last, stripes, paper: f.paper, lines: (f.lines ?? []).map((l) => l.replaceAll('{name}', shown)) };
+    }),
+  };
+
+  const p = look.paper;
+  rootStyle = [
+    `--h-load-gw:${look.grid.w}`,
+    `--h-load-gh:${look.grid.h}`,
+    `--h-load-k:${Math.max(1, Math.floor(maxScale))}`,
+    `--h-load-cell:${look.cell ?? 8}`,
+    p ? `--h-load-px0:${(p.x / look.grid.w) * 100}%;--h-load-py0:${(p.y / look.grid.h) * 100}%;--h-load-pw:${(p.w / look.grid.w) * 100}%;--h-load-ph:${(p.h / look.grid.h) * 100}%` : '',
+    look.ink ? `--h-load-ink:${look.ink}` : '',
+  ].filter(Boolean).join(';');
+  status = `${label} ${look.title}`;
+  led = look.led;
+}
+---
+
+{render && (
+  <div class:list={['h-load', className]} role="status" style={rootStyle} data-machine={machine}>
+    <div class="h-load-device">
+      <div class="h-load-screen" aria-hidden="true">
+        {render.frames.map((f) => (
+          <div class:list={['h-load-frame', { 'h-load-last': f.last }]} style={f.style}>
+            {f.stripes && (
+              <div
+                class:list={['h-load-stripes', { 'h-load-drift': f.stripes.seconds > 0 }]}
+                style={`--h-load-period:${f.stripes.period};--h-load-seconds:${f.stripes.seconds}s;background-image:${f.stripes.css}`}
+              ></div>
+            )}
+            {f.paper && (
+              <div class="h-load-paper" style={`background:${f.paper}`}>
+                {f.lines.map((l) => <div class="h-load-line">{l}</div>)}
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      {led && <span class="h-load-led" aria-hidden="true" style={`--h-load-led:${led.colour};--h-load-at:${led.from}s`}></span>}
+    </div>
+    <span class:list={['h-load-status', { 'h-load-status-hidden': !showLabel }]}>{status}</span>
+  </div>
+)}
+
+<style>
+  .h-load {
+    display: grid;
+    justify-items: start;
+    gap: calc(var(--h-cell) * 1.5);
+    min-width: 0;
+  }
+
+  /* The device: the screen in Screen's bezel, with room for a drive light. */
+  .h-load-device {
+    --h-load-margin: 0.6rem;
+    position: relative;
+    width: min(calc(var(--h-load-gw) * var(--h-load-k) * 1px), 100% - 2 * var(--h-load-margin));
+    margin: var(--h-load-margin);
+  }
+  @media (max-width: 420px) {
+    .h-load-device { --h-load-margin: 3px; }
+  }
+
+  .h-load-screen {
+    position: relative;
+    aspect-ratio: var(--h-load-gw) / var(--h-load-gh);
+    /* Source pixels resolve against this box, so every stripe and character
+       is in proportion at any width. */
+    container-type: inline-size;
+    overflow: hidden;
+    isolation: isolate;
+    border-radius: 1.4rem / 1.6rem;
+    background: var(--h-screen-glass);
+    box-shadow:
+      0 0 0 0.6rem var(--h-screen-bezel),
+      0 0 0 calc(0.6rem + 1px) var(--h-screen-rim),
+      0 0 60px 0 var(--h-screen-glow);
+  }
+
+  .h-load-frame {
+    --h-load-px: calc(100cqw / var(--h-load-gw));
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    visibility: hidden;
+    /* Appear at --h-load-at, give way at --h-load-until. */
+    animation:
+      h-load-on 1ms linear var(--h-load-at) forwards,
+      h-load-off 1ms linear var(--h-load-until) forwards;
+  }
+  .h-load-frame.h-load-last { animation: h-load-on 1ms linear var(--h-load-at) forwards; }
+
+  @keyframes h-load-on { from, to { visibility: visible; } }
+  @keyframes h-load-off { from, to { visibility: hidden; } }
+
+  /* The stripes: one layer a period taller than the screen, drifting up by
+     exactly one period and starting again, so the loop has no seam. */
+  .h-load-stripes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: calc(100% + var(--h-load-px) * var(--h-load-period));
+    will-change: transform;
+  }
+  .h-load-drift { animation: h-load-rise var(--h-load-seconds) linear infinite; }
+  @keyframes h-load-rise {
+    from { transform: translateY(0); }
+    to { transform: translateY(calc(var(--h-load-px) * var(--h-load-period) * -1)); }
+  }
+
+  .h-load-paper {
+    position: absolute;
+    left: var(--h-load-px0);
+    top: var(--h-load-py0);
+    width: var(--h-load-pw);
+    height: var(--h-load-ph);
+    overflow: hidden;
+    color: var(--h-load-ink);
+    font-family: var(--h-font-mono);
+    font-variant-ligatures: none;
+    /* One character to a cell: JetBrains Mono's advance is 0.6em, so 0.4em of
+       spacing puts each character on the machine's 8-pixel column. */
+    font-size: calc(var(--h-load-px) * var(--h-load-cell));
+    line-height: calc(var(--h-load-px) * var(--h-load-cell));
+    letter-spacing: calc(var(--h-load-px) * var(--h-load-cell) * 0.4);
+    white-space: pre;
+  }
+  .h-load-line { height: calc(var(--h-load-px) * var(--h-load-cell)); }
+
+  /* A drive light: an object, so round; on the bezel below the screen. */
+  .h-load-led {
+    position: absolute;
+    right: 1.6rem;
+    bottom: calc(-0.6rem + 0.3rem - 3px);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2a2622;
+    animation: h-load-led 1ms linear var(--h-load-at) forwards;
+  }
+  @keyframes h-load-led {
+    from, to {
+      background: var(--h-load-led);
+      box-shadow: 0 0 6px 1px var(--h-load-led);
+    }
+  }
+
+  .h-load-status {
+    padding-inline: 0.6rem;
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-micro);
+    line-height: var(--h-lh-micro);
+    color: var(--h-ink-muted);
+  }
+  .h-load-status-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* §6: under reduced motion nothing moves or changes. The busy state shows
+     as one still frame, the drive light already lit. */
+  @media (prefers-reduced-motion: reduce) {
+    .h-load-frame,
+    .h-load-frame.h-load-last,
+    .h-load-drift,
+    .h-load-led { animation: none; }
+    .h-load-frame.h-load-last { visibility: visible; }
+    .h-load-led {
+      background: var(--h-load-led);
+      box-shadow: 0 0 6px 1px var(--h-load-led);
+    }
+  }
+</style>
