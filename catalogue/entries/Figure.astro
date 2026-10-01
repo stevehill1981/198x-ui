@@ -1,0 +1,53 @@
+---
+import Figure from '../../components/Figure.astro';
+import Specimen from '../Specimen.astro';
+import type { CatalogueSamples } from '../samples';
+
+interface Props {
+  samples: CatalogueSamples;
+}
+
+const { samples } = Astro.props;
+const { spectrum, amiga, photo } = samples;
+---
+
+<Specimen
+  title="A capture"
+  code={`<Figure src="…" alt="…" width={352} height={296}>
+  <Fragment slot="caption">The program after RUN: both lines, then the report.</Fragment>
+</Figure>`}
+  note="The capture is drawn by Screen, so it sits at a whole multiple of its true grid and is never tinted or filtered (§7). The figure is an object, so it keeps Screen's rounded bezel (§7). The caption is Literata italic, as every caption is (§4), in the muted ink and kept to the reading measure."
+  block
+>
+  <Figure {...spectrum} loading="eager">
+    <Fragment slot="caption">The program after RUN: both lines, then the report 0 OK, 20:1.</Fragment>
+  </Figure>
+</Specimen>
+
+<Specimen
+  title="A capture with its grid declared, CRT off"
+  code={`<Figure src="…" alt="…" width={640} height={512} grid={{ w: 320, h: 256 }} crt={false}>…</Figure>`}
+  note="Every Screen prop passes through. The Amiga is stored at twice its 320x256 and shown at 320x256 (§7)."
+  block
+>
+  <Figure {...amiga} grid={{ w: 320, h: 256 }} crt={false} loading="eager">
+    <Fragment slot="caption">Signal, from the 68000 assembly track.</Fragment>
+  </Figure>
+</Specimen>
+
+{photo && (
+  <Specimen
+    title="A photograph"
+    code={`<Figure kind="image" src="…" alt="…" width={1600} height={1175}>
+  <Fragment slot="caption">… Photograph: Bill Bertram, CC BY-SA 2.5.</Fragment>
+</Figure>`}
+    note="kind='image' for anything that is not a capture: shown at its own size or the cell's width, whichever is smaller, never stretched (here in a 40rem column). Rounded with a hairline edge, because it is an object (§7). The caption is the same Literata italic as a capture's: one caption treatment, photographs included (§4). Grid, maxScale and crt throw here, so a capture cannot slip into the mode that lets it scale by a fraction."
+    block
+  >
+    <div style="max-width: 40rem">
+    <Figure kind="image" src={photo.src} alt={photo.alt} width={photo.width} height={photo.height} loading="eager">
+      <Fragment slot="caption">The 48K machine. Every key carries several BASIC keywords. {photo.credit}</Fragment>
+    </Figure>
+    </div>
+  </Specimen>
+)}

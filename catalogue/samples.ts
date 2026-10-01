@@ -25,6 +25,10 @@ export interface CatalogueSamples {
   amiga: Sample;
   /** A 256x240 NES capture, small enough to reach 2x on a desktop. */
   nes: Sample;
+  /** A photograph wider than a phone, for Figure's image mode. Optional, so a
+   * set written before Figure keeps working; without it that specimen is
+   * skipped. Carry the credit its licence asks for. */
+  photo?: Sample & { credit?: string };
 }
 
 export const code198xSamples: CatalogueSamples = {
@@ -51,5 +55,12 @@ export const code198xSamples: CatalogueSamples = {
     alt: 'Dash, from the 6502 assembly track, on an NTSC NES.',
     width: 256,
     height: 240,
+  },
+  photo: {
+    src: '/images/sinclair-zx-spectrum/machine/meet-the-machine/unit-01/zx-spectrum-48k.jpg',
+    alt: 'A ZX Spectrum 48K from above and to the right: the black wedge case, forty grey rubber keys printed with BASIC keywords, and the rainbow flash.',
+    width: 1600,
+    height: 1175,
+    credit: 'Photograph: Bill Bertram, CC BY-SA 2.5.',
   },
 };

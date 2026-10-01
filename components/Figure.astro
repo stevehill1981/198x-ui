@@ -1,0 +1,143 @@
+---
+/**
+ * A capture or an image, with its caption.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: a figure is an object, a thing that exists. A capture sits in Screen's
+ *   bezel; a plain image takes rounded corners and a hairline edge. Neither is
+ *   square.
+ * - §7, "Captures are shown as the machine showed them": a capture is drawn by
+ *   Screen, so it renders at a whole multiple of its true grid, is never
+ *   tinted or filtered, and halves doubled storage. Figure adds nothing on top
+ *   of the pixels.
+ * - §4: captions are Literata italic everywhere, photographs included. Set in
+ *   the muted ink, which holds 4.5:1 on every ground at the small step.
+ *
+ * Two modes, from `kind`:
+ *
+ * - `capture` (default): a machine's screen. Every Screen prop passes through
+ *   (grid, maxScale, crt, decorative), and Screen's rules apply unchanged.
+ * - `image`: a photograph, a scan, a diagram. Shown at its own size or the
+ *   width of its cell, whichever is smaller, and never stretched. Not for
+ *   captures: an image is free to scale by a fraction, and a capture is not.
+ *
+ * The figure is as wide as its cell and the caption keeps to the reading
+ * measure beneath it. Without a caption it is still a figure; say in the
+ * surrounding text what it shows.
+ *
+ * Props:
+ *   kind        'capture' (default) or 'image'.
+ *   src         Image URL.
+ *   alt         Required. What it shows. An empty string only with
+ *               `decorative`, as Screen has it.
+ *   decorative  Marks it as ornament, permitting alt="".
+ *   width       Stored file width in px.
+ *   height      Stored file height in px.
+ *   grid        capture only: the true grid when the pixels cannot show it.
+ *   maxScale    capture only: largest whole multiple. Default 1.
+ *   crt         capture only: scanlines, falloff and bloom. Default true.
+ *   loading     'lazy' (default) or 'eager'.
+ *   class       Extra classes for the <figure>.
+ *
+ * Slot: `caption`, rendered as the <figcaption>. Inline markup is fine.
+ */
+import Screen from './Screen.astro';
+
+interface Props {
+  kind?: 'capture' | 'image';
+  src: string;
+  alt: string;
+  decorative?: boolean;
+  width: number;
+  height: number;
+  grid?: { w: number; h: number };
+  maxScale?: number;
+  crt?: boolean;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+}
+
+const {
+  kind = 'capture',
+  src,
+  alt,
+  decorative = false,
+  width,
+  height,
+  grid,
+  maxScale,
+  crt,
+  loading = 'lazy',
+  class: className,
+} = Astro.props;
+
+if (alt === '' && !decorative) {
+  throw new Error(
+    `[198x-ui] Figure: alt="" on ${src}. Describe what it shows, or pass ` +
+    '`decorative` if it really is ornament.',
+  );
+}
+if (kind === 'image' && (grid !== undefined || maxScale !== undefined || crt !== undefined)) {
+  throw new Error(
+    `[198x-ui] Figure: grid, maxScale and crt are for captures (${src}). ` +
+    'If this is a machine screen, leave kind as "capture" so the whole-scale rule holds.',
+  );
+}
+
+const hasCaption = Astro.slots.has('caption');
+---
+
+<figure class:list={['h-figure', `h-figure-${kind}`, className]}>
+  {kind === 'capture' ? (
+    <Screen
+      src={src}
+      alt={alt}
+      decorative={decorative}
+      width={width}
+      height={height}
+      grid={grid}
+      maxScale={maxScale}
+      crt={crt}
+      loading={loading}
+    />
+  ) : (
+    <img class="h-figure-img" src={src} alt={alt} width={width} height={height} loading={loading} decoding="async" />
+  )}
+  {hasCaption && <figcaption class="h-figure-caption"><slot name="caption" /></figcaption>}
+</figure>
+
+<style>
+  .h-figure {
+    box-sizing: border-box;
+    display: grid;
+    justify-items: start;
+    gap: calc(var(--h-cell) * 1.5);
+    margin: 0;
+    min-width: 0;
+  }
+
+  /* An image: its own size or the cell's width, never stretched, never
+     upscaled past its file. Rounded, because it is an object (§7). */
+  .h-figure-img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    outline: 1px solid var(--h-line);
+    outline-offset: -1px;
+  }
+
+  .h-figure-caption {
+    max-width: var(--h-measure);
+    font-family: var(--h-font-read);
+    font-style: italic;
+    font-size: var(--h-text-small);
+    line-height: var(--h-lh-small);
+    color: var(--h-ink-muted);
+  }
+
+  /* Screen sets its own margin for the bezel; line the caption up with the
+     glass rather than the bezel's outer edge. */
+  .h-figure-capture > .h-figure-caption { padding-inline: 0.6rem; }
+</style>

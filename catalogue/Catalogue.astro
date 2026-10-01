@@ -40,6 +40,7 @@ import TabsEntry from './entries/Tabs.astro';
 import ListingEntry from './entries/Listing.astro';
 import KbdEntry from './entries/Kbd.astro';
 import TileEntry from './entries/Tile.astro';
+import FigureEntry from './entries/Figure.astro';
 
 interface Props {
   base: string;
@@ -63,6 +64,7 @@ const components: Record<string, any> = {
   listing: ListingEntry,
   kbd: KbdEntry,
   tile: TileEntry,
+  figure: FigureEntry,
 };
 
 const current = entry ? catalogueEntries.find((e) => e.slug === entry) : undefined;
