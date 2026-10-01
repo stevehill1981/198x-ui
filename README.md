@@ -21,12 +21,12 @@ nothing, and the style inside it is called `House198x` either way.
 | `components/Button.astro` | Primary, secondary and quiet; a link or a button; the arrow in its own cell |
 | `components/Eyebrow.astro` | The small boxed uppercase label |
 | `components/Shell.astro` | The double bezel: `device` (an object, rounded) or interface (square) |
-| `components/ThemeToggle.astro` | Auto / Light / Dark, with `ThemeBoot.astro` for the document head |
+| `components/ThemeToggle.astro` | Auto / Light / Dark, with `ThemeBoot.astro` for the document head. Dormant in v1 (paper only until the dark spec; sites should not mount it). |
 | `components/Tabs.astro` | Accessible tabs, or a segmented control without panels |
 | `components/Listing.astro` | Program listings: syntax colour, line numbers, keyboard-reachable scrolling |
 | `components/Kbd.astro` | A keycap, or a combination as separate caps |
 | `components/Tile.astro` | A door into a site: the site's glyph, a name, one line, the arrow in its cell |
-| `components/Figure.astro` | A capture (through Screen) or a photograph, with a Literata italic caption |
+| `components/Figure.astro` | A capture (through Screen) or a photograph, with a Nebula Sans italic caption |
 | `components/Breadcrumbs.astro` | The trail above a page, the current page marked for screen readers |
 | `components/Chip.astro` | A square label, link, or filter toggle (`aria-pressed`, inverse when on) |
 | `components/SearchField.astro` | A labelled search landmark with an optional key hint; the site does the searching |

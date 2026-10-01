@@ -50,9 +50,9 @@ npx astro build            # not `npm run build` — its prebuild would overwrit
 node scripts/a11y-sweep.mjs
 ```
 
-`a11y-sweep.mjs` runs axe over every built route in **both themes** and exits
+`a11y-sweep.mjs` runs axe over every built route in **light and dark passes** and exits
 non-zero on anything serious or critical. Half this family's contrast defects
-exist in only one theme, which is why it sweeps both. It needs Chromium:
+exist in only one pass, which is why it sweeps both; in v1, both passes must render paper (a reader who prefers dark gets paper until the dark spec). It needs Chromium:
 `npx playwright install chromium` once.
 
 **Reproduce the defect before fixing it.** Point `_198x-ui/` at the pre-fix
