@@ -1,0 +1,254 @@
+---
+/**
+ * A button, or a link that looks like one.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: interface is square, on the 8px cell, and flat. A button carries its
+ *   arrow in its own square cell.
+ * - §3c: a glow is attached, so none at rest. Hover and focus-visible get the
+ *   same feedback (a lift, and a brighter fill on primary), never hover alone.
+ * - §6: the lift rises fast and decays slowly, and that is its only motion.
+ *   Pressing nudges the button one pixel, instantly, as a key would. Both are
+ *   off under prefers-reduced-motion (the tokens zero the durations).
+ *
+ * The arrow is drawn in CSS, not set as a character or an icon. None of the
+ * three house faces carries U+2192 or U+2197 in the subsets the kit ships, so a
+ * text arrow would come from whatever font the reader has, and an icon font
+ * or hand-drawn SVG is a dependency the kit does not take. Two strokes on the
+ * cell draw the same arrow everywhere, in currentColor, and it is aria-hidden:
+ * the label says what the button does.
+ *
+ * Renders an <a> when given `href`, else a <button>. Pass `disabled` only to a
+ * button; a link has no disabled state, and asking for one throws.
+ *
+ * Props:
+ *   variant   'primary' (the accent fill), 'secondary' (outlined), or 'quiet'
+ *             (outlined, smaller, no arrow cell). Default 'primary'.
+ *   href      Makes it a link.
+ *   arrow     'right', 'up-right' (leaves for another page), 'play' (runs
+ *             something) or 'none'. Default 'right', or 'none' for quiet.
+ *   size      'default' (7 cells tall) or 'small' (5 cells). Default 'default'.
+ *   type      The button's type. Default 'button', so it never submits a form
+ *             by accident.
+ *   disabled  For a button only.
+ *   class     Extra classes for a host's own layout.
+ *   ...rest   Passed to the element (aria-*, data-*, id, name, value, …).
+ *
+ * Slot: the label.
+ *
+ * The classes is-hover, is-focus and is-active show a state at rest. They exist
+ * for the catalogue, which has to show feedback nobody is giving; a site has
+ * no use for them.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+type Common = {
+  variant?: 'primary' | 'secondary' | 'quiet';
+  arrow?: 'right' | 'up-right' | 'play' | 'none';
+  size?: 'default' | 'small';
+  class?: string;
+};
+
+type Props = Common &
+  Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'class' | 'type'> & {
+    href?: string;
+    type?: 'button' | 'submit' | 'reset';
+    disabled?: boolean;
+  };
+
+const {
+  variant = 'primary',
+  arrow,
+  size = 'default',
+  href,
+  type = 'button',
+  disabled = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+if (href !== undefined && disabled) {
+  throw new Error(
+    `[198x-ui] Button: disabled on a link (${href}). A link cannot be disabled; ` +
+      'leave the href off and render a disabled button, or remove the link.',
+  );
+}
+
+const glyph = arrow ?? (variant === 'quiet' ? 'none' : 'right');
+const classes = ['h-btn', `h-btn-${variant}`, { 'h-btn-small': size === 'small', 'h-btn-bare': glyph === 'none' }, className];
+---
+
+{href !== undefined ? (
+  <a href={href} class:list={classes} {...rest}>
+    <span class="h-btn-label"><slot /></span>
+    {glyph !== 'none' && <span class={`h-btn-cell h-btn-${glyph}`} aria-hidden="true"><span class="h-btn-glyph"></span></span>}
+  </a>
+) : (
+  <button type={type} class:list={classes} disabled={disabled} {...rest}>
+    <span class="h-btn-label"><slot /></span>
+    {glyph !== 'none' && <span class={`h-btn-cell h-btn-${glyph}`} aria-hidden="true"><span class="h-btn-glyph"></span></span>}
+  </button>
+)}
+
+<style>
+  .h-btn {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--h-cell);
+    min-height: calc(var(--h-cell) * 7);
+    /* The 1px border comes out of the padding, so the height lands on the
+       cell: 1 + 7 + 40 + 7 + 1 = 56. */
+    padding: calc(var(--h-cell) - 1px) calc(var(--h-cell) - 1px) calc(var(--h-cell) - 1px) calc(var(--h-cell) * 3 - 1px);
+    border: 1px solid transparent;
+    border-radius: 0;
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-small);
+    line-height: 1;
+    font-weight: var(--h-weight-minor);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: none;
+    /* Decay: the slow fade back to rest. Hover and focus switch to the rise. */
+    transition:
+      box-shadow var(--h-decay) var(--h-ease),
+      background-color var(--h-decay) var(--h-ease),
+      border-color var(--h-decay) var(--h-ease),
+      color var(--h-decay) var(--h-ease);
+  }
+
+  .h-btn.h-btn-bare { padding-right: calc(var(--h-cell) * 3 - 1px); }
+
+  .h-btn:hover,
+  .h-btn:focus-visible,
+  .h-btn.is-hover {
+    box-shadow: var(--h-lift-1);
+    transition-duration: var(--h-rise);
+  }
+
+  .h-btn:focus-visible,
+  .h-btn.is-focus {
+    outline: 2px solid var(--h-accent);
+    outline-offset: 3px;
+  }
+
+  .h-btn:active:not(:disabled),
+  .h-btn.is-active { transform: translate(1px, 1px); }
+
+  /* The arrow's cell: five cells square, the glyph drawn on it. */
+  .h-btn-cell {
+    position: relative;
+    flex: none;
+    width: calc(var(--h-cell) * 5);
+    height: calc(var(--h-cell) * 5);
+  }
+
+  /* The glyph: a two-cell box centred in the cell. Up-right is the same arrow
+     turned a quarter-turn's half, so both share one drawing. */
+  .h-btn-glyph {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--h-cell) * 2);
+    height: calc(var(--h-cell) * 2);
+    margin: calc(var(--h-cell) * -1) 0 0 calc(var(--h-cell) * -1);
+  }
+  .h-btn-up-right .h-btn-glyph { transform: rotate(-45deg); }
+
+  /* Shaft, then the head: a corner of two strokes turned 45°. */
+  .h-btn-right .h-btn-glyph::before,
+  .h-btn-up-right .h-btn-glyph::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    right: 2px;
+    top: calc(50% - 1px);
+    height: 2px;
+    background: currentColor;
+  }
+  .h-btn-right .h-btn-glyph::after,
+  .h-btn-up-right .h-btn-glyph::after {
+    content: "";
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    width: var(--h-cell);
+    height: var(--h-cell);
+    margin-top: calc(var(--h-cell) * -0.5);
+    box-sizing: border-box;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: rotate(45deg);
+  }
+
+  /* Play: a solid triangle, the run key. */
+  .h-btn-play .h-btn-glyph::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--h-cell) * 0.375);
+    top: calc(var(--h-cell) * 0.25);
+    border-style: solid;
+    border-width: calc(var(--h-cell) * 0.75) 0 calc(var(--h-cell) * 0.75) calc(var(--h-cell) * 1.25);
+    border-color: transparent transparent transparent currentColor;
+  }
+
+  /* Primary: the accent fill, its text in --h-ink-on-accent (§4). */
+  .h-btn-primary { background: var(--h-accent); color: var(--h-ink-on-accent); }
+  .h-btn-primary .h-btn-cell { background: color-mix(in srgb, var(--h-ink-on-accent) 16%, transparent); }
+  .h-btn-primary:hover,
+  .h-btn-primary:focus-visible,
+  .h-btn-primary.is-hover { background: var(--h-accent-hover); }
+
+  /* Secondary: outlined, on the shell tray. */
+  .h-btn-secondary {
+    background: var(--h-shell);
+    border-color: var(--h-line);
+    color: var(--h-ink);
+  }
+  .h-btn-secondary .h-btn-cell { background: var(--h-wash-2); }
+  .h-btn-secondary:hover,
+  .h-btn-secondary:focus-visible,
+  .h-btn-secondary.is-hover { background: var(--h-wash); }
+
+  /* Quiet: a secondary action beside a primary one. */
+  .h-btn-quiet {
+    min-height: calc(var(--h-cell) * 5);
+    padding: 0 calc(var(--h-cell) * 2 - 1px);
+    background: none;
+    border-color: var(--h-line);
+    color: var(--h-ink-body);
+    font-size: var(--h-text-micro);
+  }
+  .h-btn-quiet:not(.h-btn-bare) { padding-right: 0; }
+  .h-btn-quiet .h-btn-cell { width: calc(var(--h-cell) * 4); height: calc(var(--h-cell) * 4); }
+  .h-btn-quiet:hover,
+  .h-btn-quiet:focus-visible,
+  .h-btn-quiet.is-hover {
+    color: var(--h-ink);
+    background: var(--h-wash);
+    border-color: var(--h-ink-muted);
+  }
+
+  /* Small: five cells tall, a four-cell arrow cell. */
+  .h-btn-small {
+    min-height: calc(var(--h-cell) * 5);
+    padding: calc(var(--h-cell) * 0.5 - 1px) calc(var(--h-cell) * 0.5 - 1px) calc(var(--h-cell) * 0.5 - 1px) calc(var(--h-cell) * 2 - 1px);
+    font-size: var(--h-text-micro);
+  }
+  .h-btn-small.h-btn-bare { padding-right: calc(var(--h-cell) * 2 - 1px); }
+  .h-btn-small .h-btn-cell { width: calc(var(--h-cell) * 4); height: calc(var(--h-cell) * 4); }
+
+  /* Disabled: no fill, no feedback. The label stays legible in the muted ink
+     (inactive controls are exempt from 1.4.3, but there is no reason to hide
+     what the control would do). */
+  .h-btn:disabled {
+    cursor: not-allowed;
+    background: var(--h-wash);
+    border-color: var(--h-line);
+    color: var(--h-ink-muted);
+    box-shadow: none;
+  }
+  .h-btn:disabled .h-btn-cell { background: none; }
+</style>

@@ -1,0 +1,133 @@
+---
+/**
+ * The double bezel: an outer shell around an inner core, which holds the
+ * content. One component, two shape families.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md §7, "Objects are round;
+ * the interface is square":
+ *
+ * - `device` is an **object**: something that exists, a machine with its screen
+ *   and listing, a tape, a poster. Rounded corners, a tray around the core, and
+ *   depth from the core's lit top edge.
+ * - `interface` (the default) is **interface**: a panel you read or operate.
+ *   Square, flat, one line, no tray.
+ *
+ * Both follow the theme, the device shell included. What stays dark in both
+ * themes is the hardware *inside* a device (a screen's bezel, which Screen
+ * draws), not the device's frame.
+ *
+ * No colour of its own, at rest or otherwise (§3, §3c). A linked shell lifts on
+ * hover and focus-visible together, in the neutral glow, never a project hue.
+ *
+ * Props:
+ *   variant  'interface' (default) or 'device'.
+ *   as       The outer element: 'div' (default), 'section', 'article',
+ *            'aside', 'figure' or 'nav'. Ignored when `href` is set.
+ *   href     Makes the whole shell one link, for a card that goes somewhere
+ *            (a pager's next unit). Keep link content short; it is all read as
+ *            the link's name.
+ *   flush    No padding in the core, for content that brings its own.
+ *   label    An accessible name, for a section, aside or nav.
+ *   class    Extra classes for the outer element.
+ *
+ * Slots:
+ *   default  The core's content.
+ *   caption  With as="figure", a <figcaption> after the core (HTML wants it a
+ *            direct child of the figure), set in Literata italic (§4: captions
+ *            are Literata italic everywhere).
+ *
+ * The class is-hover shows a linked shell's hover at rest, for the catalogue.
+ */
+interface Props {
+  variant?: 'interface' | 'device';
+  as?: 'div' | 'section' | 'article' | 'aside' | 'figure' | 'nav';
+  href?: string;
+  flush?: boolean;
+  label?: string;
+  class?: string;
+}
+
+const { variant = 'interface', as = 'div', href, flush = false, label, class: className } = Astro.props;
+const Tag = href !== undefined ? 'a' : as;
+const hasCaption = Astro.slots.has('caption');
+
+if (hasCaption && as !== 'figure') {
+  throw new Error('[198x-ui] Shell: a caption slot needs as="figure"; a caption belongs to a figure.');
+}
+---
+
+<Tag
+  class:list={['h-shell', `h-shell-${variant}`, { 'h-shell-link': href !== undefined }, className]}
+  href={href}
+  aria-label={label}
+>
+  <div class:list={['h-shell-core', { flush }]}>
+    <slot />
+  </div>
+  {hasCaption && <figcaption class="h-shell-caption"><slot name="caption" /></figcaption>}
+</Tag>
+
+<style>
+  .h-shell,
+  .h-shell-core,
+  .h-shell-caption { box-sizing: border-box; }
+
+  .h-shell {
+    display: block;
+    margin: 0;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .h-shell-core {
+    padding: calc(var(--h-cell) * 3);
+    background: var(--h-ground);
+  }
+  .h-shell-core.flush { padding: 0; }
+
+  /* Interface: square, one line, flat. */
+  .h-shell-interface {
+    border: 1px solid var(--h-line);
+    border-radius: 0;
+  }
+  .h-shell-interface > .h-shell-caption { border-top: 1px solid var(--h-line); background: var(--h-ground); }
+
+  /* Device: the tray, then the core inside it, both rounded, the inner radius
+     the outer less the tray so the curves stay concentric. */
+  .h-shell-device {
+    --h-shell-r: 2rem;
+    padding: var(--h-cell);
+    border: 1px solid var(--h-line);
+    border-radius: var(--h-shell-r);
+    background: var(--h-shell);
+  }
+  .h-shell-device > .h-shell-core {
+    border-radius: calc(var(--h-shell-r) - var(--h-cell));
+    box-shadow: inset 0 1px 1px var(--h-highlight);
+  }
+
+  .h-shell-caption {
+    padding: calc(var(--h-cell) * 1.5) calc(var(--h-cell) * 3);
+    font-family: var(--h-font-read);
+    font-style: italic;
+    font-size: var(--h-text-small);
+    line-height: var(--h-lh-small);
+    color: var(--h-ink-muted);
+  }
+
+  /* A linked shell: lift on hover and focus together, rising fast and
+     decaying slowly (§6), and a focus ring. */
+  .h-shell-link {
+    transition: box-shadow var(--h-decay) var(--h-ease);
+  }
+  .h-shell-link:hover,
+  .h-shell-link:focus-visible,
+  .h-shell-link.is-hover {
+    box-shadow: var(--h-lift-2);
+    transition-duration: var(--h-rise);
+  }
+  .h-shell-link:focus-visible {
+    outline: 2px solid var(--h-accent);
+    outline-offset: 3px;
+  }
+</style>
