@@ -1,0 +1,10 @@
+[
+  {"action": "wait_for_boot", "max_frames": 600},
+  {"action": "load_media", "slot": "tape-1", "kind": "tape", "path": "c64-game.tap"},
+  {"action": "type_string", "text": "LOAD \"GAME\"\n"},
+  {"action": "save_screenshot", "path": "../c64-tape-press-play.png"},
+  {"action": "media_transport", "slot": "tape-1", "transport": "start"},
+  {"action": "run_frames", "frames": 1000},
+  {"action": "query", "path": "screen.text.lines"},
+  {"action": "save_screenshot", "path": "../c64-tape-found.png"}
+]
