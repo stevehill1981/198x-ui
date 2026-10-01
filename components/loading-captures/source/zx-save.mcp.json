@@ -1,0 +1,18 @@
+[
+  {"tool": "wait_for_boot", "args": {"max_frames": 600}},
+  {"tool": "type_string", "args": {"text": "10P"}},
+  {"tool": "press_keys", "args": {"keys": ["SymbolShift", "P"]}},
+  {"tool": "type_string", "args": {"text": "HELLO"}},
+  {"tool": "press_keys", "args": {"keys": ["SymbolShift", "P"]}},
+  {"tool": "type_string", "args": {"text": "\n"}},
+  {"tool": "type_string", "args": {"text": "S"}},
+  {"tool": "press_keys", "args": {"keys": ["SymbolShift", "P"]}},
+  {"tool": "type_string", "args": {"text": "GAME"}},
+  {"tool": "press_keys", "args": {"keys": ["SymbolShift", "P"]}},
+  {"tool": "type_string", "args": {"text": "\n"}},
+  {"tool": "run_frames", "args": {"frames": 20}},
+  {"tool": "press_key", "args": {"key": "Space"}},
+  {"tool": "run_frames", "args": {"frames": 400}},
+  {"tool": "run_frames", "args": {"frames": 400}},
+  {"tool": "save_tape", "args": {"path": "zx-game.tap"}}
+]
