@@ -370,14 +370,14 @@
         "hex": "#aaaaaa",
         "role": "screen",
         "confidence": "exact",
-        "source": "Kickstart 3.1 (40.63) ROM default Preferences at $685AE; 198x/docs/findings/2026-10-01-launch-machine-colours.md"
+        "source": "Kickstart 3.1 (40.63) ROM default Preferences at $685AE (and Kickstart 3.0, 39.106, at $684B4); decoded from devs/system-configuration on Workbench 2.04, 2.05 and 3.1 disks; primary evidence not yet in reference/"
       },
       {
         "name": "Workbench 2.x and 3.x blue",
         "hex": "#6688bb",
         "role": "screen",
         "confidence": "exact",
-        "source": "Kickstart 3.1 (40.63) ROM default Preferences at $685AE; 198x/docs/findings/2026-10-01-launch-machine-colours.md"
+        "source": "Kickstart 3.1 (40.63) ROM default Preferences at $685AE (and Kickstart 3.0, 39.106, at $684B4); decoded from devs/system-configuration on Workbench 2.04, 2.05 and 3.1 disks; primary evidence not yet in reference/"
       },
       {
         "name": "Insert-disk hand blue",
@@ -1115,8 +1115,8 @@
         "hex": "#c20000",
         "role": "screen",
         "primary": true,
-        "confidence": "exact",
-        "source": "reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117); ULA levels"
+        "confidence": "measured",
+        "source": "Index exact (ULA colour 2, normal); level derived from Smith, The ZX Spectrum ULA, Table 16-1 (reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md:99-117)"
       },
       {
         "name": "Stripe red",
@@ -1164,8 +1164,8 @@
         "name": "Paper white (power-on)",
         "hex": "#c2c2c2",
         "role": "screen",
-        "confidence": "exact",
-        "source": "reference/by-system/sinclair-zx-spectrum/the-complete-spectrum-rom-disassembly-dr-ian-logan-dr-frank-o-hara.txt:4172-4179; reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+        "confidence": "measured",
+        "source": "Index exact (ROM reference/by-system/sinclair-zx-spectrum/the-complete-spectrum-rom-disassembly-dr-ian-logan-dr-frank-o-hara.txt:4172-4179); level derived from Smith, The ZX Spectrum ULA, Table 16-1 (reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md:99-117)"
       },
       {
         "name": "Ink black",
@@ -1178,29 +1178,29 @@
         "name": "Bright red",
         "hex": "#ff0000",
         "role": "screen",
-        "confidence": "exact",
-        "source": "128K ROM 0 stripe string at 0x3812, levels per reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+        "confidence": "measured",
+        "source": "Index exact (128K ROM 0 stripe string at 0x3812); level derived from Smith, Table 16-1 (reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md:99-117), RGB a convention"
       },
       {
         "name": "Bright yellow",
         "hex": "#ffff00",
         "role": "screen",
-        "confidence": "exact",
-        "source": "128K ROM 0 stripe string at 0x3812, levels per reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+        "confidence": "measured",
+        "source": "Index exact (128K ROM 0 stripe string at 0x3812); level derived from Smith, Table 16-1 (reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md:99-117), RGB a convention"
       },
       {
         "name": "Bright green",
         "hex": "#00ff00",
         "role": "screen",
-        "confidence": "exact",
-        "source": "128K ROM 0 stripe string at 0x3812, levels per reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+        "confidence": "measured",
+        "source": "Index exact (128K ROM 0 stripe string at 0x3812); level derived from Smith, Table 16-1 (reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md:99-117), RGB a convention"
       },
       {
         "name": "Bright cyan",
         "hex": "#00ffff",
         "role": "screen",
-        "confidence": "exact",
-        "source": "128K ROM 0 stripe string at 0x3812, levels per reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+        "confidence": "measured",
+        "source": "Index exact (128K ROM 0 stripe string at 0x3812); level derived from Smith, Table 16-1 (reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md:99-117), RGB a convention"
       }
     ]
   },
