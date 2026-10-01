@@ -10,29 +10,29 @@ import Specimen from '../Specimen.astro';
 
 <Specimen
   title="ZX Spectrum, tape"
-  code={`<Loading machine="sinclair-zx-spectrum" name="bricks" showLabel />`}
-  note="The ROM loader's border: red and cyan for the pilot, 9.68 lines a band, then blue and yellow for the data, 3.82 lines for a 0 bit and 7.63 for a 1, from LD-BYTES and the pulse timings in Logan and O'Hara; the paper untouched but for Program: bricks (§7). The data stripes here encode the name's bytes, a stand-in for a program. The stripes rise as the machine's did, at 15 lines a second rather than its 114, so no point of the border flashes more than twice a second (WCAG 2.3.1). Under reduced motion it is one still frame (§6)."
+  code={`<Loading machine="sinclair-zx-spectrum" showLabel />`}
+  note="Two Emu198x captures of the 48K ROM, then drawn stripes (§7). Program: GAME once the header is read, the border white and then cyan as LD-BYTES waits for the data. Then the border is drawn: red and cyan for the pilot, 9.68 lines a band, blue and yellow for the data, 3.82 lines for a 0 bit and 7.63 for a 1, encoding the tape's real data block; the paper inside them is the capture's own. The stripes rise as the machine's did, at 15 lines a second rather than its 114, so no point of the border flashes more than twice a second (WCAG 2.3.1). Under reduced motion it is one still frame (§6)."
   block
 >
-  <Loading machine="sinclair-zx-spectrum" name="bricks" showLabel />
+  <Loading machine="sinclair-zx-spectrum" showLabel />
 </Specimen>
 
 <Specimen
   title="Commodore 64, tape"
-  code={`<Loading machine="commodore-64" name="star trek" showLabel />`}
-  note="The KERNAL's own transcript, from the Programmer's Reference Guide: LOAD, PRESS PLAY ON TAPE, the whole screen blanked to the border's light blue, FOUND STAR TREK, then blanked again while it loads, which it holds. No stripes: on the C64 those belonged to commercial turbo loaders, and nothing held documents them."
+  code={`<Loading machine="commodore-64" showLabel />`}
+  note="Emu198x captures of the stock KERNAL: PRESS PLAY ON TAPE, then the whole screen blanked to the border's light blue (drawn), FOUND GAME, then blanked again while it loads, which it holds. The KERNAL prints LOADING and blanks the screen on the same frame, so LOADING never shows during a tape load. No stripes: on the C64 those belonged to commercial turbo loaders."
   block
 >
-  <Loading machine="commodore-64" name="star trek" showLabel />
+  <Loading machine="commodore-64" showLabel />
 </Specimen>
 
 <Specimen
   title="Commodore 64, 1541 disk"
-  code={`<Loading machine="commodore-64" media="disk" name="fun" showLabel />`}
-  note="SEARCHING FOR FUN, then LOADING, on the normal blue screen; the 1541's red drive light lit. The guide names the light red; its hex is ours."
+  code={`<Loading machine="commodore-64" media="disk" showLabel />`}
+  note="Emu198x captures of the stock KERNAL and 1541 DOS: SEARCHING FOR GAME, then LOADING, on the normal blue screen; the 1541's red drive light lit. The guide names the light red; its hex is ours."
   block
 >
-  <Loading machine="commodore-64" media="disk" name="fun" showLabel />
+  <Loading machine="commodore-64" media="disk" showLabel />
 </Specimen>
 
 <Specimen
@@ -45,6 +45,15 @@ import Specimen from '../Specimen.astro';
 </Specimen>
 
 <Specimen
+  title="At twice the grid"
+  code={`<Loading machine="commodore-64" media="disk" maxScale={2} />`}
+  note="A whole multiple, like Screen: 2x where the cell is 832 pixels wide or more, 1x below that, and fitted to the cell only on a phone narrower than the grid (§7)."
+  block
+>
+  <Loading machine="commodore-64" media="disk" maxScale={2} />
+</Specimen>
+
+<Specimen
   title="NES: nothing to load"
   code={`<Loading machine="nintendo-entertainment-system" />   <!-- renders nothing -->`}
   note="A cartridge is mapped straight into the address space, so the machine never loaded and has no loading state. Loading renders nothing; show the content at once. The space below is deliberately empty."
@@ -52,6 +61,15 @@ import Specimen from '../Specimen.astro';
 >
   <Loading machine="nintendo-entertainment-system" />
 </Specimen>
+
+<Specimen
+  title="A name the captures do not show"
+  code={`<Loading machine="commodore-64" name="star trek" />
+// [198x-ui] Loading: \`name\` was removed. The machine's messages are real captures of a
+// program named GAME, and a capture cannot show another name. Put what is loading in \`label\`.`}
+  note="Fails the build. The captures say GAME; putting another name in the status text is the honest way to say what is loading."
+  block
+></Specimen>
 
 <Specimen
   title="A machine with no sourced look"
@@ -66,6 +84,7 @@ import Specimen from '../Specimen.astro';
   /* Replay: re-insert every look so its sequence starts again. */
   document.querySelector('[data-h-load-replay]')?.addEventListener('click', () => {
     document.querySelectorAll('.h-load').forEach((el) => el.replaceWith(el.cloneNode(true)));
+    (window as unknown as { fitLoads?: () => void }).fitLoads?.();
   });
 </script>
 
