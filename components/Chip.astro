@@ -1,0 +1,161 @@
+---
+/**
+ * A small label, a link, or a filter you can switch on and off.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: interface, so square, on the 8px cell (four cells tall), flat. The
+ *   concept drew chips as pills; a chip is something you read or operate, not
+ *   a thing that exists, so it is square.
+ * - §7: inverse video means *current*. A toggle chip that is pressed (a filter
+ *   that is on) is in inverse video, and nothing else about a chip is. It
+ *   switches instantly, as the attribute byte does.
+ * - §3 and §7: no chip takes a colour of its own, not for a machine, a tier
+ *   or a category. Chips that need telling apart get a mark in their label.
+ *   (The concept's tier chips used the accent fill, a dashed edge and a
+ *   machine-coloured stripe; none of those is carried here.)
+ *
+ * Three modes, from the props:
+ *
+ * - **Label** (neither `href` nor `pressed`): a <span>. Not interactive, no
+ *   hover.
+ * - **Link** (`href`): an <a>, for a chip that goes somewhere, such as a
+ *   machine in a list of machines.
+ * - **Toggle** (`pressed`, true or false): a <button type="button"> with
+ *   aria-pressed. Clicking it, or Space or Enter while focused, flips
+ *   aria-pressed and dispatches `h-chip-change` on the button, bubbling, with
+ *   `detail: { pressed, value }`. What the filter does is the site's job.
+ *   Without JavaScript it shows its initial state and does nothing.
+ *
+ * A group of toggles is a group of independent switches (any number on). For
+ * one-of-several, use Tabs' segmented mode, which is a radio group. Name a
+ * group of toggles with a wrapper of role="group" and an aria-label.
+ *
+ * Props:
+ *   href      Makes it a link.
+ *   pressed   Makes it a toggle, in this state.
+ *   value     A toggle's value, reported in the change event. Default: the
+ *             label's text.
+ *   disabled  For a toggle only.
+ *   class     Extra classes.
+ *   ...rest   Passed to the element (aria-*, data-*, id, …).
+ *
+ * Slots:
+ *   default  The label.
+ *   meta     A short datum after it, in the mono face and the muted ink: a
+ *            year, a count. It is read as part of the label.
+ *
+ * The class is-hover shows hover at rest, for the catalogue.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = Omit<HTMLAttributes<'a'> & HTMLAttributes<'button'>, 'class' | 'type'> & {
+  href?: string;
+  pressed?: boolean;
+  value?: string;
+  disabled?: boolean;
+  class?: string;
+};
+
+const { href, pressed, value, disabled = false, class: className, ...rest } = Astro.props;
+
+if (href !== undefined && pressed !== undefined) {
+  throw new Error(`[198x-ui] Chip: href and pressed together (${href}). A link goes somewhere and a toggle switches; pick one.`);
+}
+if (disabled && pressed === undefined) {
+  throw new Error('[198x-ui] Chip: disabled is for a toggle; a label cannot be operated and a link has no disabled state.');
+}
+
+const mode = href !== undefined ? 'link' : pressed !== undefined ? 'toggle' : 'label';
+const hasMeta = Astro.slots.has('meta');
+const classes = ['h-chip', `h-chip-${mode}`, className];
+---
+
+{mode === 'link' ? (
+  <a href={href} class:list={classes} {...rest}>
+    <span class="h-chip-label"><slot /></span>
+    {hasMeta && <span class="h-chip-meta"><slot name="meta" /></span>}
+  </a>
+) : mode === 'toggle' ? (
+  <button type="button" class:list={classes} aria-pressed={String(pressed)} data-h-chip data-value={value} disabled={disabled} {...rest}>
+    <span class="h-chip-label"><slot /></span>
+    {hasMeta && <span class="h-chip-meta"><slot name="meta" /></span>}
+  </button>
+) : (
+  <span class:list={classes} {...rest}>
+    <span class="h-chip-label"><slot /></span>
+    {hasMeta && <span class="h-chip-meta"><slot name="meta" /></span>}
+  </span>
+)}
+
+<style>
+  .h-chip {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--h-cell);
+    min-height: calc(var(--h-cell) * 4);
+    padding: calc(var(--h-cell) * 0.75 - 1px) calc(var(--h-cell) * 1.5 - 1px);
+    border: 1px solid var(--h-line);
+    border-radius: 0;
+    background: var(--h-shell);
+    color: var(--h-ink-body);
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-micro);
+    line-height: var(--h-lh-micro);
+    font-weight: var(--h-weight-minor);
+    text-decoration: none;
+    vertical-align: baseline;
+  }
+
+  .h-chip-meta {
+    font-family: var(--h-font-mono);
+    font-size: 0.875em;
+    font-weight: 400;
+    font-variant-ligatures: none;
+    color: var(--h-ink-muted);
+  }
+
+  /* A link or a toggle answers the pointer with a wash and the full ink. */
+  .h-chip-link,
+  .h-chip-toggle { cursor: pointer; }
+  .h-chip-link:hover,
+  .h-chip-toggle:hover:not(:disabled),
+  .h-chip.is-hover {
+    background: var(--h-wash-2);
+    color: var(--h-ink);
+  }
+
+  .h-chip-link:focus-visible,
+  .h-chip-toggle:focus-visible {
+    outline: 2px solid var(--h-accent);
+    outline-offset: 2px;
+  }
+
+  /* Pressed, a filter that is on: current, so inverse video, instantly. */
+  .h-chip-toggle[aria-pressed="true"] {
+    background: var(--h-ink);
+    border-color: var(--h-ink);
+    color: var(--h-ground);
+  }
+  .h-chip-toggle[aria-pressed="true"] .h-chip-meta { color: inherit; }
+
+  .h-chip-toggle:disabled {
+    cursor: not-allowed;
+    background: none;
+    color: var(--h-ink-muted);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('button[data-h-chip]').forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const pressed = chip.getAttribute('aria-pressed') !== 'true';
+      chip.setAttribute('aria-pressed', String(pressed));
+      chip.dispatchEvent(new CustomEvent('h-chip-change', {
+        bubbles: true,
+        detail: { pressed, value: chip.dataset.value ?? chip.querySelector('.h-chip-label')?.textContent?.trim() },
+      }));
+    });
+  });
+</script>

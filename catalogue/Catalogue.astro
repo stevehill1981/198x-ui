@@ -42,6 +42,7 @@ import KbdEntry from './entries/Kbd.astro';
 import TileEntry from './entries/Tile.astro';
 import FigureEntry from './entries/Figure.astro';
 import BreadcrumbsEntry from './entries/Breadcrumbs.astro';
+import ChipEntry from './entries/Chip.astro';
 
 interface Props {
   base: string;
@@ -67,6 +68,7 @@ const components: Record<string, any> = {
   tile: TileEntry,
   figure: FigureEntry,
   breadcrumbs: BreadcrumbsEntry,
+  chip: ChipEntry,
 };
 
 const current = entry ? catalogueEntries.find((e) => e.slug === entry) : undefined;

@@ -25,4 +25,5 @@ export const catalogueEntries: CatalogueEntry[] = [
   { slug: 'tile', title: 'Tile' },
   { slug: 'figure', title: 'Figure' },
   { slug: 'breadcrumbs', title: 'Breadcrumbs' },
+  { slug: 'chip', title: 'Chip' },
 ];

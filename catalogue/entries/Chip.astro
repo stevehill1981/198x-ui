@@ -1,0 +1,43 @@
+---
+import Chip from '../../components/Chip.astro';
+import Specimen from '../Specimen.astro';
+
+const row = 'display: flex; flex-wrap: wrap; gap: var(--h-cell);';
+---
+
+<Specimen
+  title="Labels"
+  code={`<Chip>Sinclair BASIC</Chip>
+<Chip>ZX Spectrum<Fragment slot="meta">1982</Fragment></Chip>`}
+  note="A <span>: read, not operated, so no hover. Interface, so square and four cells tall (§7), not the concept's pill. No chip takes a colour of its own (§3, §7). The meta slot is a short datum in the mono face and the muted ink."
+>
+  <Chip>Sinclair BASIC</Chip>
+  <Chip>Keywords</Chip>
+  <Chip>ZX Spectrum<Fragment slot="meta">1982</Fragment></Chip>
+</Specimen>
+
+<Specimen
+  title="Links"
+  code={`<Chip href="/systems/commodore-64">Commodore 64<Fragment slot="meta">1982</Fragment></Chip>`}
+  note="An <a>, for a chip that goes somewhere, such as a machine in the systems list. Hover is a wash and the full ink; focus is the accent ring. The concept's tier styling (an accent fill, a dashed edge, a machine-coloured stripe) is not carried: a tier that needs telling apart takes a mark in the label (§7)."
+>
+  <Chip href="#">Commodore 64<Fragment slot="meta">1982</Fragment></Chip>
+  <Chip href="#">Amiga 500<Fragment slot="meta">1987</Fragment></Chip>
+  <Chip href="#" class="is-hover">BBC Micro<Fragment slot="meta">1981</Fragment></Chip>
+</Specimen>
+
+<Specimen
+  title="Toggles, as filters"
+  code={`<div role="group" aria-label="Filter by decade">
+  <Chip pressed={true}>1980s</Chip>
+  <Chip pressed={false}>1990s</Chip>
+</div>`}
+  note="A button with aria-pressed. Pressed means the filter is on, which is current, so it is the one state in inverse video, switched instantly (§7). Click, Space or Enter flips it and dispatches h-chip-change; what it filters is the site's job. Any number can be on; for one-of-several use Tabs' segmented mode. The last chip is disabled."
+>
+  <div role="group" aria-label="Filter by decade" style={row}>
+    <Chip pressed={false}>1970s</Chip>
+    <Chip pressed={true}>1980s<Fragment slot="meta">94</Fragment></Chip>
+    <Chip pressed={false}>1990s<Fragment slot="meta">41</Fragment></Chip>
+    <Chip pressed={false} disabled>2000s</Chip>
+  </div>
+</Specimen>
