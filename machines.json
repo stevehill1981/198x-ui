@@ -242,14 +242,151 @@
     "short": "C64",
     "year": "1982",
     "color": "#4a4dff",
-    "colours": []
+    "colours": [
+      {
+        "name": "Light blue, border and text (14)",
+        "hex": "#706deb",
+        "role": "screen",
+        "primary": true,
+        "confidence": "measured",
+        "source": "https://www.pepto.de/projects/colorvic/ (Colodore model, default settings); reference/by-system/commodore-c64/1982-commodore-64-users-guide.txt:514-515"
+      },
+      {
+        "name": "Breadbin case (RAL 1019, unverified)",
+        "hex": "#a48f7a",
+        "role": "case",
+        "confidence": "estimate",
+        "source": "https://dfarq.homeip.net/commodore-64-models/ names RAL 1019; sRGB from https://en.wikipedia.org/wiki/List_of_RAL_colours"
+      },
+      {
+        "name": "Keys, dark brown",
+        "hex": "#2a2218",
+        "role": "keys",
+        "confidence": "estimate",
+        "source": "https://deskthority.net/wiki/Commodore_64 (\"very dark brown\"); photo assets/by-system/commodore-c64/model/reference/exterior.jpg, sampled"
+      },
+      {
+        "name": "Function keys",
+        "hex": "#7f7764",
+        "role": "keys",
+        "confidence": "estimate",
+        "source": "photo assets/by-system/commodore-c64/model/reference/exterior.jpg, sampled; https://deskthority.net/wiki/Commodore_64"
+      },
+      {
+        "name": "Background blue (6)",
+        "hex": "#2e2c9b",
+        "role": "screen",
+        "confidence": "measured",
+        "source": "https://www.pepto.de/projects/colorvic/ (Colodore model, default settings); reference/by-system/commodore-c64/1982-commodore-64-users-guide.txt:514-515"
+      },
+      {
+        "name": "White (1)",
+        "hex": "#ffffff",
+        "role": "screen",
+        "confidence": "measured",
+        "source": "https://www.pepto.de/projects/colorvic/ (Colodore model, default settings)"
+      },
+      {
+        "name": "Red (2)",
+        "hex": "#813338",
+        "role": "screen",
+        "confidence": "measured",
+        "source": "https://www.pepto.de/projects/colorvic/ (Colodore model, default settings)"
+      },
+      {
+        "name": "Cyan (3)",
+        "hex": "#75cec8",
+        "role": "screen",
+        "confidence": "measured",
+        "source": "https://www.pepto.de/projects/colorvic/ (Colodore model, default settings)"
+      },
+      {
+        "name": "Yellow (7)",
+        "hex": "#edf171",
+        "role": "screen",
+        "confidence": "measured",
+        "source": "https://www.pepto.de/projects/colorvic/ (Colodore model, default settings)"
+      }
+    ]
   },
   "commodore-amiga": {
     "name": "Commodore Amiga",
     "short": "Amiga",
     "year": "1985",
     "color": "#ff6600",
-    "colours": []
+    "colours": [
+      {
+        "name": "Workbench 1.x blue",
+        "hex": "#0055aa",
+        "role": "screen",
+        "primary": true,
+        "confidence": "exact",
+        "source": "Kickstart 1.3 ROM default Preferences at $FDB9D2; reference/by-system/commodore-amiga/1986-amiga-intuition-reference-manaual.txt:1617-1619; register $05A doubled per digit, reference/by-system/commodore-amiga/1985-amiga-hardware-reference-manual.txt:2098-2129"
+      },
+      {
+        "name": "A500 case",
+        "hex": "#d6c7b4",
+        "role": "case",
+        "confidence": "estimate",
+        "source": "https://commons.wikimedia.org/wiki/File:Amiga_500,_front,_Google_NY_office_computer_museum.jpg (CC BY 2.0), sampled"
+      },
+      {
+        "name": "A500 letter keys",
+        "hex": "#d2c4ab",
+        "role": "keys",
+        "confidence": "estimate",
+        "source": "https://commons.wikimedia.org/wiki/File:Amiga_500,_front,_Google_NY_office_computer_museum.jpg (CC BY 2.0), sampled"
+      },
+      {
+        "name": "A500 Commodore badge plate",
+        "hex": "#aa9886",
+        "role": "badge",
+        "confidence": "estimate",
+        "source": "https://commons.wikimedia.org/wiki/File:Amiga_500,_front,_Google_NY_office_computer_museum.jpg (CC BY 2.0), sampled"
+      },
+      {
+        "name": "Workbench 1.x white",
+        "hex": "#ffffff",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "Kickstart 1.3 ROM default Preferences at $FDB9D2; reference/by-system/commodore-amiga/1986-amiga-intuition-reference-manaual.txt:1617-1619"
+      },
+      {
+        "name": "Workbench 1.x black",
+        "hex": "#000022",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "Kickstart 1.3 ROM default Preferences at $FDB9D2; reference/by-system/commodore-amiga/1986-amiga-intuition-reference-manaual.txt:1617-1619"
+      },
+      {
+        "name": "Workbench 1.x orange",
+        "hex": "#ff8800",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "Kickstart 1.3 ROM default Preferences at $FDB9D2; reference/by-system/commodore-amiga/1986-amiga-intuition-reference-manaual.txt:1617-1619; reference/by-system/commodore-amiga/1985-amiga-hardware-reference-manual.txt:4104-4119 names $F80 \"Red-orange\""
+      },
+      {
+        "name": "Workbench 2.x and 3.x grey",
+        "hex": "#aaaaaa",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "Kickstart 3.1 (40.63) ROM default Preferences at $685AE; 198x/docs/findings/2026-10-01-launch-machine-colours.md"
+      },
+      {
+        "name": "Workbench 2.x and 3.x blue",
+        "hex": "#6688bb",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "Kickstart 3.1 (40.63) ROM default Preferences at $685AE; 198x/docs/findings/2026-10-01-launch-machine-colours.md"
+      },
+      {
+        "name": "Insert-disk hand blue",
+        "hex": "#7777cc",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "reference/by-system/commodore-amiga/amiga-boot-sequence.md:604-610; Kickstart 1.3 ROM table at $FE872A"
+      }
+    ]
   },
   "commodore-cdtv": {
     "name": "Commodore CDTV",
@@ -648,7 +785,79 @@
     "short": "NES",
     "year": "1983",
     "color": "#e30613",
-    "colours": []
+    "colours": [
+      {
+        "name": "Nintendo red (current brand)",
+        "hex": "#e60012",
+        "role": "logo",
+        "primary": true,
+        "confidence": "estimate",
+        "source": "https://www.nintendo.com/us/ and https://www.nintendo.com/en-gb/ theme colour, checked 2026-10-01; exact today, an estimate for the 1985 print red (no 1980s spec found)"
+      },
+      {
+        "name": "Upper shell",
+        "hex": "#cccbc9",
+        "role": "case",
+        "confidence": "estimate",
+        "source": "https://commons.wikimedia.org/wiki/File:NES-Console-Set.jpg, sampled; reference/by-system/nintendo-nes/nes-3d-modelling-reference-audit.md:9-14"
+      },
+      {
+        "name": "Lower shell",
+        "hex": "#727071",
+        "role": "case",
+        "confidence": "estimate",
+        "source": "https://commons.wikimedia.org/wiki/File:NES-Console-Set.jpg, sampled; reference/by-system/nintendo-nes/nes-3d-modelling-reference-audit.md:9-14"
+      },
+      {
+        "name": "Black band",
+        "hex": "#2b2b2b",
+        "role": "case",
+        "confidence": "estimate",
+        "source": "https://commons.wikimedia.org/wiki/File:NES-Console-Set.jpg, sampled; reference/by-system/nintendo-nes/nes-3d-modelling-reference-audit.md:9-14"
+      },
+      {
+        "name": "Controller face",
+        "hex": "#3e3e3e",
+        "role": "case",
+        "confidence": "estimate",
+        "source": "https://commons.wikimedia.org/wiki/File:NES-Console-Set.jpg, sampled; reference/by-system/nintendo-nes/nes-3d-modelling-reference-audit.md:9-14"
+      },
+      {
+        "name": "A and B buttons",
+        "hex": "#cf0000",
+        "role": "keys",
+        "confidence": "estimate",
+        "source": "https://commons.wikimedia.org/wiki/File:NES-Console-Set.jpg, sampled; reference/by-system/nintendo-nes/nes-3d-modelling-reference-audit.md:9-14; probably gamut-clipped"
+      },
+      {
+        "name": "Super Mario Bros. sky ($22)",
+        "hex": "#8287ff",
+        "role": "screen",
+        "confidence": "measured",
+        "source": "https://www.nesdev.org/wiki/Special:Redirect/file/2C02G_wiki.pal (2C02G palette); index $22 from https://gist.github.com/1wErt3r/4048722 lines 1426-1427"
+      },
+      {
+        "name": "Black ($0F)",
+        "hex": "#000000",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "reference/by-system/nintendo-nes/ppu-programming.md:425; https://www.nesdev.org/wiki/Special:Redirect/file/2C02G_wiki.pal (2C02G palette)"
+      },
+      {
+        "name": "Grey ($00)",
+        "hex": "#626262",
+        "role": "screen",
+        "confidence": "measured",
+        "source": "https://www.nesdev.org/wiki/Special:Redirect/file/2C02G_wiki.pal (2C02G palette)"
+      },
+      {
+        "name": "Red ($16)",
+        "hex": "#a92704",
+        "role": "screen",
+        "confidence": "measured",
+        "source": "https://www.nesdev.org/wiki/Special:Redirect/file/2C02G_wiki.pal (2C02G palette)"
+      }
+    ]
   },
   "nintendo-virtual-boy": {
     "name": "Nintendo Virtual Boy",
@@ -900,7 +1109,100 @@
     "short": "Spectrum",
     "year": "1982",
     "color": "#cc0000",
-    "colours": []
+    "colours": [
+      {
+        "name": "Screen red (normal)",
+        "hex": "#c20000",
+        "role": "screen",
+        "primary": true,
+        "confidence": "exact",
+        "source": "reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117); ULA levels"
+      },
+      {
+        "name": "Stripe red",
+        "hex": "#ff5238",
+        "role": "livery",
+        "confidence": "estimate",
+        "source": "photo assets/by-system/sinclair-zx-spectrum/model/reference/user-exterior.png, single uncalibrated; colours named at reference/by-system/sinclair-zx-spectrum/spectrumpedia-volume-2-english.txt:533"
+      },
+      {
+        "name": "Stripe yellow",
+        "hex": "#eddc0d",
+        "role": "livery",
+        "confidence": "estimate",
+        "source": "photo assets/by-system/sinclair-zx-spectrum/model/reference/user-exterior.png, single uncalibrated; colours named at reference/by-system/sinclair-zx-spectrum/spectrumpedia-volume-2-english.txt:533"
+      },
+      {
+        "name": "Stripe green",
+        "hex": "#6bd723",
+        "role": "livery",
+        "confidence": "estimate",
+        "source": "photo assets/by-system/sinclair-zx-spectrum/model/reference/user-exterior.png, single uncalibrated; colours named at reference/by-system/sinclair-zx-spectrum/spectrumpedia-volume-2-english.txt:533"
+      },
+      {
+        "name": "Stripe cyan",
+        "hex": "#1bf1fe",
+        "role": "livery",
+        "confidence": "estimate",
+        "source": "photo assets/by-system/sinclair-zx-spectrum/model/reference/user-exterior.png, single uncalibrated; colours named at reference/by-system/sinclair-zx-spectrum/spectrumpedia-volume-2-english.txt:533; channels clipped"
+      },
+      {
+        "name": "Case black",
+        "hex": "#18191a",
+        "role": "case",
+        "confidence": "estimate",
+        "source": "photo assets/by-system/sinclair-zx-spectrum/model/reference/user-exterior.png, single uncalibrated; colours named at reference/by-system/sinclair-zx-spectrum/spectrumpedia-volume-2-english.txt:533; https://collections.vam.ac.uk/item/O1300970/zx-spectrum-personal-computer-dickinson-rick/"
+      },
+      {
+        "name": "Keys blue-grey",
+        "hex": "#5d7c74",
+        "role": "keys",
+        "confidence": "estimate",
+        "source": "photo assets/by-system/sinclair-zx-spectrum/model/reference/user-exterior.png, single uncalibrated; colours named at reference/by-system/sinclair-zx-spectrum/spectrumpedia-volume-2-english.txt:533; https://collections.vam.ac.uk/item/O1300970/zx-spectrum-personal-computer-dickinson-rick/"
+      },
+      {
+        "name": "Paper white (power-on)",
+        "hex": "#c2c2c2",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "reference/by-system/sinclair-zx-spectrum/the-complete-spectrum-rom-disassembly-dr-ian-logan-dr-frank-o-hara.txt:4172-4179; reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+      },
+      {
+        "name": "Ink black",
+        "hex": "#000000",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "reference/by-system/sinclair-zx-spectrum/the-complete-spectrum-rom-disassembly-dr-ian-logan-dr-frank-o-hara.txt:4172-4179"
+      },
+      {
+        "name": "Bright red",
+        "hex": "#ff0000",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "128K ROM 0 stripe string at 0x3812, levels per reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+      },
+      {
+        "name": "Bright yellow",
+        "hex": "#ffff00",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "128K ROM 0 stripe string at 0x3812, levels per reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+      },
+      {
+        "name": "Bright green",
+        "hex": "#00ff00",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "128K ROM 0 stripe string at 0x3812, levels per reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+      },
+      {
+        "name": "Bright cyan",
+        "hex": "#00ffff",
+        "role": "screen",
+        "confidence": "exact",
+        "source": "128K ROM 0 stripe string at 0x3812, levels per reference/by-system/sinclair-zx-spectrum/zx-spectrum-ula-chapter-16-analogue-video.md (Table 16-1, lines 99-117)"
+      }
+    ]
   },
   "sinclair-zx80": {
     "name": "Sinclair ZX80",
