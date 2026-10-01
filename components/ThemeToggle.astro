@@ -157,8 +157,14 @@ const name = `h-theme-${Math.random().toString(36).slice(2, 9)}`;
 
   const show = () => {
     const mode = current();
+    // An explicit tabindex on the checked radio: WebKit's default Tab order
+    // skips form controls that lack one, so without it Safari readers could
+    // not reach the group by Tab at all.
     groups.forEach((g) =>
-      g.querySelectorAll<HTMLInputElement>('input').forEach((i) => { i.checked = i.value === mode; }));
+      g.querySelectorAll<HTMLInputElement>('input').forEach((i) => {
+        i.checked = i.value === mode;
+        i.tabIndex = i.checked ? 0 : -1;
+      }));
   };
 
   const apply = (mode: string, key: string) => {
