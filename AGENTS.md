@@ -138,9 +138,11 @@ Digested from the record and `README.md`; the record is the authority.
 
 ## Screen measures itself
 
-`components/Screen.astro` is the one component with a script, because the true
-grid and the space a screen has are only known in the browser. The rules it
-holds (§7) are easy to break by accident while tidying its CSS:
+`components/Screen.astro` measures itself in the browser, because the true grid
+and the space a screen has are only known there. The whole-multiple rule lives
+in `components/screen-fit.ts`, which `Loading.astro` uses too, so the two cannot
+size screens differently. The rules it holds (§7) are easy to break by accident
+while tidying its CSS:
 
 - **Width comes from the script, never from the stylesheet.** Anything that
   sizes `.h-screen` to its container (`width: 100%`, `flex: 1`, a grid track that
@@ -156,6 +158,16 @@ Verify a Screen change by measuring, not looking: in the catalogue each screen's
 rendered size must be the grid times a whole k, and its `::before`
 `background-size` must be `100% kpx`. The Screen entry prints the grid, k and
 rendered size under each screen; read the scanline size from devtools.
+
+## Loading quotes captures
+
+`Loading` shows what each machine printed as real Emu198x captures in
+`components/loading-captures/`, never as text in a font. To change or add one,
+rerun or write the script in `loading-captures/source/`, keep the frame at the
+emulator's native size with its border, and update the citation in
+`loading-looks.ts` (emulator commit, ROM SHA1s, script). The C64 tape needed a
+repair step because Emu198x's tape SAVE was out of phase (emu198x/emu198x#1565);
+once that is fixed, the rephase script can go.
 
 ## Plate geometry is mirrored, not shared
 
