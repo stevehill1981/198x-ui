@@ -32,6 +32,13 @@ import PlateEntry from './entries/Plate.astro';
 import SiteNavEntry from './entries/SiteNav.astro';
 import FamilyStripEntry from './entries/FamilyStrip.astro';
 import ScreenEntry from './entries/Screen.astro';
+import ButtonEntry from './entries/Button.astro';
+import EyebrowEntry from './entries/Eyebrow.astro';
+import ShellEntry from './entries/Shell.astro';
+import ThemeToggleEntry from './entries/ThemeToggle.astro';
+import TabsEntry from './entries/Tabs.astro';
+import ListingEntry from './entries/Listing.astro';
+import KbdEntry from './entries/Kbd.astro';
 
 interface Props {
   base: string;
@@ -47,6 +54,13 @@ const components: Record<string, any> = {
   'site-nav': SiteNavEntry,
   'family-strip': FamilyStripEntry,
   screen: ScreenEntry,
+  button: ButtonEntry,
+  eyebrow: EyebrowEntry,
+  shell: ShellEntry,
+  'theme-toggle': ThemeToggleEntry,
+  tabs: TabsEntry,
+  listing: ListingEntry,
+  kbd: KbdEntry,
 };
 
 const current = entry ? catalogueEntries.find((e) => e.slug === entry) : undefined;

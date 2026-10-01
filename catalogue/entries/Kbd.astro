@@ -1,0 +1,38 @@
+---
+import Kbd from '../../components/Kbd.astro';
+import Specimen from '../Specimen.astro';
+---
+
+<Specimen
+  title="One key"
+  code={`<Kbd keys="Enter" />
+<Kbd keys="P" title="Enters PRINT" />`}
+  note="A key is an object, so its cap is round with a little depth while the interface around it is square (§7). JetBrains Mono, the machine's face, ligatures off (§4). Sized in em, so it matches the text around it."
+  block
+>
+  <p style="margin: 0; max-width: var(--h-measure); font: var(--h-text-body)/var(--h-lh-body) var(--h-font-read); color: var(--h-ink-body);">
+    Press <Kbd keys="P" title="Enters PRINT" /> for <code>PRINT</code>, then type the greeting and press <Kbd keys="Enter" />. Use <Kbd keys="Backspace" /> to delete the character before the cursor.
+  </p>
+</Specimen>
+
+<Specimen
+  title="A combination"
+  code={`<Kbd keys={['Cmd', 'Shift', 'K']} />`}
+  note="One cap per key, inside one <kbd>, as HTML specifies for key input. The + between caps is heard and copied but not seen, so a screen reader says “Cmd+Shift+K”."
+  block
+>
+  <p style="margin: 0; max-width: var(--h-measure); font: var(--h-text-body)/var(--h-lh-body) var(--h-font-read); color: var(--h-ink-body);">
+    Switch keyboard modes with <Kbd keys={['Ctrl', 'Shift', 'K']} /> on Linux, or <Kbd keys={['Cmd', 'Shift', 'K']} /> on macOS.
+  </p>
+</Specimen>
+
+<Specimen
+  title="In smaller text"
+  code={`<p class="keys"><Kbd keys="R" /> for RUN, <Kbd keys="Enter" /></p>`}
+  note="The cap follows the size of what it sits in."
+  block
+>
+  <p style="margin: 0; font: var(--h-text-micro)/var(--h-lh-micro) var(--h-font-mono); color: var(--h-ink-muted);">
+    then <Kbd keys="R" title="Enters RUN" /> for RUN, <Kbd keys="Enter" />
+  </p>
+</Specimen>

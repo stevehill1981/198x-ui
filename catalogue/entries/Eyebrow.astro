@@ -1,0 +1,26 @@
+---
+import Eyebrow from '../../components/Eyebrow.astro';
+import Specimen from '../Specimen.astro';
+---
+
+<Specimen
+  title="Eyebrow"
+  code={`<Eyebrow>What you'll make</Eyebrow>
+<Eyebrow as="p">Meet BASIC, unit 1</Eyebrow>`}
+  note="One outlined square box, four cells tall (§7), at the micro step (§6; the concept's 0.66rem was off the scale). No colour of its own (§3, §7). Written in sentence case and uppercased by style, so it is read as words."
+>
+  <Eyebrow>What you'll make</Eyebrow>
+  <Eyebrow>Every machine, every language</Eyebrow>
+  <Eyebrow as="p">Meet BASIC, unit 1</Eyebrow>
+</Specimen>
+
+<Specimen
+  title="Above a heading"
+  code={`<Eyebrow>An honest ask</Eyebrow>
+<h2>…</h2>`}
+  note="It introduces the heading; the heading carries the outline."
+  block
+>
+  <Eyebrow>An honest ask</Eyebrow>
+  <h2 style="margin: var(--h-space-3) 0 0; font: var(--h-weight-major) var(--h-text-h2)/var(--h-lh-h2) var(--h-font-ui); letter-spacing: var(--h-tr-h2); color: var(--h-ink);">Keep it going</h2>
+</Specimen>
