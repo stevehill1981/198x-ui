@@ -1,0 +1,240 @@
+---
+/**
+ * A program listing: what the reader types, or what the machine listed.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §4: JetBrains Mono, the face for anything the machine said, with
+ *   ligatures off. A listing shows the characters the machine holds, and a
+ *   ligature shows characters that are not there.
+ * - §7: interface, so a square panel with one line. It follows the theme, like
+ *   every panel; only hardware stays dark.
+ * - §3: syntax colour is neither identity nor subject, so it stays a small,
+ *   fixed set: keywords in the accent ink, strings in --h-syn-str, numbers and
+ *   addresses in --h-syn-num, comments in the muted ink. Each clears 4.5:1 on
+ *   every surface a listing produces, in both themes and on tinted grounds.
+ *
+ * Colouring happens here, at build time, by a deliberately small scanner: no
+ * grammar, no dependency, no script. Per line it finds a comment (from the
+ * `comment` marker to the end of the line, outside strings), then strings
+ * ("…"), numbers ($hex, %binary, decimal) and the words in `keywords`.
+ * It is a reading aid, not a parser; a line it gets wrong is still the right
+ * characters in the right order.
+ *
+ * Long lines scroll by default, because column layout means something in
+ * assembly. A region that scrolls must be reachable by keyboard, so the
+ * listing is a focusable, labelled region whenever it overflows, and nothing
+ * when it does not (a tab stop that scrolls nothing is noise). That is decided
+ * in the browser, on load and on every resize; without JavaScript it stays
+ * focusable. `wrap` wraps long lines instead and never scrolls.
+ *
+ * Props:
+ *   code      The listing. Leading and trailing blank lines are trimmed.
+ *   label     What the listing is, e.g. "Unit 3, the complete program". Names
+ *             the region when it scrolls. Default 'Listing'.
+ *   keywords  Words to colour as keywords, matched whole and case-sensitively:
+ *             ['PRINT', 'RUN'], ['lda', 'sta'].
+ *   comment   The comment marker: ';', 'REM', "'", '//'. A word marker such
+ *             as REM only counts as a whole word.
+ *   numbers   'none' (default); 'gutter' for generated line numbers, which are
+ *             hidden from screen readers and copying; or 'source' when each
+ *             line starts with its own number, as in BASIC, which is then
+ *             drawn muted. Source numbers are part of the program, so they are
+ *             read and copied.
+ *   start     The first gutter number. Default 1.
+ *   mark      Lines to mark as new or changed, 1-based: [3, 4]. Each is a
+ *             <mark>, so assistive technology can report it.
+ *   wrap      Wrap long lines instead of scrolling. Default false.
+ *   class     Extra classes for the outer element.
+ */
+interface Props {
+  code: string;
+  label?: string;
+  keywords?: string[];
+  comment?: string;
+  numbers?: 'none' | 'gutter' | 'source';
+  start?: number;
+  mark?: number[];
+  wrap?: boolean;
+  class?: string;
+}
+
+const {
+  code,
+  label = 'Listing',
+  keywords = [],
+  comment,
+  numbers = 'none',
+  start = 1,
+  mark = [],
+  wrap = false,
+  class: className,
+} = Astro.props;
+
+type Token = { cls?: 'kw' | 'str' | 'num' | 'c' | 'ln'; text: string };
+
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const word = '[\\w$]';
+const kwAlt = keywords.length
+  ? `(?<!${word})(?:${[...keywords].sort((a, b) => b.length - a.length).map(escapeRe).join('|')})(?!${word})`
+  : null;
+const tokenRe = new RegExp(
+  ['("[^"]*"?)', '(\\$[0-9a-fA-F]+|%[01]+|\\b\\d+(?:\\.\\d+)?\\b)', kwAlt ? `(${kwAlt})` : null]
+    .filter(Boolean)
+    .join('|'),
+  'g',
+);
+
+/** Where the comment starts, outside any string; -1 if none. */
+const commentAt = (line: string): number => {
+  if (!comment) return -1;
+  const isWord = /^\w+$/.test(comment);
+  let inString = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === '"') inString = !inString;
+    if (inString || !line.startsWith(comment, i)) continue;
+    if (isWord && (/\w/.test(line[i - 1] ?? '') || /\w/.test(line[i + comment.length] ?? ''))) continue;
+    return i;
+  }
+  return -1;
+};
+
+const scan = (body: string): Token[] => {
+  const out: Token[] = [];
+  let at = 0;
+  for (const m of body.matchAll(tokenRe)) {
+    if (m.index! > at) out.push({ text: body.slice(at, m.index) });
+    out.push({ cls: m[1] !== undefined ? 'str' : m[2] !== undefined ? 'num' : 'kw', text: m[0] });
+    at = m.index! + m[0].length;
+  }
+  if (at < body.length) out.push({ text: body.slice(at) });
+  return out;
+};
+
+const lines = code.replace(/^\s*\n|\n\s*$/g, '').split('\n').map((raw) => {
+  const tokens: Token[] = [];
+  let line = raw;
+  if (numbers === 'source') {
+    const n = /^(\s*\d+)/.exec(line);
+    if (n) { tokens.push({ cls: 'ln', text: n[1] }); line = line.slice(n[1].length); }
+  }
+  const cut = commentAt(line);
+  tokens.push(...scan(cut < 0 ? line : line.slice(0, cut)));
+  if (cut >= 0) tokens.push({ cls: 'c', text: line.slice(cut) });
+  return tokens;
+});
+
+const marked = new Set(mark);
+const gutterWidth = `${String(start + lines.length - 1).length}ch`;
+const last = lines.length - 1;
+---
+
+<div
+  class:list={['h-listing', { 'h-listing-wrap': wrap }, className]}
+  data-h-listing={wrap ? undefined : ''}
+  data-label={label}
+  role={wrap ? undefined : 'region'}
+  aria-label={wrap ? undefined : label}
+  tabindex={wrap ? undefined : '0'}
+  style={numbers === 'gutter' ? `--h-listing-gutter: ${gutterWidth}` : undefined}
+><pre class="h-listing-pre"><code class="h-listing-code">{lines.map((tokens, i) => {
+  const Line = marked.has(i + 1) ? 'mark' : 'span';
+  return (
+    <Line class="h-listing-line">{numbers === 'gutter' && <span class="h-listing-gutter" aria-hidden="true">{start + i}</span>}<span class="h-listing-text">{tokens.map((t) => t.cls ? <span class={`h-syn-${t.cls}`}>{t.text}</span> : t.text)}{i < last ? '\n' : ''}</span></Line>
+  );
+})}</code></pre></div>
+
+<style>
+  .h-listing {
+    box-sizing: border-box;
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--h-line);
+    border-radius: 0;
+    background: var(--h-ground);
+  }
+
+  .h-listing:focus-visible {
+    outline: 2px solid var(--h-accent);
+    outline-offset: 2px;
+  }
+
+  .h-listing-pre {
+    margin: 0;
+    padding: calc(var(--h-cell) * 2) 0;
+    color: var(--h-ink);
+    font-family: var(--h-font-mono);
+    font-size: var(--h-text-small);
+    line-height: calc(28 / 16);
+    font-weight: 400;
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
+  }
+
+  /* Scrolling: every line as wide as the widest, so a mark spans the scroll. */
+  .h-listing-code {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    font: inherit;
+  }
+
+  .h-listing-line {
+    display: flex;
+    padding: 0 calc(var(--h-cell) * 3);
+    background: none;
+    color: inherit;
+  }
+
+  mark.h-listing-line { background: var(--h-mark); }
+
+  .h-listing-text { white-space: pre; }
+
+  .h-listing-gutter {
+    flex: none;
+    width: var(--h-listing-gutter);
+    margin-right: 2ch;
+    text-align: right;
+    color: var(--h-ink-muted);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  /* Wrapping: lines break inside the panel and nothing scrolls. */
+  .h-listing-wrap { overflow-x: visible; }
+  .h-listing-wrap .h-listing-code { width: auto; }
+  .h-listing-wrap .h-listing-text { min-width: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  .h-syn-kw  { color: var(--h-accent-ink); }
+  .h-syn-str { color: var(--h-syn-str); }
+  .h-syn-num { color: var(--h-syn-num); }
+  .h-syn-c,
+  .h-syn-ln  { color: var(--h-ink-muted); }
+</style>
+
+<script>
+  /* Focusable and named only while it scrolls. */
+  const listings = [...document.querySelectorAll<HTMLElement>('[data-h-listing]')];
+  const fit = (el: HTMLElement) => {
+    if (el.scrollWidth > el.clientWidth + 1) {
+      el.tabIndex = 0;
+      el.setAttribute('role', 'region');
+      el.setAttribute('aria-label', el.dataset.label || 'Listing');
+    } else {
+      el.removeAttribute('tabindex');
+      el.removeAttribute('role');
+      el.removeAttribute('aria-label');
+    }
+  };
+  // Watch the box and its content: a web font arriving widens the content
+  // without resizing the box.
+  const ro = new ResizeObserver((entries) =>
+    entries.forEach((e) => fit((e.target as HTMLElement).closest<HTMLElement>('[data-h-listing]')!)));
+  listings.forEach((el) => {
+    fit(el);
+    ro.observe(el);
+    const code = el.querySelector('code');
+    if (code) ro.observe(code);
+  });
+</script>
