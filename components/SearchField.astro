@@ -1,0 +1,198 @@
+---
+/**
+ * A search box: a labelled input in a search landmark, with an optional key
+ * hint. The form and nothing else; the site does the searching.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: interface, so square, on the 8px cell (six cells tall), flat. The
+ *   concept drew a pill; an input is something you operate, so it is square.
+ *   WebKit's rounded search styling is switched off for the same reason.
+ * - §3: no colour of its own. Focus is the accent ring on the whole field.
+ * - §4: the hint is a Kbd, a key being an object, so it keeps its cap.
+ *
+ * Markup: <form role="search"> (a search landmark in every engine, including
+ * those that do not yet map <search>), a <label> tied to an <input
+ * type="search">. The landmark is named by the same label, so a page
+ * with two search fields has two distinguishable landmarks. The label is visually hidden by default, because the
+ * placeholder and the glass already say what the field is to a sighted
+ * reader; a placeholder is never the accessible name. Enter submits the form,
+ * as a one-field form does: give `action` for a results page, or listen for
+ * `submit` (or `input`) and search in place.
+ *
+ * The hint: pass `hint="/"` only if the site binds that key to focus the
+ * field. The component does not bind it (a shortcut on every page is a site
+ * decision, and it must not fire while the reader is typing elsewhere). The
+ * field then carries aria-keyshortcuts, and the cap is hidden from screen
+ * readers so the key is announced once. The cap hides while the field has
+ * focus, since the shortcut has done its job.
+ *
+ * The magnifying glass is drawn in CSS, as Button's arrows are: no icon
+ * dependency, no icon paths. It is decorative.
+ *
+ * Props:
+ *   label         The field's accessible name. Required: "Search the site",
+ *                 "Find a machine".
+ *   showLabel     Show the label above the field. Default false.
+ *   name          The query parameter. Default 'q'.
+ *   action        Where the form submits. Default: none, the current page.
+ *   method        'get' (default) or 'post'.
+ *   placeholder   An example of what to type. Never the only label.
+ *   value         An initial query, e.g. the one a results page was given.
+ *   hint          A key that focuses the field, e.g. '/'. Bind it yourself.
+ *   id            The input's id. Default: generated.
+ *   class         Extra classes for the <form>.
+ */
+import Kbd from './Kbd.astro';
+
+interface Props {
+  label: string;
+  showLabel?: boolean;
+  name?: string;
+  action?: string;
+  method?: 'get' | 'post';
+  placeholder?: string;
+  value?: string;
+  hint?: string;
+  id?: string;
+  class?: string;
+}
+
+const {
+  label,
+  showLabel = false,
+  name = 'q',
+  action,
+  method = 'get',
+  placeholder,
+  value,
+  hint,
+  id = `h-search-${Math.random().toString(36).slice(2, 9)}`,
+  class: className,
+} = Astro.props;
+
+if (!label?.trim()) throw new Error('[198x-ui] SearchField: label is required; a placeholder is not a name.');
+---
+
+<form class:list={['h-search', className]} role="search" aria-labelledby={`${id}-label`} action={action} method={method}>
+  <label id={`${id}-label`} class:list={['h-search-label', { 'h-search-label-hidden': !showLabel }]} for={id}>{label}</label>
+  <div class="h-search-field">
+    <span class="h-search-glass" aria-hidden="true"></span>
+    <input
+      class="h-search-input"
+      type="search"
+      id={id}
+      name={name}
+      value={value}
+      placeholder={placeholder}
+      autocomplete="off"
+      spellcheck="false"
+      aria-keyshortcuts={hint}
+    />
+    {hint && <span class="h-search-hint" aria-hidden="true"><Kbd keys={hint} /></span>}
+  </div>
+</form>
+
+<style>
+  .h-search {
+    box-sizing: border-box;
+    display: grid;
+    /* minmax(0, …): an input's intrinsic width (WebKit sizes it from the
+       size attribute) must not widen the form past its cell. */
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--h-cell);
+    margin: 0;
+    min-width: 0;
+  }
+
+  .h-search-label {
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-micro);
+    line-height: var(--h-lh-micro);
+    font-weight: var(--h-weight-minor);
+    color: var(--h-ink);
+  }
+
+  .h-search-label-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .h-search-field {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: calc(var(--h-cell) * 1.5);
+    min-height: calc(var(--h-cell) * 6);
+    padding: 0 calc(var(--h-cell) * 1.5 - 1px) 0 calc(var(--h-cell) * 2 - 1px);
+    border: 1px solid var(--h-line);
+    border-radius: 0;
+    background: var(--h-shell);
+    cursor: text;
+  }
+
+  .h-search-field:hover { border-color: var(--h-ink-muted); }
+  .h-search-field:focus-within {
+    border-color: var(--h-ink-muted);
+    outline: 2px solid var(--h-accent);
+    outline-offset: 2px;
+  }
+
+  /* The glass: a ring and a handle, in the muted ink. */
+  .h-search-glass {
+    position: relative;
+    flex: none;
+    width: calc(var(--h-cell) * 2);
+    height: calc(var(--h-cell) * 2);
+    color: var(--h-ink-muted);
+  }
+  .h-search-glass::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: calc(var(--h-cell) * 1.5);
+    height: calc(var(--h-cell) * 1.5);
+    box-sizing: border-box;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+  }
+  .h-search-glass::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: 1px;
+    width: calc(var(--h-cell) * 0.75);
+    height: 2px;
+    background: currentColor;
+    transform: rotate(45deg);
+    transform-origin: right center;
+  }
+
+  .h-search-input {
+    flex: 1;
+    width: 0;
+    min-width: 0;
+    margin: 0;
+    padding: calc(var(--h-cell) * 1.5) 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: var(--h-ink);
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-small);
+    line-height: var(--h-lh-small);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .h-search-input::placeholder { color: var(--h-ink-muted); opacity: 1; }
+  .h-search-input:focus { outline: none; }
+  .h-search-input::-webkit-search-decoration { -webkit-appearance: none; }
+
+  .h-search-hint { flex: none; font-size: var(--h-text-small); }
+  .h-search-field:focus-within .h-search-hint { visibility: hidden; }
+</style>

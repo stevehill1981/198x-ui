@@ -1,0 +1,36 @@
+---
+import SearchField from '../../components/SearchField.astro';
+import Specimen from '../Specimen.astro';
+---
+
+<Specimen
+  title="Find a machine"
+  code={`<SearchField label="Find a machine" placeholder="Find a machine, maker or year" />`}
+  note="A search landmark holding a labelled search input. Interface, so square on the 8px cell, six cells tall (§7), not the concept's pill; WebKit's rounded search styling is off. The label is visually hidden but always there: the placeholder is an example, never the name. Focus rings the whole field in the accent. The glass is drawn in CSS and decorative. Enter submits the form; searching is the site's job."
+  block
+>
+  <div style="max-width: 24rem">
+    <SearchField label="Find a machine" placeholder="Find a machine, maker or year" id="cat-search-1" />
+  </div>
+</Specimen>
+
+<Specimen
+  title="With a key hint, and a visible label"
+  code={`<SearchField label="Search the site" showLabel hint="/" action="/search" value="sprites" />`}
+  note="hint='/' draws the key as a Kbd cap (a key is an object, so it keeps its rounded cap, §7) and sets aria-keyshortcuts on the field. The component does not bind the key: a site passes a hint only if it does. This page binds / to this field so the hint tells the truth; press it. The cap hides while the field has focus."
+  block
+>
+  <div style="max-width: 24rem">
+    <SearchField label="Search the site" showLabel hint="/" action="#" value="sprites" id="cat-search-2" />
+  </div>
+</Specimen>
+
+<script>
+  /* The binding a site would write: / focuses search unless the reader is typing. */
+  addEventListener('keydown', (e) => {
+    const t = e.target as HTMLElement;
+    if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey || t.closest('input, textarea, select, [contenteditable]')) return;
+    e.preventDefault();
+    document.getElementById('cat-search-2')?.focus();
+  });
+</script>
