@@ -1,0 +1,96 @@
+---
+/**
+ * A key to press, or a combination of keys pressed together.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: a key is an object, a thing on a machine, so it keeps a rounded cap and
+ *   a little depth where the interface around it is square.
+ * - §4: set in JetBrains Mono, the face for anything the machine takes or
+ *   says, at 700 (the concept asked for 600, which the face does not ship and
+ *   the browser resolved to 700 anyway). No ligatures.
+ *
+ * A combination is one <kbd> holding a <kbd> per key, as HTML specifies for key
+ * input. Each key gets its own cap. Between caps sits a "+" that only screen
+ * readers and copied text get, so "Cmd Shift K" is heard and pasted as
+ * "Cmd+Shift+K" while the reader sees three caps.
+ *
+ * Sized in em, so a cap matches the text it sits in.
+ *
+ * Props:
+ *   keys   One key, or several pressed together: 'Enter', or
+ *          ['Cmd', 'Shift', 'K']. Use key names, not symbols: the house faces
+ *          do not carry the Mac modifier glyphs.
+ *   title  For a single key, what it does, e.g. "Enters PRINT". Shown on hover
+ *          only, so never the only place that fact lives.
+ *   class  Extra classes for a host's own layout.
+ */
+interface Props {
+  keys: string | string[];
+  title?: string;
+  class?: string;
+}
+
+const { keys, title, class: className } = Astro.props;
+const list = Array.isArray(keys) ? keys : [keys];
+
+if (list.length === 0 || list.some((k) => k.trim() === '')) {
+  throw new Error('[198x-ui] Kbd: every key needs a name.');
+}
+---
+
+{list.length === 1 ? (
+  <kbd class:list={['h-kbd', 'h-kbd-cap', className]} title={title}>{list[0]}</kbd>
+) : (
+  <kbd class:list={['h-kbd', 'h-kbd-combo', className]} title={title}>
+    {list.map((k, i) => (
+      <Fragment>
+        {i > 0 && <span class="h-kbd-plus">+</span>}
+        <kbd class="h-kbd-cap">{k}</kbd>
+      </Fragment>
+    ))}
+  </kbd>
+)}
+
+<style>
+  .h-kbd-combo {
+    display: inline-flex;
+    gap: 0.2em;
+    vertical-align: baseline;
+    font: inherit;
+    white-space: nowrap;
+  }
+
+  .h-kbd-cap {
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 1.7em;
+    margin: 0 0.1em;
+    padding: 0.1em 0.45em 0.15em;
+    border: 1px solid var(--h-line);
+    border-radius: 0.4em;
+    background: var(--h-ground);
+    color: var(--h-ink);
+    box-shadow: 0 2px 0 var(--h-line), inset 0 1px 0 var(--h-highlight);
+    font-family: var(--h-font-mono);
+    font-size: 0.8em;
+    line-height: 1.3;
+    font-weight: 700;
+    font-variant-ligatures: none;
+    text-align: center;
+    vertical-align: 0.08em;
+    white-space: nowrap;
+  }
+
+  .h-kbd-combo .h-kbd-cap { margin: 0; }
+
+  /* Heard and copied, not seen. */
+  .h-kbd-plus {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+</style>

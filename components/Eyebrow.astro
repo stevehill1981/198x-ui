@@ -1,0 +1,55 @@
+---
+/**
+ * The small boxed uppercase label above a heading: "What you'll make",
+ * "Meet BASIC, unit 1".
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: interface, so square and on the 8px cell: one outlined box, four
+ *   cells tall, no fill.
+ * - §6: set at the micro step. The concept drew it at 0.66rem, which is off
+ *   the scale; §6 maps every size onto a step, and micro is the smallest.
+ * - §3 and §7: no colour of its own. A label that needs telling apart from
+ *   another gets a mark, not a hue.
+ *
+ * It is text, not a heading: it sits beside the heading it introduces, and the
+ * heading carries the document outline.
+ *
+ * Props:
+ *   as     The element. Default 'span'; 'p' where it stands alone in flow.
+ *   class  Extra classes for a host's own layout.
+ *
+ * Slot: the label. Write it in sentence case; the uppercase is styling, so a
+ * screen reader reads words rather than letters.
+ */
+interface Props {
+  as?: 'span' | 'p' | 'div';
+  class?: string;
+}
+
+const { as: Tag = 'span', class: className } = Astro.props;
+---
+
+<Tag class:list={['h-eyebrow', className]}><slot /></Tag>
+
+<style>
+  .h-eyebrow {
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--h-cell);
+    min-height: calc(var(--h-cell) * 4);
+    margin: 0;
+    padding: 0 var(--h-cell);
+    border: 1px solid var(--h-line);
+    border-radius: 0;
+    background: none;
+    color: var(--h-ink-body);
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-micro);
+    line-height: 1;
+    font-weight: var(--h-weight-minor);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+</style>
