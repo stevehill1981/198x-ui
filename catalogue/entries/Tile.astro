@@ -1,0 +1,65 @@
+---
+import Tile from '../../components/Tile.astro';
+import Specimen from '../Specimen.astro';
+
+/* Stand-in marks. A site passes its own icon (the Code198x concept uses
+   Phosphor); the catalogue draws plain shapes so it takes no dependency
+   either. They are placeholders, not a proposed icon set. */
+const grid = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: var(--h-space-4); list-style: none; margin: 0; padding: 0;';
+---
+
+<Specimen
+  title="A row of doors"
+  code={`<Tile href="/foundations" title="Foundations">
+  <svg slot="glyph" …>…</svg>
+  How computers work underneath, explained once for every machine.
+</Tile>`}
+  note="Interface, so square and flat on the 8px cell (§7). Doors are told apart by their mark, never a hue (§7, §3): the glyph is the site's own icon in the slot, drawn in the ink; these shapes are stand-ins. The whole tile is one link and the arrow sits in its own cell (§7). Hover and focus give the same reply: a lift that rises fast and decays slowly (§6) and the accent in the arrow cell. Tab through to see focus."
+  block
+>
+  <ul style={grid}>
+    <li>
+      <Tile href="#" title="The Basics">
+        <svg slot="glyph" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6" /></svg>
+        Never programmed? What a program is, before any machine.
+      </Tile>
+    </li>
+    <li>
+      <Tile href="#" title="Foundations">
+        <svg slot="glyph" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.75" y="2.75" width="10.5" height="10.5" /></svg>
+        How computers work underneath, explained once for every machine.
+      </Tile>
+    </li>
+    <li>
+      <Tile href="#" title="The Vault">
+        <svg slot="glyph" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="8,2.5 13.5,13 2.5,13" /></svg>
+        People, games, hardware and culture.
+      </Tile>
+    </li>
+  </ul>
+</Specimen>
+
+<Specimen
+  title="Hover and focus, shown at rest"
+  code={`<!-- what :hover and :focus-visible draw; is-hover exists for this page only -->`}
+  note="A neutral lift (shadow in light, the paper glow in dark, never a project colour, §3c) and the arrow cell in the accent fill with its own ink (§4)."
+  block
+>
+  <div style="max-width: 20rem">
+    <Tile href="#" title="Pattern Library" class="is-hover">
+      <svg slot="glyph" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2.75" y="2.75" width="10.5" height="10.5" /></svg>
+      Production-ready code, per system.
+    </Tile>
+  </div>
+</Specimen>
+
+<Specimen
+  title="Leaving the site, as a heading, without a glyph"
+  code={`<Tile href="https://emu198x.com" title="Emu198x" as="h3" arrow="up-right">The emulator the lessons run in.</Tile>`}
+  note="arrow='up-right' for a door to another site. as='h3' when the doors are a page's sections and the outline needs them. A set of doors should all carry a glyph or all go without."
+  block
+>
+  <div style="max-width: 20rem">
+    <Tile href="#" title="Emu198x" as="h3" arrow="up-right">The emulator the lessons run in.</Tile>
+  </div>
+</Specimen>
