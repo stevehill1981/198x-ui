@@ -1,0 +1,10 @@
+[
+  {"tool": "wait_for_boot", "args": {"max_frames": 600}},
+  {"tool": "load_media", "args": {"slot": "tape-1", "kind": "tape", "path": "c64-blank.tap", "writable": true}},
+  {"tool": "type_string", "args": {"text": "10 PRINT \"HELLO\"\n"}},
+  {"tool": "type_string", "args": {"text": "SAVE \"GAME\"\n"}},
+  {"tool": "media_transport", "args": {"slot": "tape-1", "transport": "start"}},
+  {"tool": "run_frames", "args": {"frames": 3100}},
+  {"tool": "query", "args": {"path": "screen.text.lines"}, "max": 2000},
+  {"tool": "save_tape", "args": {"path": "c64-game.recorded.tap"}}
+]
