@@ -1,0 +1,94 @@
+---
+import Loading from '../../components/Loading.astro';
+import Specimen from '../Specimen.astro';
+---
+
+<p class="h-load-intro">
+  Each look plays its sequence once and holds the state the machine spent its
+  busy time in. <button type="button" class="h-load-replay" data-h-load-replay>Replay them all</button>
+</p>
+
+<Specimen
+  title="ZX Spectrum, tape"
+  code={`<Loading machine="sinclair-zx-spectrum" name="bricks" showLabel />`}
+  note="The ROM loader's border: red and cyan for the pilot, 9.68 lines a band, then blue and yellow for the data, 3.82 lines for a 0 bit and 7.63 for a 1, from LD-BYTES and the pulse timings in Logan and O'Hara; the paper untouched but for Program: bricks (§7). The data stripes here encode the name's bytes, a stand-in for a program. The stripes rise as the machine's did, at 15 lines a second rather than its 114, so no point of the border flashes more than twice a second (WCAG 2.3.1). Under reduced motion it is one still frame (§6)."
+  block
+>
+  <Loading machine="sinclair-zx-spectrum" name="bricks" showLabel />
+</Specimen>
+
+<Specimen
+  title="Commodore 64, tape"
+  code={`<Loading machine="commodore-64" name="star trek" showLabel />`}
+  note="The KERNAL's own transcript, from the Programmer's Reference Guide: LOAD, PRESS PLAY ON TAPE, the whole screen blanked to the border's light blue, FOUND STAR TREK, then blanked again while it loads, which it holds. No stripes: on the C64 those belonged to commercial turbo loaders, and nothing held documents them."
+  block
+>
+  <Loading machine="commodore-64" name="star trek" showLabel />
+</Specimen>
+
+<Specimen
+  title="Commodore 64, 1541 disk"
+  code={`<Loading machine="commodore-64" media="disk" name="fun" showLabel />`}
+  note="SEARCHING FOR FUN, then LOADING, on the normal blue screen; the 1541's red drive light lit. The guide names the light red; its hex is ours."
+  block
+>
+  <Loading machine="commodore-64" media="disk" name="fun" showLabel />
+</Specimen>
+
+<Specimen
+  title="Amiga 500, Kickstart 1.3"
+  code={`<Loading machine="commodore-amiga" showLabel />`}
+  note="COLOR00 as the 1.3 ROM writes it: dark grey $444, light grey $888, then white $FFF, with the drive light lit. White is the insert-disk screen's ground; Commodore's hand-and-disk picture is its artwork and is not drawn here. The drive light's colour, green, comes from a third-party book, and its hex is ours."
+  block
+>
+  <Loading machine="commodore-amiga" showLabel />
+</Specimen>
+
+<Specimen
+  title="NES: nothing to load"
+  code={`<Loading machine="nintendo-entertainment-system" />   <!-- renders nothing -->`}
+  note="A cartridge is mapped straight into the address space, so the machine never loaded and has no loading state. Loading renders nothing; show the content at once. The space below is deliberately empty."
+  block
+>
+  <Loading machine="nintendo-entertainment-system" />
+</Specimen>
+
+<Specimen
+  title="A machine with no sourced look"
+  code={`<Loading machine="bbc-micro" />
+// [198x-ui] Loading: no sourced loading look for "bbc-micro". A loading state shows
+// what that machine showed, quoted from a source, never borrowed from another machine (§7). …`}
+  note="Fails the build. There is no default look, because any default would be another machine's. Add the machine to components/loading-looks.ts with its sources."
+  block
+></Specimen>
+
+<script>
+  /* Replay: re-insert every look so its sequence starts again. */
+  document.querySelector('[data-h-load-replay]')?.addEventListener('click', () => {
+    document.querySelectorAll('.h-load').forEach((el) => el.replaceWith(el.cloneNode(true)));
+  });
+</script>
+
+<style is:global>
+  .h-load-intro {
+    margin: 0 0 var(--h-space-4);
+    max-width: var(--h-measure);
+    font-family: var(--h-font-read);
+    font-size: var(--h-text-small);
+    line-height: var(--h-lh-small);
+    color: var(--h-ink-body);
+  }
+  .h-load-replay {
+    min-height: 32px;
+    padding: 0 var(--h-space-3);
+    border: 1px solid var(--h-line);
+    border-radius: 0;
+    background: var(--h-shell);
+    color: var(--h-ink);
+    font: inherit;
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-micro);
+    cursor: pointer;
+  }
+  .h-load-replay:focus-visible { outline: 2px solid var(--h-accent); outline-offset: 2px; }
+</style>
