@@ -1,0 +1,130 @@
+---
+/**
+ * Where this page sits: the trail of pages above it, ending at this one.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: interface, so flat and square; nothing here has a fill or a frame.
+ * - §4: set in Nebula Sans, the interface face. The concept set the trail in
+ *   JetBrains Mono, but mono is the face for what the machine said, and a
+ *   trail of page names is interface.
+ * - §7, inverse video means *current* and nothing else. The trail does not use
+ *   it: the current page is already marked in the site's nav, and the page's
+ *   own heading follows the trail directly. The last item is current by
+ *   aria-current="page", drawn in the full ink, unlinked by default.
+ * - §3: no colour of its own. Links take the body ink and an underline on
+ *   hover, never the accent or a project colour.
+ *
+ * The WAI-ARIA breadcrumb pattern: a <nav> named by `label`, an ordered list,
+ * aria-current="page" on the last item. The separators are drawn by the list
+ * and hidden from assistive technology, so a screen reader hears "list, 4
+ * items" and the names, not "slash".
+ *
+ * Props:
+ *   items  The trail, from the top down, ending with this page:
+ *          `{ label, href? }[]`. Every item but the last needs an href. The
+ *          last is the current page; give it an href only if it should stay a
+ *          link (it then carries aria-current="page" itself).
+ *   label  The nav's accessible name. Default 'Breadcrumb'. Change it only if
+ *          a page carries two trails.
+ *   class  Extra classes for the <nav>.
+ */
+interface Item {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: Item[];
+  label?: string;
+  class?: string;
+}
+
+const { items, label = 'Breadcrumb', class: className } = Astro.props;
+
+if (!items?.length) throw new Error('[198x-ui] Breadcrumbs: give at least one item, the current page.');
+items.forEach((item, i) => {
+  if (!item.label?.trim()) throw new Error(`[198x-ui] Breadcrumbs: item ${i} has no label.`);
+  if (i < items.length - 1 && !item.href) {
+    throw new Error(`[198x-ui] Breadcrumbs: "${item.label}" needs an href; only the last item, the current page, may go without.`);
+  }
+});
+
+const last = items.length - 1;
+---
+
+<nav class:list={['h-crumbs', className]} aria-label={label}>
+  <ol class="h-crumbs-list">
+    {items.map((item, i) => (
+      <li class="h-crumbs-item">
+        {i > 0 && <span class="h-crumbs-sep" aria-hidden="true"></span>}
+        {i === last ? (
+          item.href
+            ? <a class="h-crumbs-link h-crumbs-current" href={item.href} aria-current="page">{item.label}</a>
+            : <span class="h-crumbs-current" aria-current="page">{item.label}</span>
+        ) : (
+          <a class="h-crumbs-link" href={item.href}>{item.label}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>
+
+<style>
+  .h-crumbs-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--h-cell) 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-micro);
+    line-height: var(--h-lh-micro);
+    color: var(--h-ink-body);
+  }
+
+  .h-crumbs-item {
+    display: inline-flex;
+    align-items: baseline;
+    min-width: 0;
+  }
+
+  /* A slash drawn as a rule, so no character is read or copied. */
+  .h-crumbs-sep {
+    flex: none;
+    align-self: center;
+    width: 1px;
+    height: 0.9em;
+    margin: 0 calc(var(--h-cell) * 1.25);
+    background: var(--h-ink-muted);
+    transform: skewX(-20deg);
+  }
+
+  .h-crumbs-link,
+  .h-crumbs-current {
+    overflow-wrap: anywhere;
+  }
+
+  .h-crumbs-link {
+    color: var(--h-ink-body);
+    text-decoration: none;
+    /* A target of at least 24px tall (WCAG 2.5.8), without moving the text. */
+    padding-block: 2px;
+  }
+  .h-crumbs-link:hover {
+    color: var(--h-ink);
+    text-decoration: underline;
+    text-underline-offset: 0.18em;
+  }
+  .h-crumbs-link:focus-visible {
+    outline: 2px solid var(--h-accent);
+    outline-offset: 2px;
+  }
+
+  .h-crumbs-current {
+    color: var(--h-ink);
+    font-weight: var(--h-weight-minor);
+  }
+</style>
