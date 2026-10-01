@@ -165,16 +165,21 @@ const preH = grid?.h ?? height;
     pointer-events: none;
   }
 
-  /* One scanline per source line. --line-px is k px when the scale is whole. */
+  /* One scanline per source line, drawn in whole device pixels: each line of
+     --line-px ends in a dark band of --scan-dark, one device pixel or more.
+     A line must cover at least two device pixels to hold a dark band, so where
+     it cannot (1x on a 1x display, or a fractional fallback scale) the
+     scanlines are off rather than smeared into an evenly darker screen. */
   .h-screen--crt::before {
     content: "";
     position: absolute;
     inset: 0;
     z-index: 2;
     pointer-events: none;
-    background: linear-gradient(rgb(0 0 0 / 0.12) 50%, transparent 50%);
-    background-size: 100% var(--line-px, calc(100% / var(--lines, 296)));
+    background: linear-gradient(to bottom, transparent calc(var(--line-px, 2px) - var(--scan-dark, 1px)), rgb(0 0 0 / 0.12) 0);
+    background-size: 100% var(--line-px, 2px);
   }
+  .h-screen--crt[data-scan="off"]::before { display: none; }
 
   /* A little tube falloff. */
   .h-screen--crt::after {
@@ -260,8 +265,18 @@ const preH = grid?.h ?? height;
     el.style.width = `${w * k}px`;
     el.style.aspectRatio = `${w} / ${h}`;
     el.style.setProperty('--lines', String(h));
-    if (Number.isInteger(k)) el.style.setProperty('--line-px', `${k}px`);
-    else el.style.removeProperty('--line-px');
+    // Scanlines in device pixels: a source line covers k * dpr of them.
+    const dpr = window.devicePixelRatio || 1;
+    const linePx = k * dpr;
+    if (Number.isInteger(k) && linePx >= 2) {
+      el.style.setProperty('--line-px', `${k}px`);
+      el.style.setProperty('--scan-dark', `${Math.max(1, Math.floor(linePx / 2)) / dpr}px`);
+      el.dataset.scan = 'on';
+    } else {
+      el.style.removeProperty('--line-px');
+      el.style.removeProperty('--scan-dark');
+      el.dataset.scan = 'off';
+    }
     el.dataset.scale = String(k);
   };
 
@@ -279,5 +294,12 @@ const preH = grid?.h ?? height;
     clearTimeout(t);
     t = setTimeout(fitScreens, 100);
   });
+  // Page zoom and moving between displays change devicePixelRatio, and with it
+  // how many device pixels a source line covers.
+  const watchDpr = () => {
+    const mq = matchMedia(`(resolution: ${window.devicePixelRatio || 1}dppx)`);
+    mq.addEventListener('change', () => { fitScreens(); watchDpr(); }, { once: true });
+  };
+  watchDpr();
   (window as unknown as { fitScreens: () => void }).fitScreens = fitScreens;
 </script>
