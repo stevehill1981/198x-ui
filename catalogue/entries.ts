@@ -15,4 +15,11 @@ export const catalogueEntries: CatalogueEntry[] = [
   { slug: 'site-nav', title: 'SiteNav' },
   { slug: 'family-strip', title: 'FamilyStrip' },
   { slug: 'screen', title: 'Screen' },
+  { slug: 'button', title: 'Button' },
+  { slug: 'eyebrow', title: 'Eyebrow' },
+  { slug: 'shell', title: 'Shell' },
+  { slug: 'theme-toggle', title: 'ThemeToggle' },
+  { slug: 'tabs', title: 'Tabs' },
+  { slug: 'listing', title: 'Listing' },
+  { slug: 'kbd', title: 'Kbd' },
 ];

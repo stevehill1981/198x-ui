@@ -1,0 +1,14 @@
+---
+import ThemeToggle from '../../components/ThemeToggle.astro';
+import Specimen from '../Specimen.astro';
+---
+
+<Specimen
+  title="Auto, Light, Dark"
+  code={`<ThemeToggle />
+<!-- and in <head>: --> <ThemeBoot />`}
+  note="The visible Auto, Light and Dark choice of §7. Three native radios: one Tab stop, arrow keys move, the chosen one is current and so in inverse video (§7). Light and Dark set data-theme on <html>; Auto removes it. Kept in localStorage (here under h-catalogue-theme, so the catalogue never changes the site's own choice). Without JavaScript it stays hidden and the page follows the system. Both toggles below watch <html>, so they always agree."
+>
+  <ThemeToggle storageKey="h-catalogue-theme" />
+  <ThemeToggle storageKey="h-catalogue-theme" showLabel />
+</Specimen>

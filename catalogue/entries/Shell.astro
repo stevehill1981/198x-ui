@@ -1,0 +1,73 @@
+---
+import Shell from '../../components/Shell.astro';
+import Specimen from '../Specimen.astro';
+
+const body = 'margin: 0; font: var(--h-text-small)/var(--h-lh-small) var(--h-font-ui); color: var(--h-ink-body);';
+const head = 'margin: 0 0 var(--h-space-2); font: var(--h-weight-minor) var(--h-text-h4)/var(--h-lh-h4) var(--h-font-ui); color: var(--h-ink);';
+---
+
+<Specimen
+  title="Interface (the default)"
+  code={`<Shell>…</Shell>`}
+  note="A panel you read or operate: square, one line, flat, no tray (§7). It follows the theme."
+  block
+>
+  <Shell>
+    <h3 style={head}>In this lesson</h3>
+    <p style={body}>Keywords, program lines, running and listing.</p>
+  </Shell>
+</Specimen>
+
+<Specimen
+  title="Device"
+  code={`<Shell variant="device">…</Shell>`}
+  note="An object, something that exists: a machine with its screen and listing. Rounded, a tray around the core, depth from the core's lit top edge (§7). The frame follows the theme; only hardware inside it, such as a Screen's bezel, stays dark."
+  block
+>
+  <Shell variant="device">
+    <h3 style={head}>ZX Spectrum 48K</h3>
+    <p style={body}>A machine and the program it runs belong in here.</p>
+  </Shell>
+</Specimen>
+
+<Specimen
+  title="A figure with a caption"
+  code={`<Shell variant="device" as="figure">…<Fragment slot="caption">The program after RUN.</Fragment></Shell>`}
+  note="The caption is a direct child of the figure, after the core, in Literata italic (§4: captions are Literata italic everywhere)."
+  block
+>
+  <Shell variant="device" as="figure">
+    <p style={body}>A capture and its listing would sit here.</p>
+    <Fragment slot="caption">The program after RUN: Hello, then 0 OK.</Fragment>
+  </Shell>
+  <div style="height: var(--h-space-4)"></div>
+  <Shell as="figure">
+    <p style={body}>The same, as an interface panel.</p>
+    <Fragment slot="caption">A caption under a square panel.</Fragment>
+  </Shell>
+</Specimen>
+
+<Specimen
+  title="Linked"
+  code={`<Shell href="/…/unit-02">…</Shell>`}
+  note="The whole shell is one link. It lifts on hover and focus together, in the neutral glow, never a project hue (§3c); the second one shows that state at rest."
+>
+  <Shell href="#">
+    <p style={body}>Next, unit 2</p>
+    <p style={head}>Remember a name</p>
+  </Shell>
+  <Shell href="#" class="is-hover">
+    <p style={body}>Hovered</p>
+    <p style={head}>Keep the program</p>
+  </Shell>
+</Specimen>
+
+<Specimen
+  title="Flush"
+  code={`<Shell variant="device" flush>…</Shell>`}
+  note="No padding in the core, for content that brings its own."
+>
+  <Shell variant="device" flush>
+    <p style={body}>Edge to edge.</p>
+  </Shell>
+</Specimen>

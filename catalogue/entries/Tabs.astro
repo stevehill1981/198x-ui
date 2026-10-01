@@ -1,0 +1,46 @@
+---
+import Tabs from '../../components/Tabs.astro';
+import Specimen from '../Specimen.astro';
+
+const p = 'margin: 0; font: var(--h-text-small)/var(--h-lh-small) var(--h-font-read); color: var(--h-ink-body);';
+---
+
+<Specimen
+  title="Tabs"
+  code={`<Tabs label="Language" items={[{ label: 'Sinclair BASIC' }, { label: 'Z80 assembly' }]}>
+  <Fragment slot="panel-0">…</Fragment>
+  <Fragment slot="panel-1">…</Fragment>
+</Tabs>`}
+  note="The current tab is in inverse video, because it is current (§7), and switches instantly. Square cells on the 8px grid, no colour per tab (§3, §7). Hover is a wash and focus the accent ring, so neither can be mistaken for current. Keyboard: one Tab stop, Left and Right move and select, Home and End jump; Tab into the group to try it. Without JavaScript every panel shows."
+  block
+>
+  <Tabs label="Language" items={[{ label: 'Sinclair BASIC' }, { label: 'Z80 assembly' }, { label: 'C' }]} id="cat-tabs">
+    <p slot="panel-0" style={p}>Sinclair BASIC: a keyword on one key.</p>
+    <p slot="panel-1" style={p}>Z80 assembly: the machine's own instructions.</p>
+    <p slot="panel-2" style={p}>C, through a cross-compiler.</p>
+  </Tabs>
+</Specimen>
+
+<Specimen
+  title="Vertical"
+  code={`<Tabs orientation="vertical" label="Machines" items={…}>…</Tabs>`}
+  note="A list of machines down the side; Up and Down move."
+  block
+>
+  <div style="max-width: 16rem">
+    <Tabs orientation="vertical" label="Machines" selected={1} items={[{ label: 'Commodore 64' }, { label: 'ZX Spectrum' }, { label: 'Amiga' }, { label: 'NES' }]} id="cat-tabs-v">
+      <p slot="panel-0" style={p}>The C64.</p>
+      <p slot="panel-1" style={p}>The Spectrum.</p>
+      <p slot="panel-2" style={p}>The Amiga.</p>
+      <p slot="panel-3" style={p}>The NES.</p>
+    </Tabs>
+  </div>
+</Specimen>
+
+<Specimen
+  title="Segmented, without panels"
+  code={`<Tabs label="Speed" items={[{ label: '1x' }, { label: '2x' }, { label: 'Max' }]} />`}
+  note="With nothing to control it is a radio group, not a tablist, so it does not promise panels it lacks. Any arrow key moves. It reports each change as h-tabs-change on its root."
+>
+  <Tabs label="Speed" items={[{ label: '1x' }, { label: '2x' }, { label: 'Max', value: 'max' }]} id="cat-seg" />
+</Specimen>

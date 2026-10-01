@@ -1,0 +1,50 @@
+---
+import Listing from '../../components/Listing.astro';
+import Specimen from '../Specimen.astro';
+
+const basic = `10 PRINT "Hello"
+15 PRINT "from"
+20 PRINT "the Spectrum"`;
+const asm = `        lda  #$3f
+        sta  $2006      ; address high
+        lda  #$00
+        sta  $2006      ; $3f00: the backdrop colour, which the PPU reads every frame
+        lda  #%00010110 ; red
+        sta  $2007`;
+---
+
+<Specimen
+  title="BASIC, with its own line numbers"
+  code={`<Listing code={basic} label="The program so far" keywords={['PRINT']} numbers="source" mark={[2]} />`}
+  note="JetBrains Mono, ligatures off (§4). Keywords in the accent ink, strings in --h-syn-str, the program's own line numbers muted. A marked line is a <mark> on the --h-mark wash. Square, one line, follows the theme (§7)."
+  block
+>
+  <Listing code={basic} label="The program so far" keywords={['PRINT']} numbers="source" mark={[2]} />
+</Specimen>
+
+<Specimen
+  title="Assembly, scrolling, with a gutter"
+  code={`<Listing code={asm} label="Set the backdrop" keywords={['lda', 'sta']} comment=";" numbers="gutter" />`}
+  note="Numbers and addresses in --h-syn-num, comments in the muted ink. Gutter numbers are hidden from screen readers and from copying. Long lines scroll, because columns mean something here; while it overflows the listing is a focusable, labelled region, so a keyboard can scroll it (Tab to it, then the arrow keys). Narrow the frame to see it."
+  block
+>
+  <Listing code={asm} label="Set the backdrop" keywords={['lda', 'sta']} comment=";" numbers="gutter" />
+</Specimen>
+
+<Specimen
+  title="Wrapping"
+  code={`<Listing code={asm} wrap keywords={['lda', 'sta']} comment=";" />`}
+  note="Long lines wrap inside the panel and nothing scrolls, so there is no tab stop."
+  block
+>
+  <Listing code={asm} wrap label="Set the backdrop, wrapped" keywords={['lda', 'sta']} comment=";" />
+</Specimen>
+
+<Specimen
+  title="Plain"
+  code={`<Listing code={'10 REM a comment\\n20 GOTO 10'} comment="REM" />`}
+  note="With no keywords and no gutter, only strings, numbers and comments are coloured. A word marker such as REM counts only as a whole word."
+  block
+>
+  <Listing code={'10 REM the loop\n20 PRINT "REMEMBER"\n30 GOTO 10'} comment="REM" />
+</Specimen>

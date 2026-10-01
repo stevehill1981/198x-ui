@@ -1,0 +1,66 @@
+---
+import Button from '../../components/Button.astro';
+import Specimen from '../Specimen.astro';
+---
+
+<Specimen
+  title="Primary, secondary and quiet"
+  code={`<Button href="/systems/sinclair-zx-spectrum">Start with ZX Spectrum</Button>
+<Button variant="secondary" href="/curriculum" arrow="up-right">See the curriculum map</Button>
+<Button variant="quiet">Reset the code</Button>`}
+  note="Square, on the 8px cell, flat (§7). The arrow sits in its own square cell (§7), drawn in CSS because none of the house faces ships an arrow glyph in the kit's subsets. Primary text is --h-ink-on-accent on the fill (§4). Nothing glows at rest (§3c)."
+>
+  <Button href="#">Start with ZX Spectrum</Button>
+  <Button variant="secondary" href="#" arrow="up-right">See the curriculum map</Button>
+  <Button variant="quiet">Reset the code</Button>
+</Specimen>
+
+<Specimen
+  title="Arrows"
+  code={`<Button arrow="right">Next unit</Button>
+<Button arrow="up-right" href="https://…">Open the Spectrum</Button>
+<Button arrow="play">Run it live</Button>
+<Button arrow="none">Save</Button>`}
+  note="Right goes onward, up-right leaves for another page, play runs something. The cell is aria-hidden: the label says what the button does."
+>
+  <Button arrow="right">Next unit</Button>
+  <Button arrow="up-right" href="#">Open the Spectrum</Button>
+  <Button arrow="play">Run it live</Button>
+  <Button arrow="none">Save</Button>
+  <Button variant="secondary" arrow="play">Run again</Button>
+  <Button variant="quiet" arrow="up-right" href="#">Pop out</Button>
+</Specimen>
+
+<Specimen
+  title="Small"
+  code={`<Button size="small" arrow="play">Run it live</Button>`}
+  note="Five cells tall instead of seven, for a toolbar beside a running machine."
+>
+  <Button size="small" arrow="play">Run it live</Button>
+  <Button size="small" variant="secondary">Back to the capture</Button>
+  <Button size="small" arrow="none">Save</Button>
+</Specimen>
+
+<Specimen
+  title="Hover and focus, shown at rest"
+  code={`<!-- what :hover and :focus-visible draw; is-hover, is-focus and is-active exist for this page only -->`}
+  note="Hover and keyboard focus get the same reply, never hover alone (§3c): a neutral lift, and a brighter fill on primary. The lift rises in 120ms and decays over 420ms, as phosphor does (§6), and is instant under reduced motion. Pressing moves the button one pixel. Tab to any button above to see the real focus ring."
+>
+  <Button class="is-hover">Hover</Button>
+  <Button class="is-hover is-focus">Focus</Button>
+  <Button class="is-active">Pressed</Button>
+  <Button variant="secondary" class="is-hover">Hover</Button>
+  <Button variant="secondary" class="is-hover is-focus">Focus</Button>
+  <Button variant="quiet" class="is-hover">Hover</Button>
+  <Button variant="quiet" class="is-hover is-focus">Focus</Button>
+</Specimen>
+
+<Specimen
+  title="Disabled"
+  code={`<Button disabled>Run it live</Button>`}
+  note="Buttons only: a link has no disabled state, and asking for one throws. The label keeps the muted ink so it stays legible."
+>
+  <Button disabled arrow="play">Run it live</Button>
+  <Button variant="secondary" disabled>See the map</Button>
+  <Button variant="quiet" disabled>Reset the code</Button>
+</Specimen>
