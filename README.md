@@ -18,6 +18,13 @@ nothing, and the style inside it is called `House198x` either way.
 | `components/SiteNav.astro` | Top-level navigation |
 | `components/FamilyStrip.astro` | The footer family strip |
 | `components/Screen.astro` | One capture, at a whole multiple of its true grid |
+| `components/Button.astro` | Primary, secondary and quiet; a link or a button; the arrow in its own cell |
+| `components/Eyebrow.astro` | The small boxed uppercase label |
+| `components/Shell.astro` | The double bezel: `device` (an object, rounded) or interface (square) |
+| `components/ThemeToggle.astro` | Auto / Light / Dark, with `ThemeBoot.astro` for the document head |
+| `components/Tabs.astro` | Accessible tabs, or a segmented control without panels |
+| `components/Listing.astro` | Program listings: syntax colour, line numbers, keyboard-reachable scrolling |
+| `components/Kbd.astro` | A keycap, or a combination as separate caps |
 | `catalogue/` | Every component in its variants, for a site to mount in development |
 | `machines.json` | Machine → colour, for all 156 systems |
 | `wordmarks/` | The eleven plates as SVG and PNG, light and dark |
