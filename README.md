@@ -25,6 +25,12 @@ nothing, and the style inside it is called `House198x` either way.
 | `components/Tabs.astro` | Accessible tabs, or a segmented control without panels |
 | `components/Listing.astro` | Program listings: syntax colour, line numbers, keyboard-reachable scrolling |
 | `components/Kbd.astro` | A keycap, or a combination as separate caps |
+| `components/Tile.astro` | A door into a site: the site's glyph, a name, one line, the arrow in its cell |
+| `components/Figure.astro` | A capture (through Screen) or a photograph, with a Literata italic caption |
+| `components/Breadcrumbs.astro` | The trail above a page, the current page marked for screen readers |
+| `components/Chip.astro` | A square label, link, or filter toggle (`aria-pressed`, inverse when on) |
+| `components/SearchField.astro` | A labelled search landmark with an optional key hint; the site does the searching |
+| `components/Loading.astro` | What each machine showed while it loaded, from `loading-looks.ts`, every value sourced |
 | `catalogue/` | Every component in its variants, for a site to mount in development |
 | `machines.json` | Machine → colour, for all 156 systems |
 | `wordmarks/` | The eleven plates as SVG and PNG, light and dark |
@@ -110,6 +116,32 @@ header documents every prop.
 The fitting runs in the browser, once per page however many screens it holds.
 Detection reads the pixels, so a capture has to be same-origin. A site that adds
 screens after load calls `window.fitScreens()`.
+
+## Loading
+
+A loading state shows what *that* machine showed while it was busy, quoted from
+a source, never borrowed from another machine (`family-visual-identity.md` §7):
+
+```astro
+---
+import Loading from '@198x-ui/components/Loading.astro';
+---
+<Loading machine="sinclair-zx-spectrum" name="bricks" />
+<Loading machine="commodore-64" media="disk" name="fun" />
+<Loading machine="commodore-amiga" />
+<Loading machine="nintendo-entertainment-system" />   <!-- renders nothing: a cartridge never loaded -->
+```
+
+Each machine's look is data in `components/loading-looks.ts`, with the source
+of every colour, band height and message beside it. A machine with no entry
+fails the build: there is no default look, because a default would be another
+machine's. To add one, find what its stock loader put on screen in a primary
+source or an Emu198x capture of an official ROM, and cite it there.
+
+The root is `role="status"`; the picture is aria-hidden. Sequences play once
+and hold the busy state; under `prefers-reduced-motion: reduce` that state is
+one still frame. The Spectrum's stripes drift slower than the machine's, so no
+point flashes more than twice a second (WCAG 2.3.1); the file says why.
 
 ## The catalogue
 
