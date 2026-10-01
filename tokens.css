@@ -3,17 +3,28 @@
  * Governed by 198x/decisions/family-visual-identity.md. Values here are the
  * decision made concrete; change the record first, then this file.
  *
- * Light is the default. Dark applies on [data-theme="dark"] and, for viewers
- * who have expressed no preference, on prefers-color-scheme: dark.
+ * Dark leads (§7). Dark is the default expression; light applies on
+ * [data-theme="light"] and, where the site has not forced a theme, on
+ * prefers-color-scheme: light. [data-theme="dark"] forces dark. A site's
+ * Auto/Light/Dark toggle sets data-theme (or removes it for Auto); nothing
+ * here depends on how it stores the choice.
  *
  * Those three states are declared once, below, via color-scheme. Every colour
  * token then carries both values in a single light-dark() declaration instead
  * of being restated in a second and third block. Setting color-scheme also
  * hands form controls and scrollbars the right theme, which restating tokens
  * never did.
+ *
+ * The light selectors are the exact mirror of the dark ones sites already
+ * write, `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }`,
+ * so a site's own overrides resolve to the same theme as these tokens in
+ * every state.
  */
 
-:root { color-scheme: light dark; }
+:root { color-scheme: dark; }
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) { color-scheme: light; }
+}
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"]  { color-scheme: dark; }
 
@@ -24,32 +35,35 @@
    * resolving from them. Custom properties resolve at use time, so a theme
    * block moves only the base and the tint below keeps working — nothing has
    * to restate the mix per theme. */
-  --h-page-base:   light-dark(#fdfcf7, #1a1714);   /* the lightest surface: page background */
-  --h-ground-base: light-dark(#f4f1e8, #221d16);   /* panels, cards, sidebars */
+  --h-page-base:   light-dark(#f5f3ee, #050505);   /* §4 ground: the page background */
+  --h-ground-base: light-dark(#fcfbf8, #0d0c0a);   /* §4 panel (core): panels, cards, sidebars */
   --h-page:        var(--h-page-base);
   --h-ground:      var(--h-ground-base);
-  /* Ambient ground tint ceiling — see the block at the end of this file. */
-  --h-tint-strength: 5%;
-  --h-ink:         light-dark(#3a2c1f, #efe7d6);   /* house brown: headings, plate frame */
-  --h-ink-body:    light-dark(#3f4652, #b9ad96);   /* long-form body text */
-  /* Cleared 4.5:1 against all three light grounds, --h-surface-light included,
-   * so text set in it holds on the darkest ground the family uses. It was
-   * #6b7280, which measured 3.86:1 there and 4.28:1 on --h-ground. */
-  --h-ink-muted:   light-dark(#606773, #b9ad96);
-  /* DECORATIVE / LARGE ONLY — never small informational text. At 2.27:1 on
-   * --h-ground it cannot carry copy, and darkening it far enough to try makes
-   * it --h-ink-muted, which is the tone that already does that job. Use it for
-   * rules, separators and ornament. Rule from Code198x's
-   * visual-direction-synthesis.md, which names this exact value. */
+  /* Ambient ground tint ceiling — see the block at the end of this file.
+   * 20% is dark's; light's 5% is set with the light theme, below. */
+  --h-tint-strength: 20%;
+  --h-ink:         light-dark(#1c1916, #efe7d6);   /* §4 ink: headings, strong text */
+  --h-ink-body:    light-dark(#4b453c, #b9ad96);   /* §4 ink-2: long-form body text */
+  /* §4 ink-3, the muted text ink. It holds 4.5:1 on page and panel, on both
+   * tinted by every project at the ceiling, and in the 0.15 glow (4.60:1 on
+   * the panel, the tightest). The concept's first dark muted ink was
+   * --h-ink-faint below and failed inside the glow; this one was moved in
+   * lightness only, hue and chroma kept, until it passed. */
+  --h-ink-muted:   light-dark(#645c50, #9f947f);
+  /* DECORATIVE ONLY — never small informational text. In light it measures
+   * 2.31:1 on the page, and darkening it far enough to carry copy makes it
+   * --h-ink-muted, the tone that already does that job. Use it for rules,
+   * separators and ornament. Not in §4's table, so left as it was. */
   --h-ink-faint:   light-dark(#94a3b8, #8a7f6a);
-  --h-accent:      light-dark(#b74d2d, #e0744a);   /* rust */
+  /* The fill: buttons and marks behind text, never text itself. */
+  --h-accent:      light-dark(#c14f1f, #e0744a);   /* rust, §4 accent fill */
+  /* Text on that fill: white in light, near-black in dark (§4). */
+  --h-ink-on-accent: light-dark(#ffffff, #1a0d07);
   --h-accent-deep: light-dark(#a8401f, #c85122);
-  /* The accent at ink strength — the one to set *text* in. --h-accent is the
-   * fill: it measures 4.07:1 on --h-surface-light and 4.52:1 on --h-ground, so
-   * it is not safe as small text on the family's own grounds. This role swaps
-   * per theme, because each of the pair is the readable one on exactly one
-   * ground. Every consuming site had grown its own copy of this swap. */
-  --h-accent-ink:  var(--h-accent-deep);
+  /* The accent at ink strength — §4 "accent (text, marks)", the one to set
+   * *text* in. --h-accent is the fill and is not safe as small text on the
+   * family's own grounds. */
+  --h-accent-ink:  light-dark(#a53a0f, #e4784e);
   --h-line:        light-dark(#d6d3ca, #3a342a);
   --h-line-soft:   light-dark(#e2ded3, #4a4234);
   --h-code-bg:     light-dark(#242019, #100e0c);
@@ -66,9 +80,12 @@
    * instead of missing it by a few pixels. */
   --h-inset: clamp(1rem, 4vw, 2.25rem);
 
-  /* Plate */
-  --h-plate-frame:  light-dark(var(--h-ink), #efe7d6);
-  --h-plate-cell:   light-dark(var(--h-page), #242019);
+  /* Plate. Literal values, not page tokens: the plate does not move when the
+   * grounds do (§1, §4), and the `198x` cell never varies between siblings,
+   * so it is not tinted either. The same values as wordmarks/generate.py. */
+  --h-plate-frame:  light-dark(#3a2c1f, #efe7d6);   /* house brown / paper */
+  --h-plate-cell:   light-dark(#fdfcf7, #242019);
+  --h-plate-ink:    light-dark(#3a2c1f, #efe7d6);   /* the `198x` cell's text */
   --h-plate-shadow: var(--h-lift-1);   /* a rung of the ladder, not a constant */
 
   /* Screen hardware — components/Screen.astro. A bezel is an object, not page
@@ -144,9 +161,9 @@
    * carries colours but cannot switch a shadow's geometry.
    *
    * The glow alpha ceiling is 0.15, derived: --h-ink-muted has to survive
-   * sitting in the brightened ground. At 0.30 it measures 3.33:1 and fails;
-   * at 0.15, 5.41:1. The glow is paper, never a project colour — see §3c and
-   * the one exception it allows. */
+   * sitting in the brightened ground. On the panel, the brighter of the two
+   * dark grounds, it measures 4.60:1 at 0.15 and 2.78:1 at 0.30. The glow is
+   * paper, never a project colour — see §3c and the one exception it allows. */
   --h-lift-1:
     0 1px 2px  light-dark(rgba(58, 44, 31, 0.20), transparent),
     0 3px 8px  light-dark(rgba(58, 44, 31, 0.10), transparent),
@@ -167,21 +184,14 @@
 
 /* What light-dark() cannot carry.
  *
- * It takes colours only, so these two still need a block per state: a
- * percentage, and a token that points at a *different* token per theme rather
- * than at a different value. Two restated instead of sixteen — the plate's
- * shadow left this block when it became a rung of the lift ladder. */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --h-tint-strength: 20%;
-    --h-accent-ink:    var(--h-accent);
-  }
+ * It takes colours only, so the tint strength, a percentage, still needs a
+ * block per state. Dark leads, so dark's 20% is the default above and light's
+ * 5% follows the same selectors as color-scheme at the top of this file. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) { --h-tint-strength: 5%; }
 }
 
-:root[data-theme="dark"] {
-  --h-tint-strength: 20%;
-  --h-accent-ink:    var(--h-accent);
-}
+:root[data-theme="light"] { --h-tint-strength: 5%; }
 
 /* Ambient ground tint — 198x/decisions/family-visual-identity.md §3b.
  *
@@ -194,13 +204,17 @@
  * the single fact that keeps every derived ink valid on the tinted ground.
  * §3a's guarantee is that ink computed against --h-surface-light clears AA on
  * any lighter ground, and 5% is the point at which the tinted --h-ground stops
- * being lighter than that surface. Measured across the project colours, the
- * tightest (Forge) reaches it at 5.8%.
+ * being lighter than that surface. On the §4 grounds there is more room than
+ * that: measured across the eleven project colours in oklab, the tightest
+ * (Forge) takes the page past it at 8.33% and the panel at 12.55%. 5% stands.
+ * At 5%, --h-ink-muted measures 5.52-5.55:1 and --h-accent-ink 5.48-5.51:1 on
+ * the tinted page.
  *
  * Dark is bounded differently — by --h-ink-muted holding 4.5:1 on the tinted
  * ground — and has more room, because even a brightened project colour stays
- * well below the light inks that have to survive on them. It is 20%, where the
- * set measures 6.34-7.06:1 and the page ink 11.41-12.71:1.
+ * well below the light inks that have to survive on them. It is 20%, where
+ * --h-ink-muted measures 5.69-5.81:1 on the tinted panel and the page ink
+ * 13.85-14.13:1; the muted ink holds to 41% there (Asm is the tightest).
  *
  * --h-surface-light is deliberately NOT tinted. It is the reference every ink
  * is derived against, not a ground anything is painted on; moving it would

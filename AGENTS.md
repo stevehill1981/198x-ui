@@ -121,9 +121,16 @@ Digested from the record and `README.md`; the record is the authority.
   because it is under everything equally and so labels nothing.
 - **The plate frame is constant house brown**, never the project colour. It is
   what makes fills of very different strength read as one set.
-- **`--h-ink-faint` is decorative.** 2.27:1 on `--h-ground`; never small text.
+- **`--h-ink-faint` is decorative.** 2.31:1 on the light page; never small text.
 - **Set text in `--h-accent-ink`, never `--h-accent`.** The plain accent is the
-  fill and fails AA as small text on the family's own grounds.
+  fill and fails AA as small text on the family's own grounds. Text on the fill
+  is `--h-ink-on-accent`.
+- **The plate's colours are literals**, `--h-plate-*`, not page tokens. When the
+  grounds or the page ink move, the plate does not.
+- **Dark leads.** The default theme is dark; light is the
+  `prefers-color-scheme: light` and `data-theme="light"` case. Any per-theme
+  block must use the same selectors as `color-scheme` at the top of
+  `tokens.css`, or a token and the scheme can disagree.
 - **Three faces, three jobs.** A fourth face is a drift trigger, not a decision.
 - **Tint ceilings are derived, not chosen** — 5% light, 20% dark. They are
   resolved inside `tokens.css` so a host cannot exceed them. Re-derive both if
