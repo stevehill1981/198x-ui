@@ -89,8 +89,10 @@ It renders at a whole multiple of the true grid, never a fraction, and only a
 cell narrower than the grid at 1x (a phone) scales it down. A capture stored
 with every column or row doubled is detected and halved. The Amiga cannot be
 detected, because its pixels do not always pair up, so it declares its grid.
-With `crt` on (the default) there is one scanline per source line in whole
-pixels, a gentle falloff and a faint bloom. The bloom is a separate blurred copy
+With `crt` on (the default) there is one scanline per source line, drawn in
+whole device pixels, a gentle falloff and a faint bloom. A line has to cover at
+least two device pixels to hold a dark band, so scanlines are off at 1x on a 1x
+display and at a fractional fallback scale; they follow page zoom. The bloom is a separate blurred copy
 of the capture, so the capture itself is never filtered or tinted. `crt={false}`
 leaves the capture in its bezel and nothing else.
 
