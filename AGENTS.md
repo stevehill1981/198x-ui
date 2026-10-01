@@ -11,8 +11,8 @@ by the umbrella's decisions, which live in `~/Projects/198x/decisions/`.
 
 ## The one thing to understand first
 
-**Nothing in this repo builds, runs, or tests.** There is no `package.json`, no
-CI, no test suite. It is consumed by *checkout*: each site clones this repo into
+**Nothing in this repo builds or runs.** There is no `package.json` and no CI;
+the only tests are the contrast checker's, in `scripts/`. It is consumed by *checkout*: each site clones this repo into
 a gitignored `_198x-ui/` at a pinned tag and imports from it.
 
 Two consequences, and they are the whole shape of working here:
@@ -25,6 +25,15 @@ Two consequences, and they are the whole shape of working here:
   rather than tracking `main`.
 
 ## Verifying a change
+
+Start with the contrast gate. It measures every text pair in
+`contrast-pairs.json` against `tokens.css`:
+
+```bash
+node --test scripts/*.test.mjs && node scripts/check-contrast.mjs
+```
+
+Then build a consuming site, below.
 
 Build a real consuming site against your working copy. `play198x.github.io` is
 the cheapest — one route, and it carries the family's accessibility gate:
@@ -99,7 +108,7 @@ A project colour has to be changed in all of them together, or they drift:
 | Where | What it holds |
 |---|---|
 | `decisions/family-visual-identity.md` §2 (umbrella) | **The binding values.** Hex plus `oklch()`. |
-| `tokens.css` | `--h-project-*`, and a `[data-tint="…"]` rule per project |
+| `tokens.css` | `--h-project-*`, and a `[data-project="…"]` rule per project |
 | `wordmarks/generate.py` | `PROJECTS`, for the rendered assets |
 | `WORDMARK.md` | The table humans read |
 
@@ -115,26 +124,22 @@ After changing a colour, re-render: `python3 wordmarks/generate.py` (PNGs need
 
 Digested from the record and `README.md`; the record is the authority.
 
-- **Project colour appears in a plate cell and nowhere else** — not a border,
-  heading, link, rule or card accent. Colour on these sites already means
-  *machine*. The one exception is the ambient ground tint, which works precisely
-  because it is under everything equally and so labels nothing.
-- **The plate frame is constant house brown**, never the project colour. It is
-  what makes fills of very different strength read as one set.
-- **`--h-ink-faint` is decorative.** 2.31:1 on the light page; never small text.
-- **Set text in `--h-accent-ink`, never `--h-accent`.** The plain accent is the
-  fill and fails AA as small text on the family's own grounds. Text on the fill
-  is `--h-ink-on-accent`.
-- **The plate's colours are literals**, `--h-plate-*`, not page tokens. When the
-  grounds or the page ink move, the plate does not.
-- **Dark leads.** The default theme is dark; light is the
-  `prefers-color-scheme: light` and `data-theme="light"` case. Any per-theme
-  block must use the same selectors as `color-scheme` at the top of
-  `tokens.css`, or a token and the scheme can disagree.
+- **Paper only.** The reading sites are light until the dark spec (§4). Every
+  colour token is a single value, so `contrast-pairs.json` can measure it. Do not
+  add `light-dark()`, a `data-theme` block or a glow.
+- **One spot ink per page** (§3): machine first, then the project, then none. It
+  arrives as `data-project` on `<html>`, or as `--h-spot`/`--h-spot-ink` set
+  inline from a machine's derived values (§3a). A second spot ink, or a colour
+  for a section or category, is a drift trigger.
+- **Magazine face only in containers** (§4): masthead, prediction panel, pull
+  quote, stat box, teaser. Never body text, never below 20px. Yellow is a fill
+  only.
+- **The plate frame is constant house brown**, never the project colour. The
+  plate's colours are literals, `--h-plate-*`, not page tokens.
+- **`--h-ink-faint` and `--h-line` are decorative**, never text.
+- **Set text in `--h-accent-ink`, never `--h-accent`.** Both alias the spot, and
+  the plain accent is the fill. Text on the fill is `--h-ink-on-accent`.
 - **Three faces, three jobs.** A fourth face is a drift trigger, not a decision.
-- **Tint ceilings are derived, not chosen** — 5% light, 20% dark. They are
-  resolved inside `tokens.css` so a host cannot exceed them. Re-derive both if
-  the palette lightness moves again.
 
 ## Screen measures itself
 
@@ -151,8 +156,8 @@ while tidying its CSS:
 - **Nothing goes on the capture.** Scanlines and falloff are pseudo-elements and
   the bloom is a second `<img>` with `alt=""` and `aria-hidden`. A `filter`, blend
   mode or opacity on `.h-screen-img` is a breach of §7, whatever it looks like.
-- **The bezel is dark in both themes.** It is hardware; its colours are the
-  `--h-screen-*` tokens, single values rather than `light-dark()` pairs.
+- **The bezel is dark.** It is hardware; its colours are the `--h-screen-*`
+  tokens.
 
 Verify a Screen change by measuring, not looking: in the catalogue each screen's
 rendered size must be the grid times a whole k, and its `::before`

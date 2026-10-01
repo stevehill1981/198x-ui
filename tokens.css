@@ -1,132 +1,85 @@
-/* House198x design tokens.
+/* House198x design tokens, v1.
  *
- * Governed by 198x/decisions/family-visual-identity.md. Values here are the
- * decision made concrete; change the record first, then this file.
+ * Governed by 198x/decisions/family-visual-identity.md. Change the record
+ * first, then this file.
  *
- * Dark leads (§7). Dark is the default expression; light applies on
- * [data-theme="light"] and, where the site has not forced a theme, on
- * prefers-color-scheme: light. [data-theme="dark"] forces dark. A site's
- * Auto/Light/Dark toggle sets data-theme (or removes it for Auto); nothing
- * here depends on how it stores the choice.
- *
- * Those three states are declared once, below, via color-scheme. Every colour
- * token then carries both values in a single light-dark() declaration instead
- * of being restated in a second and third block. Setting color-scheme also
- * hands form controls and scrollbars the right theme, which restating tokens
- * never did.
- *
- * The light selectors are the exact mirror of the dark ones sites already
- * write, `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) }`,
- * so a site's own overrides resolve to the same theme as these tokens in
- * every state.
- */
+ * Paper leads. The reading sites are light only until dark is designed in
+ * its own spec; a stored or preferred dark theme gets paper, deliberately.
+ * Every colour is a single value, so the contrast checker can measure it
+ * (node scripts/check-contrast.mjs). */
 
-:root { color-scheme: dark; }
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) { color-scheme: light; }
-}
-:root[data-theme="light"] { color-scheme: light; }
-:root[data-theme="dark"]  { color-scheme: dark; }
+:root { color-scheme: light; }
 
 :root {
-  /* Ground and ink.
-   *
-   * The two grounds are declared as *bases*, with --h-page and --h-ground
-   * resolving from them. Custom properties resolve at use time, so a theme
-   * block moves only the base and the tint below keeps working — nothing has
-   * to restate the mix per theme. */
-  --h-page-base:   light-dark(#f5f3ee, #050505);   /* §4 ground: the page background */
-  --h-ground-base: light-dark(#fcfbf8, #0d0c0a);   /* §4 panel (core): panels, cards, sidebars */
-  --h-page:        var(--h-page-base);
-  --h-ground:      var(--h-ground-base);
-  /* Ambient ground tint ceiling — see the block at the end of this file.
-   * 20% is dark's; light's 5% is set with the light theme, below. */
-  --h-tint-strength: 20%;
-  --h-ink:         light-dark(#1c1916, #efe7d6);   /* §4 ink: headings, strong text */
-  --h-ink-body:    light-dark(#4b453c, #b9ad96);   /* §4 ink-2: long-form body text */
-  /* §4 ink-3, the muted text ink. It holds 4.5:1 on page and panel, on both
-   * tinted by every project at the ceiling, and in the 0.15 glow (4.60:1 on
-   * the panel, the tightest). The concept's first dark muted ink was
-   * --h-ink-faint below and failed inside the glow; this one was moved in
-   * lightness only, hue and chroma kept, until it passed. */
-  --h-ink-muted:   light-dark(#645c50, #9f947f);
-  /* DECORATIVE ONLY — never small informational text. In light it measures
-   * 2.31:1 on the page, and darkening it far enough to carry copy makes it
-   * --h-ink-muted, the tone that already does that job. Use it for rules,
-   * separators and ornament. Not in §4's table, so left as it was. */
-  --h-ink-faint:   light-dark(#94a3b8, #8a7f6a);
-  /* The fill: buttons and marks behind text, never text itself. */
-  --h-accent:      light-dark(#c14f1f, #e0744a);   /* rust, §4 accent fill */
-  /* Text on that fill: white in light, near-black in dark (§4). */
-  --h-ink-on-accent: light-dark(#ffffff, #1a0d07);
-  --h-accent-deep: light-dark(#a8401f, #c85122);
-  /* The accent at ink strength — §4 "accent (text, marks)", the one to set
-   * *text* in. --h-accent is the fill and is not safe as small text on the
-   * family's own grounds. */
-  --h-accent-ink:  light-dark(#a53a0f, #e4784e);
-  /* The fill under the pointer or focus: a primary button's hover (§4 "accent
-   * fill"; the concept's --accent-hover). --h-ink-on-accent stays the text on
-   * it, 5.77:1 light and 7.09:1 dark. */
-  --h-accent-hover: light-dark(#ad4519, #e8835c);
+  /* Paper and ink (§4). */
+  --h-page:      #f6f4ee;   /* ground */
+  --h-ground:    #fcfbf8;   /* panel: cards, sidebars */
+  --h-ink:       #1b1a17;   /* headings, strong text, 15.82:1 */
+  --h-ink-body:  #4a463e;   /* body text, 8.54:1 */
+  --h-ink-muted: #6b6559;   /* captions and secondary text, 5.26:1 */
+  --h-ink-faint: #a29b8c;   /* DECORATIVE ONLY: rules and ornament, never text */
+  --h-line:      #d9d4c7;   /* the hair: rules and grid lines, never text */
+  --h-line-soft: #e6e2d8;
 
-  /* Washes: ink laid thinly over whatever ground is there, so they work on a
-   * tinted ground without restating it. --h-shell is the double bezel's tray;
-   * --h-wash is a hover; --h-wash-2 a resting cell (a button's arrow cell, a
-   * segment). Every text token clears 4.5:1 on each, see the PR measurements.
-   * --h-highlight is the lit top edge of a device core, never under text. */
-  --h-shell:     light-dark(rgb(28 25 22 / 0.035), rgb(239 231 214 / 0.035));
-  --h-wash:      light-dark(rgb(28 25 22 / 0.05),  rgb(239 231 214 / 0.06));
-  --h-wash-2:    light-dark(rgb(28 25 22 / 0.08),  rgb(239 231 214 / 0.09));
-  --h-highlight: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.07));
-  /* A marked line in a Listing: the accent ink at 12%. The concept used 16%,
-   * which leaves the dark muted ink at 4.51:1 on a 20%-tinted ground; at 12%
-   * the tightest text on it is 4.60:1 (light, accent ink, Forge tint). */
-  --h-mark: color-mix(in srgb, var(--h-accent-ink) 12%, transparent);
+  /* The spot ink: one per page (§3). --h-spot is the fill and marks (white text
+   * on it at 4.5:1 or better); --h-spot-ink is the spot set as text (4.5:1 or
+   * better on paper). The default is ink, so a page with no project and no
+   * machine has no colour at all. A project sets it with data-project on
+   * <html>; a machine page sets both inline, from derived values (§3a). */
+  --h-spot:      var(--h-ink);
+  --h-spot-ink:  var(--h-ink);
 
-  /* Syntax, for Listing. Strings a cool cyan, numbers and addresses a warm
-   * yellow, from the concept (brand.css "COLOUR"). Keywords take
-   * --h-accent-ink and comments --h-ink-muted, so no third hue is needed.
-   * These are text tokens: each clears 4.5:1 on the ground, the page, the
-   * shell, the highlighted-line wash and both tinted at the §3b ceilings. */
-  --h-syn-str:   light-dark(#006962, #86d4c8);
-  --h-syn-num:   light-dark(#7a5700, #e2c572);
+  /* The accent names stay, aliased to the spot, so v0 components keep
+   * working: focus rings, the primary button, listing keywords. */
+  --h-accent:        var(--h-spot);
+  --h-accent-ink:    var(--h-spot-ink);
+  --h-accent-hover:  color-mix(in oklab, var(--h-spot) 86%, #000000);
+  --h-accent-deep:   color-mix(in oklab, var(--h-spot) 80%, #000000);
+  --h-ink-on-accent: #ffffff;
 
-  --h-line:        light-dark(#d6d3ca, #3a342a);
-  --h-line-soft:   light-dark(#e2ded3, #4a4234);
-  --h-code-bg:     light-dark(#242019, #100e0c);
-  --h-code-ink:    #efe7d6;
+  /* The magazine voice (§4): containers only (masthead, prediction panel, pull
+   * quote, stat box, teaser). Yellow is a fill only; on paper it is 1.36:1. */
+  --h-mag-yellow: #f2d22e;
+  --h-mag-red:    #ff4b4b;   /* display figures on ink, 5.27:1 */
 
-  /* Derivation surface. Every ink is computed against this, never against
-   * --h-page. It is conservative by design: ink that clears AA here clears it
-   * on any lighter ground. See family-visual-identity.md §3a. */
+  --h-shell:     rgb(27 26 23 / 0.035);
+  --h-wash:      rgb(27 26 23 / 0.05);
+  --h-wash-2:    rgb(27 26 23 / 0.08);
+  --h-highlight: rgb(255 255 255 / 0.9);
+  --h-mark: color-mix(in srgb, var(--h-spot-ink) 12%, transparent);
+
+  --h-syn-str: #006962;
+  --h-syn-num: #7a5700;
+  --h-code-bg: #242019;
+  --h-code-ink: #efe7d6;
+
+  /* Derivation surface (§3a): every derived ink is computed against this, never
+   * the page. Conservative: an ink that clears 4.5:1 here clears it on paper. */
   --h-surface-light: #f5e2d8;
-  --h-surface-dark:  #3d2c21;
 
   /* Horizontal inset for shared components. A host with its own content
    * grid overrides this so the nav and footer line up with the page body
    * instead of missing it by a few pixels. */
   --h-inset: clamp(1rem, 4vw, 2.25rem);
 
-  /* Plate. Literal values, not page tokens: the plate does not move when the
-   * grounds do (§1, §4), and the `198x` cell never varies between siblings,
-   * so it is not tinted either. The same values as wordmarks/generate.py. */
-  --h-plate-frame:  light-dark(#3a2c1f, #efe7d6);   /* house brown / paper */
-  --h-plate-cell:   light-dark(#fdfcf7, #242019);
-  --h-plate-ink:    light-dark(#3a2c1f, #efe7d6);   /* the `198x` cell's text */
+  /* Plate. Literal values, not page tokens: the plate does not move with the
+   * page (§1, §4), and the `198x` cell never varies between siblings. The
+   * same values as wordmarks/generate.py. */
+  --h-plate-frame:  #3a2c1f;   /* house brown */
+  --h-plate-cell:   #fdfcf7;
+  --h-plate-ink:    #3a2c1f;   /* the `198x` cell's text */
   --h-plate-shadow: var(--h-lift-1);   /* a rung of the ladder, not a constant */
 
-  /* Screen hardware — components/Screen.astro. A bezel is an object, not page
-   * furniture, so it stays dark in both themes (§7: objects are round and
-   * physical). These are single values on purpose, not light-dark() pairs. */
+  /* Screen hardware: components/Screen.astro. A bezel is an object, not page
+   * furniture, so it stays dark (§7: objects are round and physical). */
   --h-screen-glass: #0b0a09;                   /* behind the capture, before it loads */
   --h-screen-bezel: #151311;
   --h-screen-rim:   rgb(239 231 214 / 0.14);   /* the bezel's outer edge */
   --h-screen-glow:  rgb(205 205 205 / 0.08);   /* light thrown onto the frame */
 
   /* Project identity. oklch(0.50 <chroma> <hue>) — equal lightness is the
-   * cohering rule; chroma runs to the sRGB gamut edge per hue. These appear in
-   * a plate cell and nowhere else, which is what separates them from machine
-   * colour — not their lightness. White cell ink measures 5.3–6.6:1 on them.
+   * cohering rule; chroma runs to the sRGB gamut edge per hue. They fill the
+   * plate cell (§2) and are the spot ink on a project's own pages (§3). White cell ink measures 5.3–6.6:1 on them.
    * 0.50 is the ceiling: from 0.55 to 0.70 neither paper nor brown ink clears
    * 4.5:1 on the worst of the eleven. */
   --h-project-code:  #a93800;
@@ -141,12 +94,11 @@
   --h-project-format: #007465;
   --h-project-studio: #482aff;
 
-  /* Type. Three faces, three jobs. All three cover Latin, Greek and Cyrillic,
-   * so a heading naming a Soviet or Bulgarian machine sets in the house face
-   * rather than the viewer's. None covers CJK. */
-  --h-font-ui:    "Nebula Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --h-font-read:  Literata, Georgia, "Times New Roman", serif;
-  --h-font-mono:  "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  /* Type. Three faces, three jobs; all cover Latin, Greek and Cyrillic. */
+  --h-font-ui:   "Nebula Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --h-font-read: var(--h-font-ui);   /* reading is Nebula Sans now; the name stays for v0 components */
+  --h-font-mag:  "Fira Sans Extra Condensed", "Nebula Sans", sans-serif;
+  --h-font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
 
   /* ---- Type scale — family-visual-identity.md §6 -------------------------
    * Nine steps on a 20px body, roughly a 1.25 ratio. The root size is
@@ -181,29 +133,11 @@
    * they take the type scale. 8px at the default size. */
   --h-cell: 0.5rem;
 
-  --h-measure: 65ch;   /* ~600px of Literata at 20px */
+  --h-measure: 65ch;   /* ~650px of Nebula Sans at 20px */
 
-  /* ---- Lift — §6. One ladder, rendered in two media ----------------------
-   * Shadow models ink falling on paper, and a dark ground is not paper: the
-   * plate's dark shadow was already `none` rather than softened. The dark
-   * counterpart is a glow — the thing does not cast, it emits.
-   *
-   * Both geometries are always declared; light-dark() makes the wrong one
-   * transparent. That keeps lift in a single declaration, since light-dark()
-   * carries colours but cannot switch a shadow's geometry.
-   *
-   * The glow alpha ceiling is 0.15, derived: --h-ink-muted has to survive
-   * sitting in the brightened ground. On the panel, the brighter of the two
-   * dark grounds, it measures 4.60:1 at 0.15 and 2.78:1 at 0.30. The glow is
-   * paper, never a project colour — see §3c and the one exception it allows. */
-  --h-lift-1:
-    0 1px 2px  light-dark(rgba(58, 44, 31, 0.20), transparent),
-    0 3px 8px  light-dark(rgba(58, 44, 31, 0.10), transparent),
-    0 0 20px -6px light-dark(transparent, rgba(239, 231, 214, 0.15));
-  --h-lift-2:
-    0 2px 4px  light-dark(rgba(58, 44, 31, 0.22), transparent),
-    0 8px 24px light-dark(rgba(58, 44, 31, 0.14), transparent),
-    0 0 32px -8px light-dark(transparent, rgba(239, 231, 214, 0.15));
+  /* Lift: shadow, because paper is paper. The dark glow waits for the dark spec. */
+  --h-lift-1: 0 1px 2px rgba(27, 26, 23, 0.18), 0 3px 8px rgba(27, 26, 23, 0.09);
+  --h-lift-2: 0 2px 4px rgba(27, 26, 23, 0.20), 0 8px 24px rgba(27, 26, 23, 0.12);
 
   /* ---- Motion — §6. One rule ---------------------------------------------
    * Reading is the job; animation is mostly a tax on it. The exception is the
@@ -214,67 +148,19 @@
   --h-ease:  cubic-bezier(0.2, 0, 0.1, 1);
 }
 
-/* What light-dark() cannot carry.
- *
- * It takes colours only, so the tint strength, a percentage, still needs a
- * block per state. Dark leads, so dark's 20% is the default above and light's
- * 5% follows the same selectors as color-scheme at the top of this file. */
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) { --h-tint-strength: 5%; }
-}
-
-:root[data-theme="light"] { --h-tint-strength: 5%; }
-
-/* Ambient ground tint — 198x/decisions/family-visual-identity.md §3b.
- *
- * A site opts in from its HTML, with the same project name the plate takes:
- *
- *   <html lang="en" data-tint="build">
- *
- * Nothing else. The colour and both ceilings are resolved here on purpose: a
- * host that could set the strength could exceed it, and the light ceiling is
- * the single fact that keeps every derived ink valid on the tinted ground.
- * §3a's guarantee is that ink computed against --h-surface-light clears AA on
- * any lighter ground, and 5% is the point at which the tinted --h-ground stops
- * being lighter than that surface. On the §4 grounds there is more room than
- * that: measured across the eleven project colours in oklab, the tightest
- * (Forge) takes the page past it at 8.33% and the panel at 12.55%. 5% stands.
- * At 5%, --h-ink-muted measures 5.52-5.55:1 and --h-accent-ink 5.48-5.51:1 on
- * the tinted page.
- *
- * Dark is bounded differently — by --h-ink-muted holding 4.5:1 on the tinted
- * ground — and has more room, because even a brightened project colour stays
- * well below the light inks that have to survive on them. It is 20%, where
- * --h-ink-muted measures 5.69-5.81:1 on the tinted panel and the page ink
- * 13.85-14.13:1; the muted ink holds to 41% there (Asm is the tightest).
- *
- * --h-surface-light is deliberately NOT tinted. It is the reference every ink
- * is derived against, not a ground anything is painted on; moving it would
- * invalidate the derivation the ceiling exists to protect.
- *
- * The tint is the only home for project colour outside a plate cell. It works
- * because it is ambient — it is under everything equally, so it cannot be read
- * as a label on any one thing. Anything *attached* to an object stays
- * forbidden: no border, heading, link, rule or card accent.
- */
-:root[data-tint="code"]  { --h-tint: var(--h-project-code); }
-:root[data-tint="emu"]   { --h-tint: var(--h-project-emu); }
-:root[data-tint="asm"]   { --h-tint: var(--h-project-asm); }
-:root[data-tint="cat"]   { --h-tint: var(--h-project-cat); }
-:root[data-tint="build"] { --h-tint: var(--h-project-build); }
-:root[data-tint="debug"] { --h-tint: var(--h-project-debug); }
-:root[data-tint="isa"]   { --h-tint: var(--h-project-isa); }
-:root[data-tint="forge"] { --h-tint: var(--h-project-forge); }
-:root[data-tint="play"]  { --h-tint: var(--h-project-play); }
-:root[data-tint="format"] { --h-tint: var(--h-project-format); }
-:root[data-tint="studio"] { --h-tint: var(--h-project-studio); }
-
-/* One rule, both themes: --h-tint-strength and the bases each resolve to
- * whatever the active theme block set them to. */
-:root[data-tint] {
-  --h-page:   color-mix(in oklab, var(--h-tint) var(--h-tint-strength), var(--h-page-base));
-  --h-ground: color-mix(in oklab, var(--h-tint) var(--h-tint-strength), var(--h-ground-base));
-}
+/* A project's own pages (§3): its colour is the spot ink. Every project colour
+ * measures 5.14:1 or better on paper, so the raw value serves as both. */
+:root[data-project="code"]  { --h-spot: var(--h-project-code); --h-spot-ink: var(--h-project-code); }
+:root[data-project="emu"]   { --h-spot: var(--h-project-emu); --h-spot-ink: var(--h-project-emu); }
+:root[data-project="asm"]   { --h-spot: var(--h-project-asm); --h-spot-ink: var(--h-project-asm); }
+:root[data-project="cat"]   { --h-spot: var(--h-project-cat); --h-spot-ink: var(--h-project-cat); }
+:root[data-project="build"] { --h-spot: var(--h-project-build); --h-spot-ink: var(--h-project-build); }
+:root[data-project="debug"] { --h-spot: var(--h-project-debug); --h-spot-ink: var(--h-project-debug); }
+:root[data-project="isa"]   { --h-spot: var(--h-project-isa); --h-spot-ink: var(--h-project-isa); }
+:root[data-project="forge"] { --h-spot: var(--h-project-forge); --h-spot-ink: var(--h-project-forge); }
+:root[data-project="play"]  { --h-spot: var(--h-project-play); --h-spot-ink: var(--h-project-play); }
+:root[data-project="format"] { --h-spot: var(--h-project-format); --h-spot-ink: var(--h-project-format); }
+:root[data-project="studio"]  { --h-spot: var(--h-project-studio); --h-spot-ink: var(--h-project-studio); }
 
 /* Motion off where it is not wanted — §6. */
 @media (prefers-reduced-motion: reduce) {

@@ -13,7 +13,7 @@ nothing, and the style inside it is called `House198x` either way.
 
 | | |
 |---|---|
-| `tokens.css` | Palette (dark leads, light follows), the type roster, the eleven project colours |
+| `tokens.css` | Paper palette (light only), the spot ink, the magazine tokens, the type roster, the eleven project colours |
 | `components/Plate.astro` | The family wordmark — `[ ASM \| 198x ]` |
 | `components/SiteNav.astro` | Top-level navigation |
 | `components/FamilyStrip.astro` | The footer family strip |
@@ -190,25 +190,31 @@ screen, the column-doubled BBC Micro poster, an Amiga screen stored at 640x512
 and an NES screen. Any other site passes its own set as `samples`, with the same
 shapes, because each one is there to prove one of Screen's rules.
 
-## Ground tint
+## Spot ink
 
-A site can carry its project colour as an ambient ground tint. Opt in from the
-HTML, with the same project name the plate takes:
+Each page has one spot ink, which marks figures, kickers and emphasis
+(`198x/decisions/family-visual-identity.md` §3). `tokens.css` exposes it as two
+tokens: `--h-spot` is the fill (white text on it clears 4.5:1) and
+`--h-spot-ink` is the same colour set as text (4.5:1 or better on paper). The
+default is ink, so a page with no project and no machine has no colour.
+
+A project's own pages opt in from the HTML, with the same name the plate takes:
 
 ```astro
-<html lang="en" data-tint="build">
+<html lang="en" data-project="build">
 ```
 
-That is the whole interface. The colour and both ceilings — 5% in light, 20% in
-dark — resolve inside `tokens.css`, because a host that could set the strength
-could exceed it, and the light ceiling is what keeps every derived ink valid on
-the tinted ground. See `198x/decisions/family-visual-identity.md` §3b.
+A machine page sets both tokens inline on `<html>`, from the machine's derived
+values. Machine colours are curated, and each ink is derived against the paper
+ground, never written down as a brand value (§3a):
 
-Two things it is not. It is not a licence for project colour anywhere else:
-the tint works *because* it is ambient, and anything attached to an object — a
-border, heading, link, rule or card accent — stays forbidden. And a fixed brand
-colour is not covered by the ceiling, which protects derived ink only; check any
-such colour on the tinted ground directly. That is how `--h-accent` was caught.
+```astro
+<html lang="en" style="--h-spot: #c00000; --h-spot-ink: #c00000">
+```
+
+Colour never means two things on one page: machine content takes the spot ink,
+and the project colour appears only where no machine is the subject. The
+`--h-accent*` names remain as aliases of the spot, so v0 components keep working.
 
 ## Governance
 
@@ -216,26 +222,26 @@ Everything here is the concrete form of
 `198x/decisions/family-visual-identity.md`. **Change the record first, then this
 repo.** In particular:
 
-- **Project colour appears in a plate cell and nowhere else.** Not a border, a
-  heading, a link, a rule, or a card accent. Colour on these sites already means
-  *machine*; a second meaning for the same signal is what the rule exists to
-  prevent, and a reader cannot tell two colours apart by looking.
-- **The plate frame is constant**, never the project colour. It is what makes
-  eleven fills of differing strength read as one set.
-- **`--h-ink-faint` is decorative, never small informational text.** It measures
-  2.31:1 on the light page, and darkening it far enough to carry copy turns it
-  into `--h-ink-muted` — the tone that already does that job. The two cannot
-  both be text colours.
-- **Set text in `--h-accent-ink`, never `--h-accent`.** The plain accent is the
-  fill: as small text it measures 4.30:1 on the light page. `--h-accent-ink` is
-  the accent at ink strength in each theme, and it is the only one to put words
-  in. Text *on* the fill is `--h-ink-on-accent`.
-- **Dark leads.** Dark is the default; light follows `prefers-color-scheme` or
-  an explicit `data-theme="light"`, and `data-theme="dark"` forces dark (§7).
-  The Auto/Light/Dark toggle is the site's: it sets or clears `data-theme`.
-- **Three faces, three jobs.** Nebula Sans for interface, Literata for reading and
-  editorial display and all captions, JetBrains Mono for anything the machine
-  said. A fourth face is a drift trigger, not a decision.
+- **Paper leads; light only until the dark spec.** Every colour token is a single
+  value (§4). A stored or preferred dark theme gets paper. Dark is designed in
+  its own spec; the dark theme and the glow stay on the previous kit version.
+- **One spot ink per page** (§3). Machine first, then the project, then no
+  colour. Never a second spot ink, and never a colour for a section, category or
+  feature: use a mark.
+- **The plate frame is constant**, never the project colour (§1). The project
+  colour fills the prefix cell and nothing else on the plate.
+- **`--h-ink-faint` and `--h-line` are decorative, never text.** Rules, grid
+  lines and ornament only. Muted text is `--h-ink-muted` (5.26:1).
+- **Set text in `--h-spot-ink` (or `--h-accent-ink`), never `--h-spot`.** The
+  spot is the fill. Text on the fill is `--h-ink-on-accent`.
+- **The magazine face is for magazine containers only** (§4): masthead,
+  prediction panel, pull quote, stat box, teaser. Never body text, never below
+  20px. `--h-mag-yellow` is a fill only; on paper it is 1.36:1.
+- **Three faces, three jobs.** Nebula Sans for reading and interface, Fira Sans
+  Extra Condensed for the magazine voice, JetBrains Mono for anything the
+  machine said. A fourth face is a drift trigger, not a decision.
+- **Every text pair is measured.** `contrast-pairs.json` lists them and
+  `node scripts/check-contrast.mjs` fails on any pair under its minimum.
 
 ## About `machines.json`
 
