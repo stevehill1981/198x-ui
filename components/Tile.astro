@@ -1,0 +1,196 @@
+---
+/**
+ * A door: one way into a site, as a single link. A glyph mark, a name, one
+ * line saying what is behind it, and an arrow in its own cell.
+ *
+ * Governed by 198x/decisions/family-visual-identity.md:
+ *
+ * - §7: interface, so square, on the 8px cell, and flat. A tile is a control
+ *   you operate, not a thing that exists, so it does not take a device's
+ *   rounded tray. The arrow sits in its own square cell, as a button's does.
+ * - §7 and §3: doors are told apart by a mark, never a hue. The glyph is
+ *   drawn in the ink, and nothing about a tile takes a colour of its own.
+ * - §3c and §6: no glow at rest. Hover and focus-visible get the same reply:
+ *   a lift that rises fast and decays slowly, and the arrow cell filled with
+ *   the accent. Both are instant under prefers-reduced-motion (the tokens zero
+ *   the durations).
+ *
+ * The glyph is the site's. The kit takes no icon dependency and draws no icon
+ * paths, so a site passes its own mark in the `glyph` slot: an <svg> from its
+ * icon set, an <i class="ph-light ph-cpu">, or a character from a face it
+ * loads. The slot is wrapped aria-hidden, because the name already says where
+ * the door goes; give the glyph no text of its own. It is sized to the name
+ * (1em square box, `currentColor`), so an SVG with width and height of 1em and
+ * fill or stroke of currentColor sits right with no further styling.
+ *
+ * The arrow is drawn in CSS, as Button's is: none of the house faces ships an
+ * arrow glyph in the kit's subsets.
+ *
+ * The whole tile is one link, so everything in it is read as the link's name:
+ * keep the line short. Put tiles in a list or grid of the host's own; a tile
+ * fills the width its cell gives it and grows to the tallest in its row.
+ *
+ * Props:
+ *   href      Where the door goes. Required.
+ *   title     The name: "Foundations", "The Vault". Required.
+ *   as        The element for the name. Default 'span'; use 'h2' or 'h3' when
+ *             the tiles are the sections of a page and the outline needs them.
+ *   arrow     'right' (default) or 'up-right', for a door that leaves the site.
+ *   class     Extra classes for the link.
+ *   ...rest   Passed to the <a> (aria-*, data-*, id, rel, target, …).
+ *
+ * Slots:
+ *   glyph     The mark before the name. Optional, but a set of doors should
+ *             all have one or all go without.
+ *   default   The one line: what is behind the door.
+ *
+ * The class is-hover shows the hover state at rest, for the catalogue.
+ */
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = Omit<HTMLAttributes<'a'>, 'class' | 'title'> & {
+  href: string;
+  title: string;
+  as?: 'span' | 'h2' | 'h3' | 'h4';
+  arrow?: 'right' | 'up-right';
+  class?: string;
+};
+
+const { href, title, as: Name = 'span', arrow = 'right', class: className, ...rest } = Astro.props;
+
+if (!href) throw new Error('[198x-ui] Tile: href is required; a door goes somewhere.');
+if (!title?.trim()) throw new Error('[198x-ui] Tile: title is required.');
+
+const hasGlyph = Astro.slots.has('glyph');
+---
+
+<a href={href} class:list={['h-tile', className]} {...rest}>
+  <Name class="h-tile-name">
+    {hasGlyph && <span class="h-tile-glyph" aria-hidden="true"><slot name="glyph" /></span>}
+    <span class="h-tile-title">{title}</span>
+  </Name>
+  <span class="h-tile-line"><slot /></span>
+  <span class={`h-tile-cell h-tile-${arrow}`} aria-hidden="true"><span class="h-tile-arrow"></span></span>
+</a>
+
+<style>
+  .h-tile {
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: calc(var(--h-cell) * 1.5);
+    height: 100%;
+    min-height: calc(var(--h-cell) * 26);
+    padding: calc(var(--h-cell) * 3);
+    border: 1px solid var(--h-line);
+    border-radius: 0;
+    background: var(--h-ground);
+    color: var(--h-ink);
+    text-decoration: none;
+    box-shadow: none;
+    transition:
+      box-shadow var(--h-decay) var(--h-ease),
+      border-color var(--h-decay) var(--h-ease);
+  }
+
+  .h-tile:hover,
+  .h-tile:focus-visible,
+  .h-tile.is-hover {
+    border-color: var(--h-ink-muted);
+    box-shadow: var(--h-lift-2);
+    transition-duration: var(--h-rise);
+  }
+
+  .h-tile:focus-visible {
+    outline: 2px solid var(--h-accent);
+    outline-offset: 3px;
+  }
+
+  .h-tile-name {
+    display: flex;
+    align-items: baseline;
+    gap: calc(var(--h-cell) * 1.5);
+    margin: 0;
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-h4);
+    line-height: var(--h-lh-h4);
+    letter-spacing: var(--h-tr-h4);
+    font-weight: var(--h-weight-major);
+    color: var(--h-ink);
+    overflow-wrap: anywhere;
+  }
+
+  /* The site's mark: a 1em box in the ink, on the name's baseline. */
+  .h-tile-glyph {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: 1em;
+    height: 1em;
+    align-self: center;
+    color: var(--h-ink-body);
+    line-height: 1;
+  }
+  .h-tile-glyph :global(svg) { width: 1em; height: 1em; }
+
+  .h-tile-line {
+    max-width: 32ch;
+    font-family: var(--h-font-ui);
+    font-size: var(--h-text-small);
+    line-height: var(--h-lh-small);
+    color: var(--h-ink-body);
+  }
+
+  /* The arrow's cell: five cells square, at the bottom right. */
+  .h-tile-cell {
+    position: relative;
+    justify-self: end;
+    width: calc(var(--h-cell) * 5);
+    height: calc(var(--h-cell) * 5);
+    background: var(--h-wash-2);
+    color: var(--h-ink);
+    transition:
+      background-color var(--h-decay) var(--h-ease),
+      color var(--h-decay) var(--h-ease);
+  }
+  .h-tile:hover .h-tile-cell,
+  .h-tile:focus-visible .h-tile-cell,
+  .h-tile.is-hover .h-tile-cell {
+    background: var(--h-accent);
+    color: var(--h-ink-on-accent);
+    transition-duration: var(--h-rise);
+  }
+
+  /* The arrow: Button's drawing, a shaft and a head of two strokes. */
+  .h-tile-arrow {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--h-cell) * 2);
+    height: calc(var(--h-cell) * 2);
+    margin: calc(var(--h-cell) * -1) 0 0 calc(var(--h-cell) * -1);
+  }
+  .h-tile-up-right .h-tile-arrow { transform: rotate(-45deg); }
+  .h-tile-arrow::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    right: 2px;
+    top: calc(50% - 1px);
+    height: 2px;
+    background: currentColor;
+  }
+  .h-tile-arrow::after {
+    content: "";
+    position: absolute;
+    right: 2px;
+    top: 50%;
+    width: var(--h-cell);
+    height: var(--h-cell);
+    margin-top: calc(var(--h-cell) * -0.5);
+    box-sizing: border-box;
+    border-top: 2px solid currentColor;
+    border-right: 2px solid currentColor;
+    transform: rotate(45deg);
+  }
+</style>
