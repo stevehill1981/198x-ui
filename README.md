@@ -126,8 +126,8 @@ a source, never borrowed from another machine (`family-visual-identity.md` §7):
 ---
 import Loading from '@198x-ui/components/Loading.astro';
 ---
-<Loading machine="sinclair-zx-spectrum" name="bricks" />
-<Loading machine="commodore-64" media="disk" name="fun" />
+<Loading machine="sinclair-zx-spectrum" />
+<Loading machine="commodore-64" media="disk" label="Loading Bricks…" />
 <Loading machine="commodore-amiga" />
 <Loading machine="nintendo-entertainment-system" />   <!-- renders nothing: a cartridge never loaded -->
 ```
@@ -137,6 +137,15 @@ of every colour, band height and message beside it. A machine with no entry
 fails the build: there is no default look, because a default would be another
 machine's. To add one, find what its stock loader put on screen in a primary
 source or an Emu198x capture of an official ROM, and cite it there.
+
+Whatever the machine printed is a real Emu198x capture in
+`components/loading-captures/`, shown at whole multiples of its grid by the same
+rule as `Screen`; never text set in a font. What changed too fast to capture
+(the Spectrum's border stripes, the C64's blanked screen, the Amiga's greys) is
+drawn in the same box. Every capture is of a program called `GAME`, so there is
+no `name` prop: passing one fails the build. Say what is really loading in
+`label`. The scripts and media that make the captures are in
+`loading-captures/source/`, and `loading-looks.ts` says how each was made.
 
 The root is `role="status"`; the picture is aria-hidden. Sequences play once
 and hold the busy state; under `prefers-reduced-motion: reduce` that state is
@@ -259,3 +268,9 @@ Literata and JetBrains Mono are redistributed under the SIL OFL 1.1, and the
 licence has to travel with them if you redistribute them further. And MIT grants
 copyright, not trade marks: use the plate to say *this is a 198x site*, not to
 badge something unaffiliated.
+
+The capture PNGs in `components/loading-captures/` are screenshots of the
+machines, made in Emu198x, not code of ours, and MIT does not cover them. They
+stand where the lesson screenshots on the family sites stand: output, not ROMs
+(`198x/decisions/system-rom-sourcing.md`). No ROM, character set or font is in
+this repo.

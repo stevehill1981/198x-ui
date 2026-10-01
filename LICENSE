@@ -29,7 +29,7 @@ which grants MIT for authored content and GPL-2.0-or-later for code. This is a
 presentation kit for the family's own sites, not a shipped tool, and nothing in
 it derives from a GPL source.
 
-Two things the grant above does not reach.
+Three things the grant above does not reach.
 
 THIRD-PARTY FONTS
 
@@ -45,6 +45,15 @@ Those files, and the `.woff2` subsets built from them, remain under the OFL and
 are not licensed by this file. The OFL travels with the fonts: if you
 redistribute them, carry the licence text too. See `fonts/README.md` for
 provenance and subsetting.
+
+MACHINE SCREENSHOTS
+
+`components/loading-captures/*.png` are screenshots of the machines, made in
+the Emu198x emulator. They are not covered by this licence, as screenshots
+are not covered by the Code198x website's. They contain no ROM, character set
+or font; see `198x/decisions/system-rom-sourcing.md`. The scripts and media
+that make them, in `components/loading-captures/source/`, are ours and are
+covered.
 
 TRADE MARKS
 
