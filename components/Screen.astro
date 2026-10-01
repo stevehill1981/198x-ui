@@ -176,8 +176,14 @@ const preH = grid?.h ?? height;
     inset: 0;
     z-index: 2;
     pointer-events: none;
-    background: linear-gradient(to bottom, transparent calc(var(--line-px, 2px) - var(--scan-dark, 1px)), rgb(0 0 0 / 0.12) 0);
-    background-size: 100% var(--line-px, 2px);
+    /* One repeating gradient, not a tiny tile repeated hundreds of times:
+       Safari can stop painting a small background tile part-way down a tall
+       layer, which showed as scanlines covering only part of the screen. */
+    background: repeating-linear-gradient(to bottom,
+      transparent 0,
+      transparent calc(var(--line-px, 2px) - var(--scan-dark, 1px)),
+      rgb(0 0 0 / 0.12) calc(var(--line-px, 2px) - var(--scan-dark, 1px)),
+      rgb(0 0 0 / 0.12) var(--line-px, 2px));
   }
   .h-screen--crt[data-scan="off"]::before { display: none; }
 
