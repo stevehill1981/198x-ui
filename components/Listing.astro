@@ -26,7 +26,9 @@
  * listing is a focusable, labelled region whenever it overflows, and nothing
  * when it does not (a tab stop that scrolls nothing is noise). That is decided
  * in the browser, on load and on every resize; without JavaScript it stays
- * focusable. `wrap` wraps long lines instead and never scrolls.
+ * focusable. While focused, Left, Right, Home and End scroll it in every
+ * engine (WebKit does not scroll a focused overflow box by itself). `wrap`
+ * wraps long lines instead and never scrolls.
  *
  * Props:
  *   code      The listing. Leading and trailing blank lines are trimmed.
@@ -231,7 +233,24 @@ const last = lines.length - 1;
   // without resizing the box.
   const ro = new ResizeObserver((entries) =>
     entries.forEach((e) => fit((e.target as HTMLElement).closest<HTMLElement>('[data-h-listing]')!)));
+  /* Keyboard scrolling. Chromium scrolls a focused overflow box with the
+     arrow keys; WebKit does not, and scrolls the page instead. So the
+     listing takes the horizontal keys itself while it holds focus. Up and
+     Down stay with the page, which is what they mean there. */
+  const STEP = 40;
+  const keys: Record<string, (el: HTMLElement) => number> = {
+    ArrowRight: (el) => el.scrollLeft + STEP,
+    ArrowLeft: (el) => el.scrollLeft - STEP,
+    Home: () => 0,
+    End: (el) => el.scrollWidth,
+  };
   listings.forEach((el) => {
+    el.addEventListener('keydown', (e) => {
+      const to = keys[e.key];
+      if (!to || e.target !== el || !el.hasAttribute('tabindex') || e.altKey || e.ctrlKey || e.metaKey) return;
+      e.preventDefault();
+      el.scrollLeft = to(el);
+    });
     fit(el);
     ro.observe(el);
     const code = el.querySelector('code');
