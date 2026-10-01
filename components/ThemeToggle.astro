@@ -17,12 +17,15 @@
  *
  * Why three radios rather than the concept's cycling icon button. The concept
  * cycled Auto → Light → Dark on one button whose icon showed the state. That
- * hides two of the three choices, makes the reader press up to twice to reach
- * one, and its icons came from an icon font the kit does not take. Three
- * labelled options are the "visible Auto, Light and Dark" §7 asks for, and as
- * native radio inputs in a fieldset they bring their semantics and keyboard
- * model with them: one Tab stop, arrows to move, the group and its legend
- * announced, checked state reported. Nothing is re-implemented in script.
+ * hides two of the three choices and makes the reader press up to twice to
+ * reach one. Three options are the "visible Auto, Light and Dark" §7 asks for,
+ * and as native radio inputs in a fieldset they bring their semantics and
+ * keyboard model with them: one Tab stop, arrows to move, the group and its
+ * legend announced, checked state reported. Nothing is re-implemented in script.
+ *
+ * Each option shows an icon (Phosphor's monitor, sun and moon, vendored in
+ * icons/phosphor/ under MIT; owner's choice, 2026-10-01). Its name is still
+ * there: visually hidden for screen readers, and as a tooltip.
  *
  * Without JavaScript nothing could act on a choice, so the control stays
  * `hidden` and the page follows the reader's system, which is Auto. The script
@@ -50,10 +53,15 @@ interface Props {
 }
 
 const { label = 'Theme', showLabel = false, storageKey = 'theme', class: className } = Astro.props;
+import monitor from './icons/phosphor/monitor.svg?raw';
+import sun from './icons/phosphor/sun.svg?raw';
+import moon from './icons/phosphor/moon.svg?raw';
+
+const icon = (svg: string) => svg.replace('<svg ', '<svg aria-hidden="true" focusable="false" ');
 const options = [
-  { value: 'auto', text: 'Auto' },
-  { value: 'light', text: 'Light' },
-  { value: 'dark', text: 'Dark' },
+  { value: 'auto', text: 'Auto', svg: icon(monitor) },
+  { value: 'light', text: 'Light', svg: icon(sun) },
+  { value: 'dark', text: 'Dark', svg: icon(moon) },
 ];
 // Radios group by name, so each toggle needs its own.
 const name = `h-theme-${Math.random().toString(36).slice(2, 9)}`;
@@ -63,9 +71,9 @@ const name = `h-theme-${Math.random().toString(36).slice(2, 9)}`;
   <legend class:list={['h-theme-legend', { 'h-theme-sr': !showLabel }]}>{label}</legend>
   <div class="h-theme-options">
     {options.map((o) => (
-      <label class="h-theme-option">
+      <label class="h-theme-option" title={o.text}>
         <input type="radio" name={name} value={o.value} checked={o.value === 'auto'} />
-        <span>{o.text}</span>
+        <span class="h-theme-face"><Fragment set:html={o.svg} /><span class="h-theme-sr">{o.text}</span></span>
       </label>
     ))}
   </div>
@@ -116,29 +124,34 @@ const name = `h-theme-${Math.random().toString(36).slice(2, 9)}`;
     cursor: pointer;
   }
 
-  .h-theme-option span {
+  .h-theme-face {
     box-sizing: border-box;
     display: grid;
     place-items: center;
+    min-width: calc(var(--h-cell) * 5);
     min-height: calc(var(--h-cell) * 5);
-    padding: 0 calc(var(--h-cell) * 2);
+    padding: 0 calc(var(--h-cell) * 1.25);
     border: 1px solid var(--h-line);
     background: var(--h-shell);
     color: var(--h-ink-body);
     font-weight: var(--h-weight-minor);
   }
-  .h-theme-option + .h-theme-option span { border-left: 0; }
+  .h-theme-face :global(svg) {
+    width: calc(var(--h-cell) * 2.25);
+    height: calc(var(--h-cell) * 2.25);
+  }
+  .h-theme-option + .h-theme-option .h-theme-face { border-left: 0; }
 
-  .h-theme-option:hover span { background: var(--h-wash); color: var(--h-ink); }
+  .h-theme-option:hover .h-theme-face { background: var(--h-wash); color: var(--h-ink); }
 
   /* Current: inverse video, switched instantly. */
-  .h-theme-option input:checked + span {
+  .h-theme-option input:checked + .h-theme-face {
     background: var(--h-ink);
     border-color: var(--h-ink);
     color: var(--h-ground);
   }
 
-  .h-theme-option input:focus-visible + span {
+  .h-theme-option input:focus-visible + .h-theme-face {
     outline: 2px solid var(--h-accent);
     outline-offset: 2px;
     position: relative;
