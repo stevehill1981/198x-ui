@@ -7,6 +7,10 @@ assets drift from what the sites render.
 
     python3 wordmarks/generate.py
 
+It also writes each project's stacked tile -- the plate turned on its side,
+for app icons and avatars -- and the compact tile that replaces it below
+about 24px (family-visual-identity.md section 1).
+
 The type is emitted as outlines, not as <text>. The plate geometry is computed
 from JetBrains Mono's 600-unit advance, so a viewer without that font used to
 get a fallback mono whose advance did not match a divider that does not move.
@@ -108,6 +112,58 @@ def plate(prefix: str, fill: str, theme: dict) -> str:
 '''
 
 
+def centred_run(text: str, cx: float, cy: float, size: float, fill: str) -> str:
+    """A text run of cap height centred on (cx, cy), at type size `size`."""
+    s = size / UPEM
+    step = ADV_UNITS + LETTER_SPACING_UNITS
+    width = (len(text) * step - LETTER_SPACING_UNITS) * s
+    x, y = cx - width / 2, cy + CAP * size / 2
+    paths = "".join(
+        f'<path d="{GLYPHS[ch]}"' + (f' transform="translate({i * step} 0)"' if i else "") + "/>"
+        for i, ch in enumerate(text)
+    )
+    return (f'<g fill="{fill}" transform="translate({x:.2f} {y:.2f}) '
+            f'scale({s:.4f} -{s:.4f})">{paths}</g>')
+
+
+def stacked(prefix: str, fill: str, theme: dict, size: float = 1024.0,
+            compact: bool = False, margin: float = 0.0) -> str:
+    """The stacked tile: the project fill carrying 19 over the constant cell
+    carrying 8x, divided and framed in the frame colour. `compact` is the
+    small-size form, the wildcard x alone on the fill. `margin` insets the
+    tile within a transparent canvas, as fraction of the side, for icon grids
+    that expect one (Apple's is 100/1024)."""
+    name = f"{prefix.capitalize()}198x"
+    o = size * margin
+    side = size - 2 * o
+    stroke = side / 26          # proportionally heavier than the plate's F/7,
+    radius = side * 0.11        # so the frame survives at 32px
+    inner = side - stroke
+    x0 = y0 = o + stroke / 2
+    frame = (f'<rect x="{x0:.2f}" y="{y0:.2f}" width="{inner:.2f}" height="{inner:.2f}" '
+             f'rx="{radius:.2f}" fill="none" stroke="{theme['frame']}" stroke-width="{stroke:.2f}"/>')
+    if compact:
+        body = (f'<rect x="{x0:.2f}" y="{y0:.2f}" width="{inner:.2f}" height="{inner:.2f}" '
+                f'rx="{radius:.2f}" fill="{fill}"/>' + frame
+                + centred_run("x", size / 2, size / 2 - side * 0.04, side * 0.95, theme["fill_ink"]))
+    else:
+        half = inner / 2
+        type_size = half * 0.62
+        body = (f'<clipPath id="t"><rect x="{x0:.2f}" y="{y0:.2f}" width="{inner:.2f}" '
+                f'height="{inner:.2f}" rx="{radius:.2f}"/></clipPath>'
+                f'<g clip-path="url(#t)">'
+                f'<rect x="{x0:.2f}" y="{y0:.2f}" width="{inner:.2f}" height="{half:.2f}" fill="{fill}"/>'
+                f'<rect x="{x0:.2f}" y="{y0 + half:.2f}" width="{inner:.2f}" height="{half:.2f}" fill="{theme['cell']}"/>'
+                f'</g>{frame}'
+                f'<line x1="{x0:.2f}" y1="{y0 + half:.2f}" x2="{x0 + inner:.2f}" y2="{y0 + half:.2f}" '
+                f'stroke="{theme['frame']}" stroke-width="{stroke:.2f}"/>'
+                + centred_run("19", size / 2, y0 + half / 2, type_size, theme["fill_ink"])
+                + centred_run("8x", size / 2, y0 + half * 1.5, type_size, theme["ink"]))
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{size:g}" height="{size:g}" '
+            f'viewBox="0 0 {size:g} {size:g}" role="img" aria-label="{name}">'
+            f'<title>{name}</title>{body}</svg>\n')
+
+
 if __name__ == "__main__":
     import shutil
     import subprocess
@@ -128,4 +184,13 @@ if __name__ == "__main__":
                     [rsvg, "-w", "600", str(svg), "-o", str(svg.with_suffix(".png"))],
                     check=True,
                 )
+            for suffix, compact, width in (("stacked", False, 512), ("stacked-compact", True, 64)):
+                tile = out / f"{name}198x-{suffix}-{theme_name}.svg"
+                tile.write_text(stacked(name, fill, theme, compact=compact))
+                n += 1
+                if rsvg:
+                    subprocess.run(
+                        [rsvg, "-w", str(width), str(tile), "-o", str(tile.with_suffix(".png"))],
+                        check=True,
+                    )
     print(f"{n} wordmarks written to {out}" + ("" if rsvg else " (no rsvg-convert: SVG only)"))
