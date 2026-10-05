@@ -111,6 +111,26 @@ themselves cannot drift; it is the geometry constants that need keeping in step.
 Compact use: the stacked cell holds to about 36px, closes up by 24px, and drops
 to the wildcard `x` alone at 16px.
 
+## The stacked tile
+
+The plate turned on its side, for app icons, avatars and favicons: a square
+whose top cell carries the project fill with `19`, over the constant `198x`
+cell carrying `8x`, divided and framed like the plate. The prefix name is
+dropped; the fill identifies the project.
+
+```
+wordmarks/emu198x-stacked-light.svg           wordmarks/emu198x-stacked-light.png
+wordmarks/emu198x-stacked-compact-light.svg   wordmarks/emu198x-stacked-compact-light.png
+```
+
+Use the **compact** tile, the wildcard `x` alone on the fill, at 24px and below;
+the full tile from 32px up. The frame and divider are proportionally heavier than
+the plate's (`side / 26`) so they survive at 32px. The generator's `stacked()`
+takes a `margin` for icon grids that expect transparent space around the tile:
+Apple's macOS grid is 100/1024 on each side (`margin=0.098`).
+
+The tile exists only as generated assets; there is no stacked `Plate` variant.
+
 ## Do not
 
 - **Put the project colour anywhere but a plate cell.** Not a border, a

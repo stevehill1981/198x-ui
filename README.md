@@ -33,7 +33,7 @@ nothing, and the style inside it is called `House198x` either way.
 | `components/Loading.astro` | What each machine showed while it loaded, from `loading-looks.ts`, every value sourced |
 | `catalogue/` | Every component in its variants, for a site to mount in development |
 | `machines.json` | Machine → colour, for all 156 systems |
-| `wordmarks/` | The eleven plates as SVG and PNG, light and dark |
+| `wordmarks/` | The eleven plates, and each project's stacked and compact tile, as SVG and PNG, light and dark |
 | `wordmarks/glyphs.json` | JetBrains Mono outlines, shared by `Plate.astro` and the generator |
 | `fonts.css`, `fonts/` | The three house faces, self-hosted and range-split |
 | [`WORDMARK.md`](WORDMARK.md) | Wordmark spec — geometry, colours, and what not to do |
