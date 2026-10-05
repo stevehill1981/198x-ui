@@ -78,19 +78,8 @@ The rule has been kept: on 2026-08-27 the palette moved to `L 0.50` and grew to
 eleven colours in the record at 15:53 and 16:33, and in this repo at 15:53 and
 16:34 — record first, kit within the minute, both times.
 
-**But check which branch you are reading it on.** Those four record commits
-landed on a local branch in the umbrella repo, not on `main`, and were never
-merged or pushed. `main`'s copy of the record is four commits stale and still
-describes the `L 0.40`, nine-colour palette. Read from `main` alone and this kit
-looks like it went rogue; it did not. Verify a claim *about* the record against
-the record, and verify the record against the branch that actually carries it:
-
-```bash
-git -C ~/Projects/198x log --all --oneline -- decisions/family-visual-identity.md
-```
-
-`--all` is the load-bearing flag. Without it the four newest commits are
-invisible.
+Verify a claim *about* the record against the record itself, on the umbrella's
+`main`.
 
 ### The palette lives in four places
 
