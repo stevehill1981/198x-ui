@@ -42,8 +42,10 @@
  *
  * Slots:
  *   default  The label.
- *   meta     A short datum after it, in the mono face and the muted ink: a
- *            year, a count. It is read as part of the label.
+ *   meta     A short datum after it in the muted ink: a year, a count, a
+ *            status. It is read as part of the label, so it is set as a
+ *            label (Nebula Sans), not in the mono face (identity §4,
+ *            2026-10-16).
  *
  * The class is-hover shows hover at rest, for the catalogue.
  */
@@ -109,10 +111,8 @@ const classes = ['h-chip', `h-chip-${mode}`, className];
   }
 
   .h-chip-meta {
-    font-family: var(--h-font-mono);
-    font-size: 0.875em;
+    font-family: var(--h-font-ui);
     font-weight: 400;
-    font-variant-ligatures: none;
     color: var(--h-ink-muted);
   }
 
