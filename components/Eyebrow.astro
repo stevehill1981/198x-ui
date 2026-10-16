@@ -1,6 +1,6 @@
 ---
 /**
- * The small boxed uppercase label above a heading: "What you'll make",
+ * The small boxed label above a heading: "What you'll make",
  * "Meet BASIC, unit 1".
  *
  * Governed by 198x/decisions/family-visual-identity.md:
@@ -19,8 +19,10 @@
  *   as     The element. Default 'span'; 'p' where it stands alone in flow.
  *   class  Extra classes for a host's own layout.
  *
- * Slot: the label. Write it in sentence case; the uppercase is styling, so a
- * screen reader reads words rather than letters.
+ * - §4 (2026-10-16): labels are sentence case and untracked, in Nebula Sans
+ *   semibold; tracked uppercase is retired as a label style.
+ *
+ * Slot: the label, written in sentence case.
  */
 interface Props {
   as?: 'span' | 'p' | 'div';
@@ -49,7 +51,6 @@ const { as: Tag = 'span', class: className } = Astro.props;
     font-size: var(--h-text-micro);
     line-height: 1;
     font-weight: var(--h-weight-minor);
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
+    letter-spacing: normal;
   }
 </style>
