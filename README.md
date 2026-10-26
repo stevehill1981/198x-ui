@@ -19,7 +19,7 @@ nothing, and the style inside it is called `House198x` either way.
 | `components/FamilyStrip.astro` | The footer family strip |
 | `components/Screen.astro` | One capture, at a whole multiple of its true grid |
 | `components/Button.astro` | Primary, secondary and quiet; a link or a button; the arrow in its own cell |
-| `components/Eyebrow.astro` | The small boxed uppercase label |
+| `components/Eyebrow.astro` | The small boxed label above a heading, in title case |
 | `components/Shell.astro` | The double bezel: `device` (an object, rounded) or interface (square) |
 | `components/ThemeToggle.astro` | Auto / Light / Dark, with `ThemeBoot.astro` for the document head. Dormant in v1 (paper only until the dark spec; sites should not mount it). |
 | `components/Tabs.astro` | Accessible tabs, or a segmented control without panels |
