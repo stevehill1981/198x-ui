@@ -1,0 +1,24 @@
+---
+/**
+ * A capped, centred measure. The cap includes the gutters. A site's page
+ * frame is a Center given the site's own tokens, such as
+ * `max="var(--site-frame-width)" gutters="var(--page-gutter)"`.
+ */
+import type { HTMLAttributes, HTMLTag } from 'astro/types';
+import { type Length, type Space, type Token, space, primitiveStyle } from './space';
+
+type Props<Tag extends HTMLTag = 'div'> = HTMLAttributes<Tag> & {
+  as?: Tag;
+  /** The cap: the kit's reading measure (default), a length, or a site token. */
+  max?: 'measure' | Length | Token;
+  /** Inline padding: a step of the spacing scale, or a site token. Default none. */
+  gutters?: Space | Token;
+  /** Centre the children themselves at their own width, too. */
+  intrinsic?: boolean;
+};
+
+const { as: Tag = 'div', max, gutters, intrinsic = false, class: className, style, ...attributes } = Astro.props;
+const cap = max === undefined || max === 'measure' ? undefined : max;
+const inline = gutters === undefined ? undefined : typeof gutters === 'string' ? gutters : space(gutters);
+---
+<Tag {...attributes} class:list={['l-center', className]} data-intrinsic={intrinsic || undefined} style={primitiveStyle({ '--center-max': cap, '--center-gutters': inline }, style)}><slot /></Tag>

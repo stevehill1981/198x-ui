@@ -26,8 +26,9 @@ Two consequences, and they are the whole shape of working here:
 
 ## Verifying a change
 
-Start with the contrast gate. It measures every text pair in
-`contrast-pairs.json` against `tokens.css`:
+Start with the tests and the contrast gate. The tests cover the contrast
+checker and the layout primitives' build-time guards; the gate measures every
+text pair in `contrast-pairs.json` against `tokens.css`:
 
 ```bash
 node --test scripts/*.test.mjs && node scripts/check-contrast.mjs

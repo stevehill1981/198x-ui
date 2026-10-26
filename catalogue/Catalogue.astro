@@ -45,6 +45,7 @@ import BreadcrumbsEntry from './entries/Breadcrumbs.astro';
 import ChipEntry from './entries/Chip.astro';
 import SearchFieldEntry from './entries/SearchField.astro';
 import LoadingEntry from './entries/Loading.astro';
+import LayoutEntry from './entries/Layout.astro';
 
 interface Props {
   base: string;
@@ -73,6 +74,7 @@ const components: Record<string, any> = {
   chip: ChipEntry,
   'search-field': SearchFieldEntry,
   loading: LoadingEntry,
+  layout: LayoutEntry,
 };
 
 const current = entry ? catalogueEntries.find((e) => e.slug === entry) : undefined;
