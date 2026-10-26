@@ -6,38 +6,38 @@ import Specimen from '../Specimen.astro';
 <Specimen
   title="Primary, secondary and quiet"
   code={`<Button href="/systems/sinclair-zx-spectrum">Start with ZX Spectrum</Button>
-<Button variant="secondary" href="/curriculum" arrow="up-right">See the curriculum map</Button>
-<Button variant="quiet">Reset the code</Button>`}
+<Button variant="secondary" href="/curriculum" arrow="up-right">See the Curriculum Map</Button>
+<Button variant="quiet">Reset the Code</Button>`}
   note="Square, on the 8px cell, flat (§7). The arrow sits in its own square cell (§7), drawn in CSS because none of the house faces ships an arrow glyph in the kit's subsets. Primary text is --h-ink-on-accent on the fill (§4). Nothing glows at rest (§3c)."
 >
   <Button href="#">Start with ZX Spectrum</Button>
-  <Button variant="secondary" href="#" arrow="up-right">See the curriculum map</Button>
-  <Button variant="quiet">Reset the code</Button>
+  <Button variant="secondary" href="#" arrow="up-right">See the Curriculum Map</Button>
+  <Button variant="quiet">Reset the Code</Button>
 </Specimen>
 
 <Specimen
   title="Arrows"
-  code={`<Button arrow="right">Next unit</Button>
+  code={`<Button arrow="right">Next Unit</Button>
 <Button arrow="up-right" href="https://…">Open the Spectrum</Button>
-<Button arrow="play">Run it live</Button>
+<Button arrow="play">Run It Live</Button>
 <Button arrow="none">Save</Button>`}
   note="Right goes onward, up-right leaves for another page, play runs something. The cell is aria-hidden: the label says what the button does."
 >
-  <Button arrow="right">Next unit</Button>
+  <Button arrow="right">Next Unit</Button>
   <Button arrow="up-right" href="#">Open the Spectrum</Button>
-  <Button arrow="play">Run it live</Button>
+  <Button arrow="play">Run It Live</Button>
   <Button arrow="none">Save</Button>
-  <Button variant="secondary" arrow="play">Run again</Button>
-  <Button variant="quiet" arrow="up-right" href="#">Pop out</Button>
+  <Button variant="secondary" arrow="play">Run Again</Button>
+  <Button variant="quiet" arrow="up-right" href="#">Pop Out</Button>
 </Specimen>
 
 <Specimen
   title="Small"
-  code={`<Button size="small" arrow="play">Run it live</Button>`}
+  code={`<Button size="small" arrow="play">Run It Live</Button>`}
   note="Five cells tall instead of seven, for a toolbar beside a running machine."
 >
-  <Button size="small" arrow="play">Run it live</Button>
-  <Button size="small" variant="secondary">Back to the capture</Button>
+  <Button size="small" arrow="play">Run It Live</Button>
+  <Button size="small" variant="secondary">Back to the Capture</Button>
   <Button size="small" arrow="none">Save</Button>
 </Specimen>
 
@@ -57,10 +57,10 @@ import Specimen from '../Specimen.astro';
 
 <Specimen
   title="Disabled"
-  code={`<Button disabled>Run it live</Button>`}
+  code={`<Button disabled>Run It Live</Button>`}
   note="Buttons only: a link has no disabled state, and asking for one throws. The label keeps the muted ink so it stays legible."
 >
-  <Button disabled arrow="play">Run it live</Button>
-  <Button variant="secondary" disabled>See the map</Button>
-  <Button variant="quiet" disabled>Reset the code</Button>
+  <Button disabled arrow="play">Run It Live</Button>
+  <Button variant="secondary" disabled>See the Map</Button>
+  <Button variant="quiet" disabled>Reset the Code</Button>
 </Specimen>

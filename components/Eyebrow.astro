@@ -1,7 +1,7 @@
 ---
 /**
- * The small boxed label above a heading: "What you'll make",
- * "Meet BASIC, unit 1".
+ * The small boxed label above a heading: "What You'll Make",
+ * "Meet BASIC, Unit 1".
  *
  * Governed by 198x/decisions/family-visual-identity.md:
  *
@@ -19,10 +19,12 @@
  *   as     The element. Default 'span'; 'p' where it stands alone in flow.
  *   class  Extra classes for a host's own layout.
  *
- * - §4 (2026-10-16): labels are sentence case and untracked, in Nebula Sans
- *   semibold; tracked uppercase is retired as a label style.
+ * - §4 (2026-10-19): labels are title case and untracked, in Nebula Sans
+ *   semibold; tracked uppercase is retired as a label style. Title case
+ *   keeps short joining words (a, the, and, of, to and the rest of §4's
+ *   list) lower case unless they begin the label.
  *
- * Slot: the label, written in sentence case.
+ * Slot: the label, written in title case. Nothing transforms it.
  */
 interface Props {
   as?: 'span' | 'p' | 'div';
