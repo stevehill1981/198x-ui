@@ -94,6 +94,7 @@ if (!label?.trim()) throw new Error('[198x-ui] SearchField: label is required; a
 </form>
 
 <style>
+@layer kit-components {
   .h-search {
     box-sizing: border-box;
     display: grid;
@@ -195,4 +196,5 @@ if (!label?.trim()) throw new Error('[198x-ui] SearchField: label is required; a
 
   .h-search-hint { flex: none; font-size: var(--h-text-small); }
   .h-search-field:focus-within .h-search-hint { visibility: hidden; }
+}
 </style>

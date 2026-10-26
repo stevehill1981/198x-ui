@@ -49,6 +49,7 @@ const shown = version ? (/^\d/.test(version) ? `v${version}` : version) : null;
 </header>
 
 <style>
+@layer kit-components {
   .h-nav {
     display: flex;
     align-items: center;
@@ -89,4 +90,5 @@ const shown = version ? (/^\d/.test(version) ? `v${version}` : version) : null;
   @media (max-width: 40rem) {
     .h-nav { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
   }
+}
 </style>

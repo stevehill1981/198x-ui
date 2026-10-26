@@ -26,6 +26,7 @@ const { title, code, note, block = false } = Astro.props;
 </section>
 
 <style>
+@layer kit-components {
   .h-specimen {
     padding: var(--h-space-6) 0;
     border-top: 1px solid var(--h-line);
@@ -71,4 +72,5 @@ const { title, code, note, block = false } = Astro.props;
   }
 
   .h-specimen-stage.block { display: block; }
+}
 </style>

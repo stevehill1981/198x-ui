@@ -92,6 +92,7 @@ const classes = ['h-btn', `h-btn-${variant}`, { 'h-btn-small': size === 'small',
 )}
 
 <style>
+@layer kit-components {
   .h-btn {
     box-sizing: border-box;
     display: inline-flex;
@@ -251,4 +252,5 @@ const classes = ['h-btn', `h-btn-${variant}`, { 'h-btn-small': size === 'small',
     box-shadow: none;
   }
   .h-btn:disabled .h-btn-cell { background: none; }
+}
 </style>

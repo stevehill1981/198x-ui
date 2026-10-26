@@ -132,6 +132,7 @@ const panels = tabs ? await Promise.all(items.map((_, i) => Astro.slots.render(`
 </div>
 
 <style>
+@layer kit-components {
   .h-tabs-list {
     display: flex;
     flex-wrap: wrap;
@@ -174,6 +175,7 @@ const panels = tabs ? await Promise.all(items.map((_, i) => Astro.slots.render(`
 
   .h-tabs-panelled > .h-tabs-panel { margin-top: calc(var(--h-cell) * 2); }
   .h-tabs-panel:focus-visible { outline: 2px solid var(--h-accent); outline-offset: 2px; }
+}
 </style>
 
 <script>

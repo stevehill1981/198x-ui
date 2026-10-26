@@ -37,6 +37,7 @@ const { as: Tag = 'span', class: className } = Astro.props;
 <Tag class:list={['h-eyebrow', className]}><slot /></Tag>
 
 <style>
+@layer kit-components {
   .h-eyebrow {
     box-sizing: border-box;
     display: inline-flex;
@@ -55,4 +56,5 @@ const { as: Tag = 'span', class: className } = Astro.props;
     font-weight: var(--h-weight-minor);
     letter-spacing: normal;
   }
+}
 </style>
