@@ -83,6 +83,7 @@ const { spectrum, doubled, amiga, nes } = samples;
 </script>
 
 <style is:global>
+@layer kit-components {
   .h-screen-readout,
   .h-screen-readout-intro {
     font-family: var(--h-font-mono);
@@ -92,4 +93,5 @@ const { spectrum, doubled, amiga, nes } = samples;
   }
   .h-screen-readout { margin: var(--h-space-3) 0 0; }
   .h-screen-readout-intro { margin: 0 0 var(--h-space-4); max-width: var(--h-measure); }
+}
 </style>

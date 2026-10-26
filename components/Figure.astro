@@ -108,6 +108,7 @@ const hasCaption = Astro.slots.has('caption');
 </figure>
 
 <style>
+@layer kit-components {
   .h-figure {
     box-sizing: border-box;
     display: grid;
@@ -140,4 +141,5 @@ const hasCaption = Astro.slots.has('caption');
   /* Screen sets its own margin for the bezel; line the caption up with the
      glass rather than the bezel's outer edge. */
   .h-figure-capture > .h-figure-caption { padding-inline: 0.6rem; }
+}
 </style>

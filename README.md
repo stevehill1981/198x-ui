@@ -87,6 +87,30 @@ import SiteNav from '@198x-ui/components/SiteNav.astro';
 A site that uses the layout primitives also imports `layout.css`, once, into a
 layer of its own: `@import '../../_198x-ui/layout.css' layer(composition);`.
 
+### Cascade layers
+
+Every component's styles sit in a cascade layer named `kit-components`. A
+site that uses layers places it in its own order: after its element defaults
+and layout, so a component keeps its look over a site's `a` or `button`
+defaults, and before the layers where the site styles components, so those
+can override one without out-specifying it. The tokens and fonts go in a
+separate layer first, since everything reads them:
+
+```css
+@layer kit, base, composition, kit-components, blocks;
+@import '../../_198x-ui/tokens.css' layer(kit);
+@import '../../_198x-ui/fonts.css' layer(kit);
+```
+
+A site that does not use layers needs no change to load the kit, but it should
+know the consequence: CSS outside every layer beats every layer, so **any** of
+its own rules now outranks a component's, whatever the specificity. A broad
+`a { color: … }` or `button { … }` will restyle Button, Chip or SiteNav. Check
+for such rules when moving a site's pin past this change, or put the site's
+CSS in layers first. Two things stay unlayered on purpose: `layout.css`, so the
+site picks its layer, and Tabs' `<noscript>` fallback, which must beat the
+component's own rules when scripts are off.
+
 Pin to a tag rather than tracking `main`. Without that, a change here can break
 every site at once with nothing in between to catch it.
 

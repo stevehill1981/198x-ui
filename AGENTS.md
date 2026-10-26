@@ -78,6 +78,18 @@ which section of the record it embodies.
 The route is development-only, so check it stays that way: `astro build` should
 leave no `catalogue/` in `dist/`.
 
+## Component styles live in `@layer kit-components`
+
+Every `<style>` block in `components/` and `catalogue/` wraps its rules in
+`@layer kit-components { … }`, so a site that uses cascade layers can place
+components in its own order and override them from its own layers. Tokens and
+fonts are not in it: a site imports those into a lower layer (`kit`). A new component does the same. The exceptions are
+deliberate: `layout.css` is unlayered so a site imports it into a layer of its
+choosing, and Tabs' `<noscript>` fallback is unlayered so it beats the
+component's own rules. An unlayered rule added by mistake outranks every
+layered rule on every site that pins the kit; the README's "Cascade layers"
+says what that means for a site without layers.
+
 ## Governance — the record comes first
 
 Everything here is the concrete form of
