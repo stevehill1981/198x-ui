@@ -17,10 +17,12 @@ import Reel from '../../components/layout/Reel.astro';
 import Frame from '../../components/layout/Frame.astro';
 import Specimen from '../Specimen.astro';
 
+// Sized from their border edge, so a site's own box-sizing reset (or its
+// absence) does not change what the specimens measure.
 const tinted = 'background: var(--h-wash);';
-const cell = `${tinted} padding: var(--h-space-2);`;
+const cell = `${tinted} box-sizing: border-box; padding: var(--h-space-2);`;
 const flush = 'margin: 0;';
-const chip = 'inline-size: 7rem; padding: var(--h-space-1) var(--h-space-2); border: 1px solid var(--h-line);';
+const chip = 'box-sizing: border-box; inline-size: 7rem; padding: var(--h-space-1) var(--h-space-2); border: 1px solid var(--h-line);';
 const machines = ['Spectrum', 'Commodore 64', 'Amiga', 'NES', 'BBC Micro', 'Amstrad CPC', 'MSX', 'Atari 800'];
 ---
 
