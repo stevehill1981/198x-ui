@@ -28,4 +28,5 @@ export const catalogueEntries: CatalogueEntry[] = [
   { slug: 'chip', title: 'Chip' },
   { slug: 'search-field', title: 'SearchField' },
   { slug: 'loading', title: 'Loading' },
+  { slug: 'layout', title: 'Layout primitives' },
 ];

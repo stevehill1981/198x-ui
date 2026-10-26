@@ -1,0 +1,151 @@
+---
+/**
+ * The layout primitives, each with settings that make its behaviour visible.
+ * Sites measure this entry in the browser (the Code198x website's
+ * tests/layout-primitives.spec.ts finds each one by its data-specimen), so a
+ * change to a setting here is a change to what they check.
+ */
+import Stack from '../../components/layout/Stack.astro';
+import Box from '../../components/layout/Box.astro';
+import Center from '../../components/layout/Center.astro';
+import Cluster from '../../components/layout/Cluster.astro';
+import Sidebar from '../../components/layout/Sidebar.astro';
+import Switcher from '../../components/layout/Switcher.astro';
+import Grid from '../../components/layout/Grid.astro';
+import Cover from '../../components/layout/Cover.astro';
+import Reel from '../../components/layout/Reel.astro';
+import Frame from '../../components/layout/Frame.astro';
+import Specimen from '../Specimen.astro';
+
+const tinted = 'background: var(--h-wash);';
+const cell = `${tinted} padding: var(--h-space-2);`;
+const flush = 'margin: 0;';
+const chip = 'inline-size: 7rem; padding: var(--h-space-1) var(--h-space-2); border: 1px solid var(--h-line);';
+const machines = ['Spectrum', 'Commodore 64', 'Amiga', 'NES', 'BBC Micro', 'Amstrad CPC', 'MSX', 'Atari 800'];
+---
+
+<Specimen
+  title="Stack"
+  code={`<Stack space={6}>…</Stack>`}
+  note="Children in a column with one gap between each, taken from the space scale (§6). It removes their own block margins, so the gap is the only space between them."
+  block
+>
+  <Stack space={6} data-specimen="stack">
+    <p>Children lose the browser's paragraph margins.</p>
+    <p>One gap separates each from the next.</p>
+    <p>Here it is step 6 of the scale, 1.5rem.</p>
+  </Stack>
+</Specimen>
+
+<Specimen
+  title="Box"
+  code={`<Box padding={6} border>…</Box>`}
+  note="Padding from the space scale, and with border the kit's hairline. No fill or colour of its own (§6): a site adds those."
+  block
+>
+  <Box padding={6} border data-specimen="box"><p style={flush}>Padding from the scale and the kit's hairline.</p></Box>
+</Specimen>
+
+<Specimen
+  title="Center"
+  code={`<Center max="40rem" gutters={4}>…</Center>
+<Center max="var(--site-frame-width)" gutters="var(--page-gutter)">…</Center>`}
+  note="A capped, centred measure; the cap includes the gutters. The default cap is the kit's reading measure. A site's page frame passes its own tokens."
+  block
+>
+  <Center max="40rem" gutters={4} data-specimen="center" style={tinted}><p style={flush}>At most 40rem wide, gutters included, and centred.</p></Center>
+</Specimen>
+
+<Specimen
+  title="Cluster"
+  code={`<Cluster space={2}>…</Cluster>`}
+  note="Items in rows that wrap, with one gap across and down."
+  block
+>
+  <Cluster space={2} data-specimen="cluster">
+    {machines.map(name => <span style={chip}>{name}</span>)}
+  </Cluster>
+</Specimen>
+
+<Specimen
+  title="Sidebar"
+  code={`<Sidebar sideWidth="15rem" contentMin="50%" space={6}>…</Sidebar>`}
+  note="Two panes side by side until the main one would be narrower than contentMin, then stacked, with no breakpoint. Another Sidebar as a direct child fails the build."
+  block
+>
+  <Sidebar sideWidth="15rem" contentMin="50%" space={6} data-specimen="sidebar">
+    <div style={cell}>The sidebar, 15rem while there is room.</div>
+    <div style={cell}>The main pane. When it would be narrower than half the width, the two stack.</div>
+  </Sidebar>
+</Specimen>
+
+<Specimen
+  title="Switcher"
+  code={`<Switcher threshold="40rem" space={4}>…</Switcher>`}
+  note="Equal items in a row that become a column, all at once, when the container is narrower than the threshold."
+  block
+>
+  <Switcher threshold="40rem" space={4} data-specimen="switcher">
+    <div style={cell}>One</div>
+    <div style={cell}>Two</div>
+    <div style={cell}>Three</div>
+  </Switcher>
+</Specimen>
+
+<Specimen
+  title="Grid"
+  code={`<Grid min="12rem" space={4}>…</Grid>
+<Grid min="6rem" space={4} rowSpace={8} maxColumns={3}>…</Grid>`}
+  note="As many columns of at least min as fit. maxColumns caps how many share a row; rowSpace sets the gap between rows apart from the gap between columns."
+  block
+>
+  <Stack space={6}>
+    <Grid min="12rem" space={4} data-specimen="grid">
+      {Array.from({ length: 6 }, (_, i) => <div style={cell}>Cell {i + 1}</div>)}
+    </Grid>
+    <Grid min="6rem" space={4} rowSpace={8} maxColumns={3} data-specimen="grid-capped">
+      {Array.from({ length: 6 }, (_, i) => <div style={cell}>Cell {i + 1}</div>)}
+    </Grid>
+  </Stack>
+</Specimen>
+
+<Specimen
+  title="Cover"
+  code={`<Cover min="20rem" padding={6}>
+  <p>Above</p>
+  <h3 data-cover-centre>Centred in the space left</h3>
+  <p>Below</p>
+</Cover>`}
+  note="The child marked data-cover-centre sits in the middle of a minimum height; anything before or after it keeps to the edges."
+  block
+>
+  <Cover min="20rem" padding={6} style={tinted} data-specimen="cover">
+    <p style={flush}>Above</p>
+    <h3 data-cover-centre>Centred in the space left</h3>
+    <p style={flush}>Below</p>
+  </Cover>
+</Specimen>
+
+<Specimen
+  title="Reel"
+  code={`<Reel itemWidth="12rem" space={4}>…</Reel>`}
+  note="A row that scrolls sideways instead of wrapping."
+  block
+>
+  <Reel itemWidth="12rem" space={4} data-specimen="reel">
+    {Array.from({ length: 8 }, (_, i) => <div style={cell}>Item {i + 1}</div>)}
+  </Reel>
+</Specimen>
+
+<Specimen
+  title="Frame"
+  code={`<Frame ratio="4 / 3"><svg …/></Frame>`}
+  note="An illustration or photograph cropped to an aspect ratio. Never a capture: Frame crops to fill a box, which §7 forbids for a capture, so the build fails if its content holds one."
+  block
+>
+  <div style="max-inline-size: 24rem;">
+    <Frame ratio="4 / 3" data-specimen="frame">
+      <svg viewBox="0 0 400 100" role="img" aria-label="A wide illustration cropped to 4:3"><rect width="400" height="100" fill="var(--h-wash)"/><circle cx="200" cy="50" r="40" fill="var(--h-ink-muted)"/></svg>
+    </Frame>
+  </div>
+</Specimen>

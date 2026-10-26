@@ -31,6 +31,8 @@ nothing, and the style inside it is called `House198x` either way.
 | `components/Chip.astro` | A square label, link, or filter toggle (`aria-pressed`, inverse when on) |
 | `components/SearchField.astro` | A labelled search landmark with an optional key hint; the site does the searching |
 | `components/Loading.astro` | What each machine showed while it loaded, from `loading-looks.ts`, every value sourced |
+| `components/layout/` | The layout primitives: Stack, Box, Center, Cluster, Sidebar, Switcher, Grid, Cover, Reel, Frame |
+| `layout.css` | The primitives' classes, unlayered, for a site to import into a layer of its own |
 | `catalogue/` | Every component in its variants, for a site to mount in development |
 | `machines.json` | Machine → colour, for all 156 systems |
 | `wordmarks/` | The eleven plates, and each project's stacked and compact tile, as SVG and PNG, light and dark |
@@ -81,6 +83,9 @@ import SiteNav from '@198x-ui/components/SiteNav.astro';
 ```
 
 `asm198x.github.io` carries a working `scripts/fetch-ui.sh` to copy.
+
+A site that uses the layout primitives also imports `layout.css`, once, into a
+layer of its own: `@import '../../_198x-ui/layout.css' layer(composition);`.
 
 Pin to a tag rather than tracking `main`. Without that, a change here can break
 every site at once with nothing in between to catch it.
@@ -151,6 +156,42 @@ The root is `role="status"`; the picture is aria-hidden. Sequences play once
 and hold the busy state; under `prefers-reduced-motion: reduce` that state is
 one still frame. The Spectrum's stripes drift slower than the machine's, so no
 point flashes more than twice a second (WCAG 2.3.1); the file says why.
+
+## Layout primitives
+
+After [Every Layout](https://every-layout.dev): components that arrange what a
+site puts in them and have no look of their own (`family-visual-identity.md`
+§6). Each renders one element with an `l-` class from `layout.css` and writes
+its settings as custom properties. Spacing props take a step of the §6 scale
+(`space={4}` is `var(--h-space-4)`), and every prop is typed, so a wrong value
+fails the site's type check.
+
+| Component | Does | Reach for it instead of |
+|---|---|---|
+| `Stack` | Vertical rhythm: one gap between children | Margins on each element |
+| `Box` | Padding, and with `border` the hairline | Ad hoc padded panels |
+| `Center` | A capped, centred measure; the cap includes the gutters | `max-width` with `margin-inline: auto` |
+| `Cluster` | Rows of items that wrap | `flex-wrap` rows |
+| `Sidebar` | Two panes that stack when the main one gets too narrow | Two-column grids with a breakpoint |
+| `Switcher` | A row that becomes a column, all at once, below a threshold | Grids that drop to one column at a breakpoint |
+| `Grid` | As many columns of a minimum width as fit, optionally capped | Fixed-column grids and their breakpoints |
+| `Cover` | One child centred in a minimum height | Hero and opening bands |
+| `Reel` | A row that scrolls sideways | Hand-built overflow rows |
+| `Frame` | An illustration or photograph cropped to a ratio | `object-fit` boxes |
+
+`Center` caps at the kit's reading measure unless given a length or a site's
+own token: a site's page frame is
+`<Center max="var(--site-frame-width)" gutters="var(--page-gutter)">`.
+
+Two guards fail the build rather than leave a mistake to a screenshot:
+
+- **Sidebar, Switcher and Reel** pass their settings to their children by
+  inheritance, so each refuses another of its own kind as a direct child
+  (`nesting.ts`). Wrap the inner one in an element.
+- **Frame never holds a capture.** It crops to fill a box, which §7 forbids for
+  a capture (`frame.ts`). It refuses `Screen` and a `Figure` of kind
+  `capture`, and anything a site marks with `data-capture`; a site's own
+  capture components should carry that attribute on their root.
 
 ## The catalogue
 
