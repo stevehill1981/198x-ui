@@ -33,12 +33,12 @@ Three things the grant above does not reach.
 
 THIRD-PARTY FONTS
 
-`fonts/` contains no work of ours. Nebula Sans, Literata and JetBrains Mono are
+`fonts/` contains no work of ours. Nebula Sans, Fira Sans Condensed and JetBrains Mono are
 redistributed under the SIL Open Font License 1.1, each with its licence text
 beside it:
 
     fonts/OFL-NebulaSans.txt
-    fonts/OFL-Literata.txt
+    fonts/OFL-FiraSansCondensed.txt
     fonts/OFL-JetBrainsMono.txt
 
 Those files, and the `.woff2` subsets built from them, remain under the OFL and
